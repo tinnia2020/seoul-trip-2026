@@ -67,6 +67,8 @@
         #map-wrap.active{display:block}
         #map{width:100%;height:100%}
         .map-controls{position:absolute;top:16px;left:16px;right:16px;z-index:1000;display:flex;gap:8px;flex-wrap:wrap}
+        .map-select{padding:10px 14px;background:white;border:none;border-radius:12px;font-size:0.9rem;font-weight:600;color:#333;box-shadow:0 2px 8px rgba(0,0,0,0.15);cursor:pointer;min-width:160px;font-family:inherit}
+        .map-select:focus{outline:none;box-shadow:0 2px 12px rgba(0,0,0,0.25)}
         .map-btn{padding:8px 14px;background:white;border:none;border-radius:20px;font-size:0.8rem;font-weight:600;color:#666;box-shadow:0 2px 8px rgba(0,0,0,0.15);cursor:pointer}
         .map-btn.active{background:var(--text);color:white}
         .locate-btn{position:absolute;bottom:90px;right:16px;width:44px;height:44px;background:white;border:none;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,0.2);cursor:pointer;z-index:1000;display:flex;align-items:center;justify-content:center}
@@ -116,11 +118,15 @@
     </div>
     <div id="map-wrap">
         <div class="map-controls">
-            <button class="map-btn active" onclick="filterMap('all')">全部</button>
-            <button class="map-btn" onclick="filterMap('美食')">🍜 美食</button>
-            <button class="map-btn" onclick="filterMap('咖啡甜點')">☕ 咖啡</button>
-            <button class="map-btn" onclick="filterMap('購物')">🛍️ 購物</button>
-            <button class="map-btn" onclick="filterMap('Work')">💻 Work</button>
+            <select class="map-select" onchange="filterMap(this.value)">
+                <option value="all">📍 全部地標</option>
+                <option value="美食">🍜 美食</option>
+                <option value="咖啡甜點">☕ 咖啡甜點</option>
+                <option value="購物">🛍️ 購物</option>
+                <option value="Work">💻 Work</option>
+                <option value="住宿">🏠 住宿</option>
+                <option value="景點">📸 景點</option>
+            </select>
         </div>
         <div id="map"></div>
         <button class="locate-btn" onclick="locate()">
@@ -197,10 +203,6 @@ function initMap(){
 }
 function filterMap(f){
     mapFilter=f;
-    document.querySelectorAll('.map-btn').forEach(function(b){
-        var bc=b.textContent.indexOf('全部')>=0?'all':b.textContent.indexOf('美食')>=0?'美食':b.textContent.indexOf('咖啡')>=0?'咖啡甜點':b.textContent.indexOf('購物')>=0?'購物':b.textContent.indexOf('Work')>=0?'Work':'all';
-        b.classList.toggle('active',bc===f)
-    });
     markers.forEach(function(m){if(match(m.category,f)){m.addTo(map)}else{m.remove()}})
 }
 function locate(){
