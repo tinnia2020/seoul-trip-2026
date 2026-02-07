@@ -66,7 +66,8 @@
         #map-wrap{position:fixed;top:0;left:0;width:100%;height:calc(100% - 70px);background:white;z-index:800;display:none}
         #map-wrap.active{display:block}
         #map{width:100%;height:100%}
-        .map-controls{position:absolute;top:16px;left:16px;right:16px;z-index:1000;display:flex;gap:8px;flex-wrap:wrap}
+        .map-controls{position:absolute;top:16px;left:16px;right:16px;z-index:2000;display:flex;gap:8px;flex-wrap:wrap;pointer-events:none}
+        .map-controls *{pointer-events:auto}
         .map-select{padding:10px 14px;background:white;border:none;border-radius:12px;font-size:0.9rem;font-weight:600;color:#333;box-shadow:0 2px 8px rgba(0,0,0,0.15);cursor:pointer;min-width:160px;font-family:inherit}
         .map-select:focus{outline:none;box-shadow:0 2px 12px rgba(0,0,0,0.25)}
         .map-btn{padding:8px 14px;background:white;border:none;border-radius:20px;font-size:0.8rem;font-weight:600;color:#666;box-shadow:0 2px 8px rgba(0,0,0,0.15);cursor:pointer}
