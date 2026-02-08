@@ -68,6 +68,28 @@
         .page{display:none}
         .page.active{display:block}
         .placeholder{display:flex;align-items:center;justify-content:center;height:70vh;color:#888;text-align:center;flex-direction:column}
+        .schedule-header{padding:20px;background:var(--white);text-align:center;border-bottom:1px solid #f0f0f0}
+        .schedule-title{font-size:1.3rem;font-weight:700;color:var(--text);margin-bottom:4px}
+        .schedule-subtitle{font-size:0.9rem;color:var(--text-sec)}
+        .schedule-tabs{display:flex;overflow-x:auto;background:var(--white);padding:12px 16px;gap:8px;position:sticky;top:60px;z-index:500;border-bottom:1px solid #f0f0f0}
+        .schedule-tabs::-webkit-scrollbar{display:none}
+        .schedule-tab{flex-shrink:0;padding:10px 16px;background:var(--white);border:2px solid #e0e0e0;border-radius:12px;font-size:0.85rem;font-weight:600;color:var(--text-sec);cursor:pointer;text-align:center;transition:all 0.2s ease}
+        .schedule-tab span{display:block;font-size:0.75rem;margin-top:4px;color:#999}
+        .schedule-tab.active{background:var(--primary);color:white;border-color:var(--primary)}
+        .schedule-tab.active span{color:rgba(255,255,255,0.9)}
+        .schedule-content{padding:16px}
+        .schedule-day{display:none}
+        .schedule-day.active{display:block}
+        .day-title{font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--primary)}
+        .schedule-item{display:flex;gap:16px;margin-bottom:20px;padding:16px;background:var(--white);border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+        .schedule-item .time{flex-shrink:0;width:70px;font-size:0.85rem;font-weight:600;color:var(--primary);padding-top:2px}
+        .schedule-item .content{flex:1}
+        .event-title{font-size:1rem;font-weight:600;color:var(--text);margin-bottom:6px}
+        .event-detail{font-size:0.85rem;color:var(--text-sec);margin-bottom:3px}
+        .schedule-item.flight{border-left:4px solid #4285f4}
+        .schedule-item.work{border-left:4px solid #a55eea}
+        .schedule-item.special{border-left:4px solid #ff6b6b}
+        .schedule-item.free{border-left:4px solid #26de81}
         .footer{text-align:center;padding:24px;color:#ccc;font-size:0.72rem}
         #map-wrap{position:fixed;top:0;left:0;width:100%;height:calc(100% - 70px);background:white;z-index:800;display:none}
         #map-wrap.active{display:flex}
@@ -142,9 +164,193 @@
         <div class="footer">Made with 🦞 for Tina</div>
     </div>
     <div id="page-schedule" class="page">
-        <div class="placeholder">
-            <div style="font-size:3rem;opacity:0.3;">📅</div>
-            <p>行程規劃<br>即將推出 ✨</p>
+        <div class="schedule-header">
+            <div class="schedule-title">🗓️ Seoul Trip 2026</div>
+            <div class="schedule-subtitle">02/23 - 03/04 • 10 Days</div>
+        </div>
+        <div class="schedule-tabs" id="schedule-tabs">
+            <button class="schedule-tab active" onclick="showDay(0)">Day 1<br><span>02/23</span></button>
+            <button class="schedule-tab" onclick="showDay(1)">Day 2<br><span>02/24</span></button>
+            <button class="schedule-tab" onclick="showDay(2)">Day 3<br><span>02/25</span></button>
+            <button class="schedule-tab" onclick="showDay(3)">Day 4<br><span>02/26</span></button>
+            <button class="schedule-tab" onclick="showDay(4)">Day 5<br><span>02/27</span></button>
+            <button class="schedule-tab" onclick="showDay(5)">Day 6<br><span>02/28</span></button>
+            <button class="schedule-tab" onclick="showDay(6)">Day 7<br><span>03/01</span></button>
+            <button class="schedule-tab" onclick="showDay(7)">Day 8<br><span>03/02</span></button>
+            <button class="schedule-tab" onclick="showDay(8)">Day 9<br><span>03/03</span></button>
+            <button class="schedule-tab" onclick="showDay(9)">Day 10<br><span>03/04</span></button>
+        </div>
+        <div class="schedule-content" id="schedule-content">
+            <div class="schedule-day active">
+                <div class="day-title">Day 1 - Monday 02/23</div>
+                <div class="schedule-item flight">
+                    <div class="time">18:15</div>
+                    <div class="content">
+                        <div class="event-title">✈️ 桃園 → 仁川</div>
+                        <div class="event-detail">TR 896 [Scoot B787-9]</div>
+                        <div class="event-detail">Taoyuan Intl Airport (TPE) Terminal 1</div>
+                    </div>
+                </div>
+                <div class="schedule-item flight">
+                    <div class="time">21:45</div>
+                    <div class="content">
+                        <div class="event-title">🛬 抵達首爾</div>
+                        <div class="event-detail">Incheon Intl (ICN) Terminal 1</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="time">23:00</div>
+                    <div class="content">
+                        <div class="event-title">🏠 Check-in</div>
+                        <div class="event-detail">43 Gyeongdongsijang-ro 12-gil, Seoul</div>
+                    </div>
+                </div>
+            </div>
+            <div class="schedule-day">
+                <div class="day-title">Day 2 - Tuesday 02/24</div>
+                <div class="schedule-item work">
+                    <div class="time">10:00</div>
+                    <div class="content">
+                        <div class="event-title">💼 Tina 工作</div>
+                        <div class="event-detail">10:00 - 19:00</div>
+                    </div>
+                </div>
+                <div class="schedule-item work">
+                    <div class="time">11:00</div>
+                    <div class="content">
+                        <div class="event-title">💼 Bian 工作</div>
+                        <div class="event-detail">11:00 - 20:00</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="time">13:00</div>
+                    <div class="content">
+                        <div class="event-title">🍜 午餐</div>
+                    </div>
+                </div>
+            </div>
+            <div class="schedule-day">
+                <div class="day-title">Day 3 - Wednesday 02/25</div>
+                <div class="schedule-item work">
+                    <div class="time">10:00</div>
+                    <div class="content">
+                        <div class="event-title">💼 Tina 工作</div>
+                        <div class="event-detail">10:00 - 19:00</div>
+                    </div>
+                </div>
+                <div class="schedule-item work">
+                    <div class="time">11:00</div>
+                    <div class="content">
+                        <div class="event-title">💼 Bian 工作</div>
+                        <div class="event-detail">11:00 - 20:00</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="time">13:00</div>
+                    <div class="content">
+                        <div class="event-title">🍜 午餐</div>
+                    </div>
+                </div>
+            </div>
+            <div class="schedule-day">
+                <div class="day-title">Day 4 - Thursday 02/26</div>
+                <div class="schedule-item free">
+                    <div class="time">All Day</div>
+                    <div class="content">
+                        <div class="event-title">🎉 Free Day</div>
+                        <div class="event-detail">自由行程</div>
+                    </div>
+                </div>
+            </div>
+            <div class="schedule-day">
+                <div class="day-title">Day 5 - Friday 02/27</div>
+                <div class="schedule-item">
+                    <div class="time">All Day</div>
+                    <div class="content">
+                        <div class="event-title">🏮 逛街 / 北村+夜景</div>
+                        <div class="event-detail">探索首爾傳統與現代</div>
+                    </div>
+                </div>
+            </div>
+            <div class="schedule-day">
+                <div class="day-title">Day 6 - Saturday 02/28</div>
+                <div class="schedule-item">
+                    <div class="time">All Day</div>
+                    <div class="content">
+                        <div class="event-title">🏔️ Eobi 冰谷 & 南怡島</div>
+                        <div class="event-detail">一日遊行程</div>
+                    </div>
+                </div>
+            </div>
+            <div class="schedule-day">
+                <div class="day-title">Day 7 - Sunday 03/01</div>
+                <div class="schedule-item">
+                    <div class="time">09:00</div>
+                    <div class="content">
+                        <div class="event-title">🚗 通勤</div>
+                        <div class="event-detail">約一小時車程</div>
+                    </div>
+                </div>
+                <div class="schedule-item special">
+                    <div class="time">11:00</div>
+                    <div class="content">
+                        <div class="event-title">💒 Wedding</div>
+                        <div class="event-detail">婚禮典禮</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="time">Afternoon</div>
+                    <div class="content">
+                        <div class="event-title">🛍️ 仁川 or 逛街</div>
+                    </div>
+                </div>
+            </div>
+            <div class="schedule-day">
+                <div class="day-title">Day 8 - Monday 03/02</div>
+                <div class="schedule-item">
+                    <div class="time">All Day</div>
+                    <div class="content">
+                        <div class="event-title">🌐 北緯 38 度線</div>
+                        <div class="event-detail">DMZ 一日遊</div>
+                    </div>
+                </div>
+            </div>
+            <div class="schedule-day">
+                <div class="day-title">Day 9 - Tuesday 03/03</div>
+                <div class="schedule-item">
+                    <div class="time">All Day</div>
+                    <div class="content">
+                        <div class="event-title">🏛️ 恩平韓屋村</div>
+                        <div class="event-detail">體驗傳統韓屋</div>
+                    </div>
+                </div>
+            </div>
+            <div class="schedule-day">
+                <div class="day-title">Day 10 - Wednesday 03/04</div>
+                <div class="schedule-item">
+                    <div class="time">Daytime</div>
+                    <div class="content">
+                        <div class="event-title">🛍️ 逛街 + 最後採購</div>
+                        <div class="event-detail">準備回家囉</div>
+                    </div>
+                </div>
+                <div class="schedule-item flight">
+                    <div class="time">23:00</div>
+                    <div class="content">
+                        <div class="event-title">✈️ 仁川 → 桃園</div>
+                        <div class="event-detail">TR 897 [Scoot B787-9]</div>
+                        <div class="event-detail">Incheon Intl (ICN) Terminal 1</div>
+                    </div>
+                </div>
+                <div class="schedule-item flight">
+                    <div class="time">00:45</div>
+                    <div class="content">
+                        <div class="event-title">🛬 抵達台灣</div>
+                        <div class="event-detail">Taoyuan Intl Airport (TPE) Terminal 1</div>
+                        <div class="event-detail">03/05 (四) 凌晨</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div id="map-wrap">
@@ -324,6 +530,10 @@ function locate(){
         myMarker=L.marker([pos.coords.latitude,pos.coords.longitude],{icon:ic}).addTo(map).bindPopup('📍 你在這裡').openPopup();
         map.setView([pos.coords.latitude,pos.coords.longitude],15)
     },function(){alert('無法取得位置')},{enableHighAccuracy:true})
+}
+function showDay(idx){
+    document.querySelectorAll('.schedule-tab').forEach(function(t,i){t.classList.toggle('active',i===idx)});
+    document.querySelectorAll('.schedule-day').forEach(function(d,i){d.classList.toggle('active',i===idx)});
 }
 draw();
     </script>
