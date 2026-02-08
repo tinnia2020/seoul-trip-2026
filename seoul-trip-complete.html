@@ -15,7 +15,8 @@
         .title svg{color:var(--primary)}
         .search-toggle{background:transparent;border:none;cursor:pointer;padding:8px;display:flex;align-items:center;justify-content:center;position:relative;z-index:1300;flex-shrink:0}
         .search-toggle svg{color:var(--primary);width:22px;height:22px}
-        .search-wrap{position:fixed;top:10px;right:12px;height:40px;background:var(--white);z-index:1100;display:flex;align-items:center;border-radius:20px;border:1px solid #e0e0e0;width:40px;overflow:hidden;transition:all 0.3s ease;pointer-events:none}
+        .search-wrap{position:fixed;top:10px;right:12px;height:40px;background:var(--white);z-index:1100;display:none;align-items:center;border-radius:20px;border:1px solid #e0e0e0;width:40px;overflow:hidden;transition:all 0.3s ease}
+        .search-wrap.show{display:flex}
         .search-wrap.open{pointer-events:auto;width:calc(100% - 180px)}
         .search-box{display:flex;align-items:center;background:transparent;padding:0 12px;gap:10px;width:100%;opacity:0;transition:opacity 0.2s ease}
         .search-wrap.open .search-box{opacity:1;transition-delay:0.1s}
@@ -220,9 +221,14 @@ function clearSearch(){document.getElementById('search').value='';q='';document.
 function toggleSearch(){
     var sw=document.getElementById('search-wrap');
     var si=document.getElementById('search');
-    sw.classList.toggle('open');
-    if(sw.classList.contains('open')){setTimeout(function(){si.focus()},300)}
-    else{clearSearch()}
+    if(!sw.classList.contains('show')){
+        sw.classList.add('show');
+        setTimeout(function(){sw.classList.add('open')},10);
+        setTimeout(function(){si.focus()},300);
+    }else{
+        sw.classList.remove('open');
+        setTimeout(function(){sw.classList.remove('show');clearSearch()},300);
+    }
 }
 function toggleMapFilter(){
     var btn=document.getElementById('map-filter-btn');
