@@ -159,15 +159,15 @@
         .current-time-line::before{content:'';position:absolute;left:-6px;top:-4px;width:10px;height:10px;background:var(--primary);border-radius:50%;box-shadow:0 0 0 3px rgba(255,107,107,0.2)}
         .current-time-label{position:absolute;left:12px;top:-10px;background:var(--primary);color:white;font-size:0.7rem;padding:2px 8px;border-radius:10px;font-weight:700;white-space:nowrap}
         
-        .hour-block{display:flex;gap:12px;position:relative;min-height:70px}
+        .hour-block{display:flex;gap:12px;position:relative;height:80px}
         .hour-block.past{opacity:0.5}
         .hour-time{flex-shrink:0;width:60px;padding:4px 12px 0 16px;font-size:0.85rem;font-weight:700;color:var(--text-sec);text-align:right;position:sticky;top:110px;z-index:10}
         .hour-line{position:relative;flex:1;padding:0 16px 0 0}
-        .hour-line::before{content:'';position:absolute;left:0;top:8px;bottom:-10px;width:1px;background:linear-gradient(180deg, #e5e5e5 0%, #f0f0f0 100%)}
+        .hour-line::before{content:'';position:absolute;left:0;top:8px;height:calc(100% - 8px);width:1px;background:linear-gradient(180deg, #e5e5e5 0%, #f0f0f0 100%)}
         .hour-dot{position:absolute;left:-3px;top:8px;width:6px;height:6px;border-radius:50%;background:#d0d0d0;z-index:1;transition:all 0.2s ease}
         .hour-block:hover .hour-dot{background:var(--primary);transform:scale(1.3)}
         
-        .event-card{background:white;border-radius:14px;padding:14px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,0.08);transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);border-left:3px solid transparent;cursor:pointer;position:relative;overflow:hidden}
+        .event-card{background:white;border-radius:14px;padding:14px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,0.08);transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);border-left:3px solid transparent;cursor:pointer;position:relative;overflow:auto}
         .event-card::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 100%);opacity:0;transition:opacity 0.3s ease}
         .event-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.12);transform:translateY(-2px) translateX(2px)}
         .event-card:hover::before{opacity:1}
@@ -462,25 +462,28 @@ function renderHourlySchedule(dayIndex) {
     minHour = Math.max(0, minHour - 1);
     maxHour = Math.min(24, maxHour + 1);
     
-    // 建立小時-事件對照表
+    // 建立時間-事件對照表（改為按結束時間）
     var hourEvents = {};
     events.forEach(function(event) {
         if (!hourEvents[event.hour]) hourEvents[event.hour] = [];
         hourEvents[event.hour].push(event);
     });
     
+    var HOUR_HEIGHT = 80; // 每小時固定高度 80px
     var html = '';
+    
     for (var h = minHour; h < maxHour; h++) {
         var hourEvts = hourEvents[h] || [];
         var eventsHtml = hourEvts.map(function(evt) {
             var icon = ICONS[evt.icon] || '';
             var descHtml = evt.desc ? '<div class="event-desc">' + evt.desc.replace(/\\n/g, '<br>') + '</div>' : '';
             var endHour = evt.hour + evt.duration;
-            var timeDetail = formatHour(evt.hour) + ' - ' + formatHour(Math.floor(endHour)) + ':' + (Math.floor((endHour % 1) * 60) || '00');
+            var endMinute = Math.floor((endHour % 1) * 60);
+            var timeDetail = formatHour(evt.hour) + ' - ' + formatHour(Math.floor(endHour)) + ':' + (endMinute < 10 ? '0' : '') + (endMinute || '00');
             
-            // 計算卡片高度（每小時約80px）
-            var cardHeight = evt.duration >= 2 ? (evt.duration * 70) + 'px' : 'auto';
-            var heightStyle = evt.duration >= 2 ? ' style="min-height:' + cardHeight + '"' : '';
+            // 精確計算卡片高度：duration × 每小時高度 - 間距
+            var cardHeight = (evt.duration * HOUR_HEIGHT) - 20; // 減去 margin
+            var heightStyle = ' style="height:' + cardHeight + 'px"';
             
             return '<div class="event-card ' + evt.type + '"' + heightStyle + '>' +
                 '<div class="event-title-text">' + icon + evt.title + '</div>' +
