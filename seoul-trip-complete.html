@@ -212,8 +212,8 @@ function draw(){
     ls.innerHTML=fs.map(function(p){
         var qe=encodeURIComponent(p.kr||p.cn);
         var cc='cat-'+p.cat;
-        var mh=p.must?'<div class="must"><div class="must-title">⭐ 必吃必買</div><div class="must-text">'+p.must+'</div>'+(p.price?'<span class="price">💰 '+p.price+'</span>':'')+'</div>':'';
-        return '<div class="card"><div class="card-badges"><span class="badge-cat '+cc+'">'+p.cat+'</span><span class="badge-zone">'+p.zone+'</span></div><div class="name-cn">'+p.cn+'</div><div class="name-kr">'+p.kr+'</div>'+(p.note?'<div class="info">💡 '+p.note+'</div>':'')+'<div class="info">🕐 '+p.hours+'</div>'+mh+'<div class="actions"><a href="https://www.google.com/maps/search/?api=1&query='+qe+'" target="_blank" class="btn btn-g">Google</a><a href="https://map.naver.com/p/search/'+qe+'" target="_blank" class="btn btn-n">Naver</a></div></div>'
+        var mh=p.must?'<div class="must"><div class="must-text">'+p.must+'</div>'+(p.price?'<span class="price">💰 '+p.price+'</span>':'')+'</div>':'';
+        return '<div class="card"><div class="card-badges"><span class="badge-cat '+cc+'">'+p.cat+'</span><span class="badge-zone">'+p.zone+'</span></div><div class="name-cn">'+p.cn+'</div><div class="name-kr">'+p.kr+'</div><div class="info">🕐 '+p.hours+'</div>'+mh+'<div class="actions"><a href="https://www.google.com/maps/search/?api=1&query='+qe+'" target="_blank" class="btn btn-g">Google</a><a href="https://map.naver.com/p/search/'+qe+'" target="_blank" class="btn btn-n">Naver</a></div></div>'
     }).join('')
 }
 document.getElementById('search').addEventListener('input',function(e){q=e.target.value.toLowerCase().trim();document.getElementById('clear').classList.toggle('show',q.length>0);draw()});
