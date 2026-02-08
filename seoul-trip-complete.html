@@ -16,9 +16,9 @@
         .title svg{color:var(--primary);width:18px;height:18px}
         .search-toggle{background:transparent;border:none;cursor:pointer;padding:6px;display:flex;align-items:center;justify-content:center;position:relative;z-index:1200;flex-shrink:0}
         .search-toggle svg{color:var(--primary);width:20px;height:20px}
-        .search-wrap{position:fixed;top:10px;right:12px;height:40px;background:var(--white);z-index:1200;display:none;align-items:center;border-radius:20px;border:1px solid #e0e0e0;width:40px;overflow:hidden;transition:width 0.4s cubic-bezier(0.4, 0, 0.2, 1)}
+        .search-wrap{position:fixed;top:10px;right:12px;height:40px;background:var(--white);z-index:1200;display:none;align-items:center;border-radius:20px;border:1px solid #e0e0e0;width:40px;overflow:hidden;transition:all 0.4s cubic-bezier(0.4, 0, 0.2, 1);max-width:calc(100vw - 180px)}
         .search-wrap.show{display:flex}
-        .search-wrap.open{pointer-events:auto;width:calc(100% - 180px)}
+        .search-wrap.open{pointer-events:auto;width:calc(100% - 24px);right:12px}
         .search-box{display:flex;align-items:center;background:transparent;padding:0 12px;gap:10px;width:100%;opacity:0;transition:opacity 0.3s ease}
         .search-wrap.open .search-box{opacity:1;transition-delay:0.15s}
         .search-box svg{color:#bbb;flex-shrink:0}
