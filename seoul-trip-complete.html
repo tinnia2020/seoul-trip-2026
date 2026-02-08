@@ -68,9 +68,6 @@
         .page{display:none}
         .page.active{display:block}
         .placeholder{display:flex;align-items:center;justify-content:center;height:70vh;color:#888;text-align:center;flex-direction:column}
-        .schedule-header{padding:20px;background:var(--white);text-align:center;border-bottom:1px solid #f0f0f0}
-        .schedule-title{font-size:1.3rem;font-weight:700;color:var(--text);margin-bottom:4px}
-        .schedule-subtitle{font-size:0.9rem;color:var(--text-sec)}
         .schedule-tabs{display:flex;overflow-x:auto;background:var(--white);padding:12px 16px;gap:8px;position:sticky;top:60px;z-index:500;border-bottom:1px solid #f0f0f0}
         .schedule-tabs::-webkit-scrollbar{display:none}
         .schedule-tab{flex-shrink:0;padding:10px 16px;background:var(--white);border:2px solid #e0e0e0;border-radius:12px;font-size:0.85rem;font-weight:600;color:var(--text-sec);cursor:pointer;text-align:center;transition:all 0.2s ease}
@@ -164,10 +161,6 @@
         <div class="footer">Made with 🦞 for Tina</div>
     </div>
     <div id="page-schedule" class="page">
-        <div class="schedule-header">
-            <div class="schedule-title">🗓️ Seoul Trip 2026</div>
-            <div class="schedule-subtitle">02/23 - 03/04 • 10 Days</div>
-        </div>
         <div class="schedule-tabs" id="schedule-tabs">
             <button class="schedule-tab active" onclick="showDay(0)">Day 1<br><span>02/23</span></button>
             <button class="schedule-tab" onclick="showDay(1)">Day 2<br><span>02/24</span></button>
