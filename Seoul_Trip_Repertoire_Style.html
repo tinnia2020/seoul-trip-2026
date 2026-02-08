@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SEOUL REPERTOIRE - App Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f5f7fa; /* App background light grey */
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --accent-color: #2563eb; /* App Blue */
+            --accent-light: #eff6ff;
+            --border-radius: 16px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .container {
+            max-width: 600px; /* Constrain width for mobile-app feel */
+            margin: 0 auto;
+            padding: 20px 16px;
+            padding-bottom: 80px; /* Space for bottom content if needed */
+        }
+
+        /* HEADER */
+        header {
+            text-align: left;
+            margin-bottom: 20px;
+            padding: 20px 0 10px 4px;
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin: 0;
+            letter-spacing: -0.5px;
+            color: var(--text-primary);
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        /* TABS (Sticky) */
+        .filter-bar {
+            position: sticky;
+            top: 0;
+            background: rgba(245, 247, 250, 0.95); /* Matches body bg */
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            padding: 12px 0;
+            margin: 0 -16px 20px -16px; /* Full bleed */
+            padding-left: 16px; /* Restore padding */
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            /* Hide scrollbar */
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        .filter-bar::-webkit-scrollbar {
+            display: none;
+        }
+        
+        /* Spacer after last item */
+        .filter-bar::after {
+            content: '';
+            flex: 0 0 16px;
+        }
+
+        .filter-btn {
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 8px 18px;
+            border: none;
+            background: #e5e7eb;
+            color: var(--text-secondary);
+            border-radius: 20px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+            flex-shrink: 0;
+        }
+
+        .filter-btn.active {
+            background: var(--accent-color);
+            color: white;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+            transform: scale(1.02);
+        }
+
+        /* LIST HEADER - Hidden in app view */
+        .list-header { display: none; }
+
+        /* CARDS */
+        .item-row {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 20px;
+            margin-bottom: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            transition: transform 0.2s, opacity 0.2s;
+            border: 1px solid rgba(0,0,0,0.02);
+            position: relative;
+        }
+        
+        .item-row.hidden {
+            display: none;
+        }
+
+        .item-row:active {
+            transform: scale(0.99);
+        }
+
+        /* Category Tag as Badge */
+        .col-meta {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            text-align: right;
+        }
+
+        .category-tag {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--accent-color);
+            background: var(--accent-light);
+            padding: 4px 10px;
+            border-radius: 6px;
+            border: none;
+            display: inline-block;
+        }
+
+        /* CONTENT */
+        .col-content {
+            display: flex;
+            flex-direction: column;
+            padding-right: 60px; /* Space for badge */
+        }
+
+        .name-cn {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            font-family: inherit;
+        }
+
+        .name-kr {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            margin-bottom: 12px;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        .details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            background: #f9fafb;
+            padding: 10px;
+            border-radius: 8px;
+            width: fit-content;
+        }
+
+        .accent-note {
+            color: var(--text-primary);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .accent-note::before {
+            content: '💡';
+            font-size: 0.8em;
+        }
+
+        /* ACTIONS (Buttons) */
+        .col-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 4px;
+        }
+
+        .btn-minimal {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .btn-minimal.google {
+            background-color: #f3f4f6;
+            color: var(--text-primary);
+        }
+
+        .btn-minimal.google:hover {
+            background-color: #e5e7eb;
+        }
+
+        .btn-minimal.naver {
+            background-color: #03c75a; /* Keep Naver Green */
+            color: white;
+            font-weight: 700;
+        }
+        
+        .btn-minimal.naver:hover {
+            background-color: #02b350;
+        }
+
+        /* WORK SPECIFIC STYLE */
+        .category-tag.work-tag {
+            background-color: #374151;
+            color: white;
+        }
+
+        /* Remove "No." text from meta, just keep tag */
+        .col-meta span:not(.category-tag) {
+            display: none;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Seoul Trip</h1>
+            <div class="subtitle">Itinerary & Saved Places</div>
+        </header>
+        
+        <!-- Sticky Filter Bar -->
+        <div class="filter-bar" id="filterBar">
+            <button class="filter-btn active" data-filter="all">All Places</button>
+            <button class="filter-btn" data-filter="美食">Food</button>
+            <button class="filter-btn" data-filter="咖啡甜點">Cafe</button>
+            <button class="filter-btn" data-filter="Work">Work</button>
+            <button class="filter-btn" data-filter="購物">Shop</button>
+            <button class="filter-btn" data-filter="服飾">Fashion</button>
+            <button class="filter-btn" data-filter="景點">Spots</button>
+        </div>
+
+        <!-- 1 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">美食</span></div>
+            <div class="col-content">
+                <div class="name-cn">青瓦屋</div>
+                <div class="name-kr">청와옥 을지로3가직영점</div>
+                <div class="details">
+                    <span class="accent-note">劉在石推薦湯飯</span>
+                    <span>08:00 - 22:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=青瓦屋 (을지로3가직영점)" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%EC%B2%AD%EC%99%80%EC%98%A5%20%EC%9D%84%EC%A7%80%EB%A1%9C3%EA%B0%80%EC%A7%81%EC%98%81%EC%A0%90" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 2 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">早午餐</span></div>
+            <div class="col-content">
+                <div class="name-cn">倫敦貝果博物館</div>
+                <div class="name-kr">런던베이글뮤지엄 안국점</div>
+                <div class="details">
+                    <span class="accent-note">推大蒜口味</span>
+                    <span>08:00 - 18:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=倫敦貝果博物館 安國店" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%EB%9F%B0%EB%8D%98%EB%B2%A0%EC%9D%B4%EA%B8%80%EB%AE%A1%EC%A7%80%EC%97%84%20%EC%95%88%EA%B5%AD%EC%A0%90" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 3 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">美食</span></div>
+            <div class="col-content">
+                <div class="name-cn">神仙雪濃湯</div>
+                <div class="name-kr">신선설농탕 명동점</div>
+                <div class="details">
+                    <span class="accent-note">建議加鹽巴</span>
+                    <span>24 小時營業</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=神仙雪濃湯 明洞店" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%EC%8B%A0%EC%84%A4%EB%86%8D%ED%83%95%20%EB%AA%85%EB%8F%99%EC%A0%90" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 4 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">美食</span></div>
+            <div class="col-content">
+                <div class="name-cn">無垢屋 (安國店)</div>
+                <div class="name-kr">무구 안국점</div>
+                <div class="details">
+                    <span class="accent-note">12:00 開放訂位</span>
+                    <span>11:30 - 21:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=無垢屋 安國店" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%EB%AC%B4%EA%B5%AC%20%EC%95%88%EA%B5%AD%EC%A0%90" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 5 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">美食</span></div>
+            <div class="col-content">
+                <div class="name-cn">朝朝刀削麵</div>
+                <div class="name-kr">조조칼국수 시청점</div>
+                <div class="details">
+                    <span class="accent-note">市廳站人氣店</span>
+                    <span>10:00 - 21:30</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=朝朝刀削麵 首爾" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%EC%A1%B0%EC%A1%B0%EC%B9%BC%EA%B5%AD%EC%88%98%20%EC%8B%9C%EC%B2%AD%EC%A0%90" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 6 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">美食</span></div>
+            <div class="col-content">
+                <div class="name-cn">小豬存錢筒</div>
+                <div class="name-kr">돼지저금통</div>
+                <div class="details">
+                    <span class="accent-note">弘大站 8 號出口</span>
+                    <span>14:00 - 02:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=小豬存錢筒 弘大" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%EB%8F%BC%EC%A7%80%EC%A0%80%EA%B8%88%ED%86%B5" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 7 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">美食</span></div>
+            <div class="col-content">
+                <div class="name-cn">橋村筆房 (炸雞)</div>
+                <div class="name-kr">교촌필방</div>
+                <div class="details">
+                    <span class="accent-note">週一公休</span>
+                    <span>16:00 - 23:30</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=橋村筆房" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%EA%B5%90%EC%B4%8C%ED%95%84%EB%B0%A9" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 8 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">咖啡甜點</span></div>
+            <div class="col-content">
+                <div class="name-cn">JO & DAWSON</div>
+                <div class="name-kr">조앤도슨</div>
+                <div class="details">
+                    <span class="accent-note">焦糖布丁名店</span>
+                    <span>12:00 - 21:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=JO & DAWSON Seoul" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%EC%A1%B0%EC%95%A4%EB%8F%84%EC%8A%A8" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 9 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">美食</span></div>
+            <div class="col-content">
+                <div class="name-cn">Dalmaji (乙支路)</div>
+                <div class="name-kr">달마지 을지로점</div>
+                <div class="details">
+                    <span class="accent-note">最後點餐 01:00</span>
+                    <span>16:00 - 02:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=Dalmaji Plaza BBQ Euljiro" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%EB%8B%AC%EB%A7%88%EC%A7%80%20%EC%9D%84%EC%A7%80%EB%A1%9C%EC%A0%90" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 10 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">美食</span></div>
+            <div class="col-content">
+                <div class="name-cn">龍龍麻辣桃源</div>
+                <div class="name-kr">용용선생 성수점</div>
+                <div class="details">
+                    <span class="accent-note">最後點餐 21:00</span>
+                    <span>16:00 - 22:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=龍龍麻辣桃源 聖水" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%EC%9A%A9%EC%9A%A9%EC%84%A0%EC%83%9D%20%EC%84%B1%EC%88%98%EC%A0%90" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 11 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">美食</span></div>
+            <div class="col-content">
+                <div class="name-cn">Jongsamyook (烤肉)</div>
+                <div class="name-kr">종삼육</div>
+                <div class="details">
+                    <span class="accent-note">鐘路三街站</span>
+                    <span>14:00 - 23:30</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=Jongsamyook Seoul" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%EC%A2%85%EC%82%BC%EC%9C%A1" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 12 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">美食</span></div>
+            <div class="col-content">
+                <div class="name-cn">孫家一隻雞</div>
+                <div class="name-kr">손가네닭한마리</div>
+                <div class="details">
+                    <span class="accent-note">隱藏版名店</span>
+                    <span>11:00 - 22:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=孫家一隻雞 東大門" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%EC%86%90%EA%B0%80%EB%84%A4%EB%8B%AD%ED%95%9C%EB%A7%88%EB%A6%AC" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 13 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">美食</span></div>
+            <div class="col-content">
+                <div class="name-cn">統營清蒸牡蠣</div>
+                <div class="name-kr">통영굴찜</div>
+                <div class="details">
+                    <span class="accent-note">季節限定</span>
+                    <span>11:00 - 22:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=統營清蒸牡蠣 首爾" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%ED%86%B5%EC%98%81%EA%B5%B4%EC%B0%9C" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 14 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">美食</span></div>
+            <div class="col-content">
+                <div class="name-cn">無垢屋 (聖水店)</div>
+                <div class="name-kr">무구 성수점</div>
+                <div class="details">
+                    <span class="accent-note">聖水站分店</span>
+                    <span>11:30 - 21:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=無垢屋 聖水" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%EB%AC%B4%EA%B5%AC%20%EC%84%B1%EC%88%98%EC%A0%90" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 15 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">美食</span></div>
+            <div class="col-content">
+                <div class="name-cn">漢南洞土豆湯總店</div>
+                <div class="name-kr">한남동감자탕</div>
+                <div class="details">
+                    <span class="accent-note">必吃老店</span>
+                    <span>24 小時營業</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=漢南洞土豆湯" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%ED%95%9C%EB%82%A8%EB%8F%99%EA%B0%90%EC%9E%90%ED%83%95" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 16 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">咖啡甜點</span></div>
+            <div class="col-content">
+                <div class="name-cn">Parole & Langue</div>
+                <div class="name-kr">파롤앤랑그</div>
+                <div class="details">
+                    <span class="accent-note">塔類甜點熱門店</span>
+                    <span>13:00 - 21:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=Parole & Langue Seoul" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%ED%8C%8C%EB%A1%A4%EC%95%A4%EB%9E%91%EA%B7%B8" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 17 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">咖啡甜點</span></div>
+            <div class="col-content">
+                <div class="name-cn">Butty Sandwich</div>
+                <div class="name-kr">버티샌드위치하우스</div>
+                <div class="details">
+                    <span class="accent-note">巧巴達三明治</span>
+                    <span>11:00 - 19:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=Butty Sandwich House Seoul" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%EB%B2%84%ED%8B%B0%EC%83%8C%EB%93%9C%EC%9C%84%EC%B9%98%ED%95%98%EC%9A%B0%EC%8A%A4" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 18 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">美食</span></div>
+            <div class="col-content">
+                <div class="name-cn">馬山奶奶燉安鱇魚</div>
+                <div class="name-kr">원조마산할매아구찜</div>
+                <div class="details">
+                    <span class="accent-note">在地口碑店</span>
+                    <span>11:00 - 22:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=雲蒸馬山奶奶燉安鱇魚" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%EC%9B%90%EC%A1%B0%EB%A7%88%EC%82%B0%ED%95%A0%EB%A7%A4%EC%95%84%EA%B5%AC%EC%B0%9C" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 19 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">購物</span></div>
+            <div class="col-content">
+                <div class="name-cn">hetras. (聖水)</div>
+                <div class="name-kr">헤트라스 성수플래그십스토어</div>
+                <div class="details">
+                    <span class="accent-note">推薦 No.29, No.7, No.5</span>
+                    <span>11:00 - 20:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=hetras 聖水" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%ED%97%A4%ED%8A%B8%EB%9D%BC%EC%8A%A4%20%EC%84%B1%EC%88%98%ED%94%8C%EB%9E%98%EA%B7%B8%EC%8B%AD%EC%8A%A4%ED%86%A0%EC%96%B4" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 20 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">咖啡甜點</span></div>
+            <div class="col-content">
+                <div class="name-cn">newmix coffee</div>
+                <div class="name-kr">뉴믹스커피 성수</div>
+                <div class="details">
+                    <span class="accent-note">必買即溶咖啡伴手禮</span>
+                    <span>11:00 - 20:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=newmix coffee 聖水" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%EB%89%B4%EB%AF%B9%EC%8A%A4%EC%BB%A4%ED%94%BC%20%EC%84%B1%EC%88%98" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 21 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">服飾</span></div>
+            <div class="col-content">
+                <div class="name-cn">ADERERROR (聖水)</div>
+                <div class="name-kr">아더 성수 스페이스</div>
+                <div class="details">
+                    <span class="accent-note">旗艦概念店</span>
+                    <span>13:00 - 21:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=ADERERROR 聖水" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%EC%95%84%EB%8D%94%20%EC%84%B1%EC%88%98%20%EC%8A%A4%ED%8E%98%EC%9D%B4%EC%8A%A4" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 22 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">服飾</span></div>
+            <div class="col-content">
+                <div class="name-cn">BLUE ELEPHANT</div>
+                <div class="name-kr">블루엘리펀트 성수 플래그십스토어</div>
+                <div class="details">
+                    <span class="accent-note">平價墨鏡品牌</span>
+                    <span>11:00 - 20:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=BLUE ELEPHANT 聖水" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%EB%B8%94%EB%A3%A8%EC%97%98%EB%A6%AC%ED%8E%80%ED%8A%B8%20%EC%84%B1%EC%88%98%20%ED%94%8C%EB%9E%98%EA%B7%B8%EC%8B%AD%EC%8A%A4%ED%86%A0%EC%96%B4" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 23 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">彩妝</span></div>
+            <div class="col-content">
+                <div class="name-cn">fwee Agit (聖水)</div>
+                <div class="name-kr">퓌 아지트 성수</div>
+                <div class="details">
+                    <span class="accent-note">必買布丁唇泥</span>
+                    <span>11:00 - 21:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=fwee Agit 聖水" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%ED%93%8C%20%EC%95%84%EC%A7%80%ED%8A%B8%20%EC%84%B1%EC%88%98" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 24 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">景點</span></div>
+            <div class="col-content">
+                <div class="name-cn">DIOR 聖水</div>
+                <div class="name-kr">디올 성수</div>
+                <div class="details">
+                    <span class="accent-note">熱門地標拍照</span>
+                    <span>11:00 - 20:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=DIOR 聖水" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%EB%94%94%EC%98%AC%20%EC%84%B1%EC%88%98" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 25 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">服飾</span></div>
+            <div class="col-content">
+                <div class="name-cn">NYUNYU (聖水)</div>
+                <div class="name-kr">뉴뉴 성수점</div>
+                <div class="details">
+                    <span class="accent-note">飾品購物聖地</span>
+                    <span>11:00 - 23:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=NYUNYU 聖水" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%EB%89%B4%EB%89%B4%20%EC%84%B1%EC%88%98%EC%A0%90" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 26 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">選物</span></div>
+            <div class="col-content">
+                <div class="name-cn">Thingool (聖水)</div>
+                <div class="name-kr">띵굴스토어 성수점</div>
+                <div class="details">
+                    <span class="accent-note">生活選物店</span>
+                    <span>11:00 - 21:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=Thingool 聖水" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%EB%9D%B5%EA%B5%B4%EC%8A%A4%ED%86%A0%EC%96%B4%20%EC%84%B1%EC%88%98%EC%A0%90" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 27 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">服飾</span></div>
+            <div class="col-content">
+                <div class="name-cn">KODAK DunDun</div>
+                <div class="name-kr">코닥어패럴 던던동대문점</div>
+                <div class="details">
+                    <span class="accent-note">位於 DunDun 2 樓</span>
+                    <span>10:30 - 22:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=KODAK DunDun 東大門" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%EC%BD%94%EB%8B%A5%EC%96%B4%ED%8C%A8%EB%9F%B4%20%EB%8D%98%EB%8D%98%EB%8F%99%EB%8C%80%EB%AC%B8%EC%A0%90" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 28 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">服飾</span></div>
+            <div class="col-content">
+                <div class="name-cn">ept (聖水)</div>
+                <div class="name-kr">이피티 성수 플래그십스토어</div>
+                <div class="details">
+                    <span class="accent-note">韓國熱門運動鞋</span>
+                    <span>11:00 - 20:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=ept 聖水" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%EC%9D%B4%ED%94%BC%ED%8B%B0%20%EC%84%B1%EC%88%98%20%ED%94%8C%EB%9E%98%EA%B7%B8%EC%8B%AD%EC%8A%A4%ED%86%A0%EC%96%B4" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 29 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">選物</span></div>
+            <div class="col-content">
+                <div class="name-cn">HAUS NOWHERE</div>
+                <div class="name-kr">하우스 성수</div>
+                <div class="details">
+                    <span class="accent-note">臘腸狗地標/新品牌</span>
+                    <span>11:00 - 21:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=HAUS NOWHERE 聖水" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%ED%95%98%EC%9A%B0%EC%8A%A4%20%EC%84%B1%EC%88%98" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 30 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">服飾</span></div>
+            <div class="col-content">
+                <div class="name-cn">Thisisneverthat</div>
+                <div class="name-kr">디스이즈네버댓 홍대플래그십스토어</div>
+                <div class="details">
+                    <span class="accent-note">街頭潮流第一站</span>
+                    <span>12:00 - 21:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=Thisisneverthat Hongdae" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%EB%94%94%EC%8A%A4%EC%9D%B4%EC%A6%88%EB%84%A4%EB%B2%84%EB%8C%93%20%ED%99%8D%EB%8C%80%ED%94%8C%EB%9E%98%EA%B7%B8%EC%8B%AD%EC%8A%A4%ED%86%A0%EC%96%B4" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 31 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">服飾</span></div>
+            <div class="col-content">
+                <div class="name-cn">KITH Seoul</div>
+                <div class="name-kr">키스 서울</div>
+                <div class="details">
+                    <span class="accent-note">潮流名店</span>
+                    <span>11:00 - 20:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=KITH Seoul" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%ED%82%A4%EC%8A%A4%20%EC%84%9C%EC%9A%B8" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 32 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">服飾</span></div>
+            <div class="col-content">
+                <div class="name-cn">HUMAN MADE</div>
+                <div class="name-kr">휴먼메이드 성수</div>
+                <div class="details">
+                    <span class="accent-note">熱門潮牌</span>
+                    <span>11:00 - 20:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=HUMAN MADE Seongsu" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%ED%9C%B4%EB%A8%BC%EB%A9%94%EC%9D%B4%EB%93%9C%20%EC%84%B1%EC%88%98" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 33 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">選物</span></div>
+            <div class="col-content">
+                <div class="name-cn">MUSINSA EMPTY</div>
+                <div class="name-kr">무신사 엠프티 성수</div>
+                <div class="details">
+                    <span class="accent-note">大型選品店</span>
+                    <span>11:00 - 20:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=MUSINSA EMPTY Seongsu" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%EB%AC%B4%EC%8B%A0%EC%82%AC%20%EC%97%A0%ED%94%84%ED%8B%B0%20%EC%84%B1%EC%88%98" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 34 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">咖啡甜點</span></div>
+            <div class="col-content">
+                <div class="name-cn">清水堂</div>
+                <div class="name-kr">청수당</div>
+                <div class="details">
+                    <span class="accent-note">益善洞竹林造景</span>
+                    <span>11:30 - 22:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=清水堂 首爾" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%EC%B2%AD%EC%88%98%EB%8B%B9" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 35 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">咖啡甜點</span></div>
+            <div class="col-content">
+                <div class="name-cn">YM Coffee House</div>
+                <div class="name-kr">YM COFFEE HOUSE</div>
+                <div class="details">
+                    <span class="accent-note">教堂風格專業手沖</span>
+                    <span>12:00 - 22:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=YM Coffee House Seoul" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/YM%20COFFEE%20HOUSE" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 36 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">咖啡甜點</span></div>
+            <div class="col-content">
+                <div class="name-cn">Cafe Layered (延南)</div>
+                <div class="name-kr">카페레이어드 연남점</div>
+                <div class="details">
+                    <span class="accent-note">司康名店</span>
+                    <span>11:00 - 22:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=Cafe Layered Yeonnam" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%EC%B9%B4%ED%8E%98%EB%A0%88%EC%9D%B4%EC%96%B4%EB%93%9C%20%EC%97%B0%EB%82%A8%EC%A0%90" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 37 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">咖啡甜點</span></div>
+            <div class="col-content">
+                <div class="name-cn">Thanks Oat</div>
+                <div class="name-kr">땡스오트 연남</div>
+                <div class="details">
+                    <span class="accent-note">延南洞手工優格</span>
+                    <span>10:00 - 19:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=Thanks Oat Yeonnam" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%EB%95%A1%EC%8A%A4%EC%98%A4%ED%8A%B8%20%EC%97%B0%EB%82%A8" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 38 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">咖啡甜點</span></div>
+            <div class="col-content">
+                <div class="name-cn">today's enough</div>
+                <div class="name-kr">오늘의 위로</div>
+                <div class="details">
+                    <span class="accent-note">週二公休</span>
+                    <span>12:00 - 20:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=today's enough Seoul" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%EC%98%A4%EB%8A%98%EC%9D%98%20%EC%9C%84%EB%A1%9C" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 39 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">咖啡甜點</span></div>
+            <div class="col-content">
+                <div class="name-cn">Sohyeondang</div>
+                <div class="name-kr">소현당</div>
+                <div class="details">
+                    <span class="accent-note">韓屋茶室</span>
+                    <span>11:00 - 20:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=Sohyeondang Seoul" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%EC%86%8C%ED%98%84%EB%8B%B9" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 40 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">咖啡甜點</span></div>
+            <div class="col-content">
+                <div class="name-cn">artist bakery</div>
+                <div class="name-kr">아티스트베이커리 안국</div>
+                <div class="details">
+                    <span class="accent-note">鹽可頌排隊名店</span>
+                    <span>08:00 - 20:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=artist bakery Anguk" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%EC%95%84%ED%8B%B0%EC%8A%A4%ED%8A%B8%EB%B2%A0%EC%9D%B4%EC%BB%A4%EB%A6%AC%20%EC%95%88%EA%B5%AD" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 41 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">選物</span></div>
+            <div class="col-content">
+                <div class="name-cn">29CM SEONGSU</div>
+                <div class="name-kr">이구성수</div>
+                <div class="details">
+                    <span class="accent-note">線上選品實體店</span>
+                    <span>11:00 - 20:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=29CM SEONGSU" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%EC%9D%B4%EA%B5%AC%EC%84%B1%EC%88%98" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 42 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">展覽</span></div>
+            <div class="col-content">
+                <div class="name-cn">Ground Seesaw</div>
+                <div class="name-kr">그라운드시소 서촌</div>
+                <div class="details">
+                    <span class="accent-note">質感展覽空間</span>
+                    <span>10:00 - 19:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=Ground Seesaw Seochon" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%EA%B7%B8%EB%9D%BC%EC%9A%B4%EB%93%9C%EC%8B%9C%EC%86%8C%20%EC%84%9C%EC%B4%8C" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 43 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag">雜貨</span></div>
+            <div class="col-content">
+                <div class="name-cn">廣藏市場 156 號</div>
+                <div class="name-kr">광장시장 156호</div>
+                <div class="details">
+                    <span class="accent-note">購買韓國製棉被</span>
+                    <span>09:00 - 18:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=廣藏市場 156號" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%EA%B4%91%EC%9E%A5%EC%8B%9C%EC%9E%A5%20156%ED%98%B8" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 44 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag work-tag" style="background-color: #374151; color: white;">Work</span></div>
+            <div class="col-content">
+                <div class="name-cn">Cociety (首爾林)</div>
+                <div class="name-kr">코사이어티 서울숲</div>
+                <div class="details">
+                    <span class="accent-note">創意工作空間</span>
+                    <span>12:00 - 20:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=Cociety Seoul Forest" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%EC%BD%94%EC%82%AC%EC%9D%B4%EC%96%B4%ED%8B%B0%20%EC%84%9C%EC%9A%B8%EC%88%B2" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 45 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag work-tag" style="background-color: #374151; color: white;">Work</span></div>
+            <div class="col-content">
+                <div class="name-cn">Brautor (聖水)</div>
+                <div class="name-kr">브라우터</div>
+                <div class="details">
+                    <span class="accent-note">蝴蝶餅/整棟座位</span>
+                    <span>08:00 - 22:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=Brautor Seongsu" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%EB%B8%8C%EB%9D%BC%EC%9A%B0%ED%84%B0" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 46 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag work-tag" style="background-color: #374151; color: white;">Work</span></div>
+            <div class="col-content">
+                <div class="name-cn">Debunk (合井)</div>
+                <div class="name-kr">디벙크</div>
+                <div class="details">
+                    <span class="accent-note">地下層讀書氛圍</span>
+                    <span>10:00 - 23:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=Debunk Hapjeong" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%EB%94%94%EB%B2%99%ED%81%AC" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 47 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag work-tag" style="background-color: #374151; color: white;">Work</span></div>
+            <div class="col-content">
+                <div class="name-cn">Hollys Coffee (弘大)</div>
+                <div class="name-kr">할리스 홍대역점</div>
+                <div class="details">
+                    <span class="accent-note">24小時/適合筆電</span>
+                    <span>24 小時營業</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=Hollys Coffee Hongdae" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%ED%95%A0%EB%A6%AC%EC%8A%A4%20%ED%99%8D%EB%8C%80%EC%97%AD%EC%A0%90" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 48 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag work-tag" style="background-color: #374151; color: white;">Work</span></div>
+            <div class="col-content">
+                <div class="name-cn">Ediya Coffee Lab</div>
+                <div class="name-kr">이디야커피랩</div>
+                <div class="details">
+                    <span class="accent-note">旗艦店/寬敞舒適</span>
+                    <span>07:30 - 02:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=Ediya Coffee Lab Seoul" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%EC%9D%B4%EB%94%94%EC%95%BC%EC%BB%A4%ED%94%BC%EB%9E%A9" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+        <!-- 49 -->
+        <div class="item-row">
+            <div class="col-meta"><span class="category-tag work-tag" style="background-color: #374151; color: white;">Work</span></div>
+            <div class="col-content">
+                <div class="name-cn">Terarosa (Posco)</div>
+                <div class="name-kr">테라로사 포스코센터점</div>
+                <div class="details">
+                    <span class="accent-note">鋼鐵書架牆/江南</span>
+                    <span>07:30 - 21:00</span>
+                </div>
+            </div>
+            <div class="col-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=Terarosa Posco Center" target="_blank" class="btn-minimal google">Reviews</a>
+                <a href="https://map.naver.com/p/search/%ED%85%8C%EB%9D%BC%EB%A1%9C%EC%82%AC%20%ED%8F%AC%EC%8A%A4%EC%BD%94%EC%84%BC%ED%84%B0%EC%A0%90" target="_blank" class="btn-minimal naver">Naver Map</a>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Simple Filter Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const buttons = document.querySelectorAll('.filter-btn');
+            const items = document.querySelectorAll('.item-row');
+
+            buttons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Update active state
+                    buttons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    // Scroll centered (optional nice-to-have)
+                    btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+
+                    const filter = btn.getAttribute('data-filter');
+
+                    items.forEach(item => {
+                        const tag = item.querySelector('.category-tag').innerText;
+                        
+                        if (filter === 'all') {
+                            item.classList.remove('hidden');
+                        } else if (tag.includes(filter) || (filter === 'Work' && tag === 'Work')) {
+                            item.classList.remove('hidden');
+                        } else {
+                            item.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

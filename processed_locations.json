@@ -1,0 +1,738 @@
+[
+  {
+    "name": "1人1杯",
+    "korean": "1인1잔 은평한옥마을",
+    "note": "絕美環景",
+    "lat": 37.6410605,
+    "lon": 126.93788889999999,
+    "category": "food"
+  },
+  {
+    "name": "43 Gyeongdongsijang-ro 12-gil",
+    "korean": "",
+    "note": "🏠🏠住宿",
+    "lat": 37.5822619,
+    "lon": 127.04309219999999,
+    "category": "hotel"
+  },
+  {
+    "name": "第三隧道",
+    "korean": "제3땅굴",
+    "note": "分界線",
+    "lat": 37.916653,
+    "lon": 126.6982609,
+    "category": "sight"
+  },
+  {
+    "name": "Hotel Charis",
+    "korean": "호텔 카리스",
+    "note": "婚禮會場",
+    "lat": 37.526314,
+    "lon": 126.72301999999999,
+    "category": "hotel"
+  },
+  {
+    "name": "恩平韓屋村",
+    "korean": "은평한옥마을",
+    "note": "韓屋村！",
+    "lat": 37.6413191,
+    "lon": 126.93920399999999,
+    "category": "sight"
+  },
+  {
+    "name": "Dotom",
+    "korean": "도톰 성수",
+    "note": "位置在 首爾廣津區 Gwangjin-gu 是很多在地人下班後會來吃的那種「真正好吃」的烤肉店！",
+    "lat": 37.5563161,
+    "lon": 127.0779539,
+    "category": "food"
+  },
+  {
+    "name": "樂天超級市場 世界塔店",
+    "korean": "롯데마트 월드타워점",
+    "note": "",
+    "lat": 37.5141637,
+    "lon": 127.1048524,
+    "category": "sight"
+  },
+  {
+    "name": "大使館換錢所",
+    "korean": "대사관환전소",
+    "note": "",
+    "lat": 37.5621715,
+    "lon": 126.98247359999999,
+    "category": "shop"
+  },
+  {
+    "name": "Maljillo",
+    "korean": "말질로",
+    "note": "生魚片",
+    "lat": 37.564749899999995,
+    "lon": 127.0202449,
+    "category": "food"
+  },
+  {
+    "name": "훼미리손칼국수보쌈",
+    "korean": "훼미리손칼국수보쌈",
+    "note": "菜包肉 刀削麵",
+    "lat": 37.5494775,
+    "lon": 127.0446801,
+    "category": "food"
+  },
+  {
+    "name": "Jayeondo Sogeumppang (Salt Bread) in Seongsu",
+    "korean": "자연도소금빵 성수점",
+    "note": "自然島鹽麵包",
+    "lat": 37.542301699999996,
+    "lon": 127.05545819999999,
+    "category": "cafe"
+  },
+  {
+    "name": "Kyewol Gomtang",
+    "korean": "계월곰탕",
+    "note": "湯飯",
+    "lat": 37.539526699999996,
+    "lon": 127.0476224,
+    "category": "food"
+  },
+  {
+    "name": "Thweet Seongsu",
+    "korean": "트윗 성수",
+    "note": "THWEET威士忌冰淇淋",
+    "lat": 37.5446613,
+    "lon": 127.051779,
+    "category": "food"
+  },
+  {
+    "name": "仁王山",
+    "korean": "인왕산",
+    "note": "仁王山 인왕산 Inwangsan 登山口可導航「Inwangsan (Hanyangdoseong Fortress) Walking Trail Entrance」 想輕鬆些也可以搭乘Ub",
+    "lat": 37.5849489,
+    "lon": 126.95930419999999,
+    "category": "sight"
+  },
+  {
+    "name": "Mangrove Dongdaemun",
+    "korean": "맹그로브 동대문",
+    "note": "",
+    "lat": 37.564155299999996,
+    "lon": 127.00859949999999,
+    "category": "food"
+  },
+  {
+    "name": "Terarosa Posco Centre Branch",
+    "korean": "테라로사 포스코센터점",
+    "note": "手沖咖啡、麵包、蛋糕；鋼鐵書架牆打卡點、江南商務區",
+    "lat": 37.50579,
+    "lon": 127.05615329999999,
+    "category": "cafe"
+  },
+  {
+    "name": "MilkyShop Seongsu Store",
+    "korean": "밀키샵 성수점",
+    "note": "MilkyShop Seongsu Store 밀키샵 성수점 最有名伴手禮「焦糖奶油餅乾」 🈺 12:00-21:00",
+    "lat": 37.5439021,
+    "lon": 127.05069519999999,
+    "category": "shop"
+  },
+  {
+    "name": "Kodak Corner Shop",
+    "korean": "코닥 코너숍 성수",
+    "note": "Kodak Corner Shop 코닥 코너숍 弘大明洞也有 周邊很可愛 🈺 10:30-20:30",
+    "lat": 37.5431112,
+    "lon": 127.0543075,
+    "category": "shop"
+  },
+  {
+    "name": "Ediya Coffee Lab.",
+    "korean": "이디야 커피랩",
+    "note": "咖啡、甜點、寬敞座位；旗艦店概念、適合長時間停留",
+    "lat": 37.5104556,
+    "lon": 127.0328766,
+    "category": "cafe"
+  },
+  {
+    "name": "祖傳三代馬鈴薯排骨湯",
+    "korean": "소문난 성수 감자탕",
+    "note": "祖傳三代馬鈴薯排骨湯 소문난 성수 감자탕 24H",
+    "lat": 37.5428241,
+    "lon": 127.0543732,
+    "category": "food"
+  },
+  {
+    "name": "Hollys Coffee Hongik Univ. station branch",
+    "korean": "할리스커피 홍대입구역점",
+    "note": "美式咖啡、鬆餅、三明治；24小時營業、適合筆電工作",
+    "lat": 37.5548054,
+    "lon": 126.922737,
+    "category": "cafe"
+  },
+  {
+    "name": "Debunk",
+    "korean": "디벙크",
+    "note": "咖啡、甜點；地下層讀書氛圍、適合工作",
+    "lat": 37.5479164,
+    "lon": 126.91508429999999,
+    "category": "cafe"
+  },
+  {
+    "name": "Blue Elephant Space Seongsu",
+    "korean": "블루엘리펀트 스페이스 성수",
+    "note": "Blue Elephant Space Seongsu 未來感空間設計 韓國墨鏡品牌 🈺 10:00-22:00",
+    "lat": 37.5426718,
+    "lon": 127.0553783,
+    "category": "shop"
+  },
+  {
+    "name": "브라우터 강남 신세계백화점",
+    "korean": "브라우터 강남 신세계백화점",
+    "note": "蝴蝶餅 (프레즐)、德式椒鹽捲餅、咖啡；整棟建築都是座位",
+    "lat": 37.5043637,
+    "lon": 127.00362109999999,
+    "category": "cafe"
+  },
+  {
+    "name": "29cm.home",
+    "korean": "이구홈 성수",
+    "note": "29cm.home 이구홈 성수 質感家居選物店 旁邊是知名開心果gelato 🈺 11:00-22:00",
+    "lat": 37.5425599,
+    "lon": 127.05575789999999,
+    "category": "food"
+  },
+  {
+    "name": "Cociety",
+    "korean": "코사이어티",
+    "note": "咖啡、甜點、創意空間；週一公休；可工作",
+    "lat": 37.544770299999996,
+    "lon": 127.0456715,
+    "category": "cafe"
+  },
+  {
+    "name": "로에 성수(LOE SEONGSU)",
+    "korean": "로에 성수",
+    "note": "韓國小眾品牌香水，免費客製化刻字 🈺 11:00-21:00",
+    "lat": 37.5424182,
+    "lon": 127.05621529999999,
+    "category": "shop"
+  },
+  {
+    "name": "HAUS NOWHERE SEOUL",
+    "korean": "하우스노웨어 서울",
+    "note": "HAUS NOWHERE SEOUL 以「前所未有之境」為靈感，提供互動式設計體驗 🈺 11:00-21:00 大狗狗！",
+    "lat": 37.5380654,
+    "lon": 127.0589486,
+    "category": "food"
+  },
+  {
+    "name": "Artist Bakery",
+    "korean": "아티스트베이커리",
+    "note": "鹽可頌 (소금 크로와상)、可頌、牛角麵包；排隊名店",
+    "lat": 37.576219,
+    "lon": 126.98427099999999,
+    "category": "cafe"
+  },
+  {
+    "name": "Standard Bread",
+    "korean": "스탠다드브레드 성수",
+    "note": "Standard Bread 스탠다드브레드 성수 烘焙咖啡｜鐵鍋焦糖法式吐司 🈺 9:00-21:00",
+    "lat": 37.5416751,
+    "lon": 127.0611416,
+    "category": "cafe"
+  },
+  {
+    "name": "Neungdong Minari Seongsu",
+    "korean": "능동미나리 성수점",
+    "note": "Neungdong Minari 능동 미나리 성수점 連Hebe東海都來吃的水芹牛骨湯 🈺 平日9:30 假日9:00-00:00",
+    "lat": 37.542747999999996,
+    "lon": 127.05396069999999,
+    "category": "food"
+  },
+  {
+    "name": "소현당 게스트하우스",
+    "korean": "소현당 게스트하우스",
+    "note": "傳統韓茶、藥菓 (약과)、韓屋庭院座位；韓屋茶室體驗",
+    "lat": 37.5788782,
+    "lon": 126.9817678,
+    "category": "sight"
+  },
+  {
+    "name": "STAFF PICKS",
+    "korean": "스태프픽스 서촌",
+    "note": "美咖啡廳",
+    "lat": 37.5774665,
+    "lon": 126.96797369999999,
+    "category": "cafe"
+  },
+  {
+    "name": "THANKS, OAT Yeonnam",
+    "korean": "땡스오트 연남",
+    "note": "",
+    "lat": 37.5662646,
+    "lon": 126.9198948,
+    "category": "food"
+  },
+  {
+    "name": "Layered Yeonnam",
+    "korean": "레이어드 연남",
+    "note": "司康 (스콘)、奶油司康、果醬司康、草莓鮮奶油款",
+    "lat": 37.5649754,
+    "lon": 126.92418219999999,
+    "category": "cafe"
+  },
+  {
+    "name": "Milestone Coffee Hannam",
+    "korean": "마일스톤 커피 한남",
+    "note": "旁邊是漢南洞潮流區",
+    "lat": 37.5378721,
+    "lon": 127.0026652,
+    "category": "cafe"
+  },
+  {
+    "name": "YM COFFEE PROJECT 연신내",
+    "korean": "YM커피프로젝트 연신내",
+    "note": "",
+    "lat": 37.6191076,
+    "lon": 126.9176062,
+    "category": "cafe"
+  },
+  {
+    "name": "清水堂",
+    "korean": "청수당",
+    "note": "",
+    "lat": 37.573882499999996,
+    "lon": 126.9897623,
+    "category": "food"
+  },
+  {
+    "name": "MUSINSA EMPTY SEONGSU",
+    "korean": "무신사 엠프티 성수",
+    "note": "韓國設計師品牌集合店、獨家聯名款；大型選品店",
+    "lat": 37.5436282,
+    "lon": 127.0566446,
+    "category": "shop"
+  },
+  {
+    "name": "首爾市立美術館",
+    "korean": "서울시립미술관",
+    "note": "美術館",
+    "lat": 37.5640625,
+    "lon": 126.9738125,
+    "category": "sight"
+  },
+  {
+    "name": "Kith Seoul",
+    "korean": "키스 서울",
+    "note": "聯名限定款、潮流運動服飾、球鞋；聖水潮流據點",
+    "lat": 37.541768,
+    "lon": 127.0570027,
+    "category": "shop"
+  },
+  {
+    "name": "COFFEE & CIGARETTES",
+    "korean": "커피앤시가렛",
+    "note": "17 樓的高空咖啡",
+    "lat": 37.562716099999996,
+    "lon": 126.97401989999999,
+    "category": "cafe"
+  },
+  {
+    "name": "thisisneverthat Seongsu Flagship",
+    "korean": "디스이즈네버댓 성수 플래그십",
+    "note": "街頭潮流T恤、衛衣、外套、帽子；韓國代表性街牌",
+    "lat": 37.5431463,
+    "lon": 127.0616649,
+    "category": "shop"
+  },
+  {
+    "name": "EPT 성수점",
+    "korean": "EPT 성수점",
+    "note": "",
+    "lat": 37.5411808,
+    "lon": 127.0611888,
+    "category": "food"
+  },
+  {
+    "name": "Blue Bottle Samcheong Cafe",
+    "korean": "블루보틀 삼청카페",
+    "note": "風景很好的樣子",
+    "lat": 37.5801151,
+    "lon": 126.9808482,
+    "category": "cafe"
+  },
+  {
+    "name": "뭍 성수 플래그쉽 스토어(MUUT SEONGSU FLAGSHIP STORE)",
+    "korean": "뭍 성수 플래그십스토어",
+    "note": "",
+    "lat": 37.5410508,
+    "lon": 127.0595319,
+    "category": "shop"
+  },
+  {
+    "name": "NYU NYU",
+    "korean": "뉴뉴 성수",
+    "note": "",
+    "lat": 37.5415196,
+    "lon": 127.0592971,
+    "category": "food"
+  },
+  {
+    "name": "國立現代美術館 首爾 MMCA",
+    "korean": "국립현대미술관 서울",
+    "note": "三清洞: 國立現代美術館MMCA'd7藍瓶咖啡 MMCA不僅是韓國當代藝術的最高殿堂,其建築本 身就是韓國近代史與空間轉化的深度展品。該地點曾 是朝鮮王室宗親府的所在,歷經日治時期的首",
+    "lat": 37.5788333,
+    "lon": 126.9804281,
+    "category": "sight"
+  },
+  {
+    "name": "fwee Agit Yeonnam",
+    "korean": "휘 아지트 연남",
+    "note": "布丁唇泥 (푸딩 틴트)、光澤唇蜜、腮紅；韓國人氣彩妝品牌",
+    "lat": 37.5599438,
+    "lon": 126.9234134,
+    "category": "cafe"
+  },
+  {
+    "name": "fwee Agit - Seongsu",
+    "korean": "휘 아지트 성수",
+    "note": "布丁唇泥 (푸딩 틴트)、光澤唇蜜、腮紅；韓國人氣彩妝品牌",
+    "lat": 37.5409857,
+    "lon": 127.0551593,
+    "category": "cafe"
+  },
+  {
+    "name": "BLUE ELEPHANT SEONGSU FLAGSHIP STORE",
+    "korean": "블루엘리펀트 성수 플래그십",
+    "note": "",
+    "lat": 37.5437612,
+    "lon": 127.05116029999999,
+    "category": "shop"
+  },
+  {
+    "name": "ADER ERROR SEONGSU",
+    "korean": "아더에러 성수",
+    "note": "經典Logo衛衣、解構設計外套、配件小物；旗艦概念店",
+    "lat": 37.5422211,
+    "lon": 127.0565311,
+    "category": "shop"
+  },
+  {
+    "name": "뉴믹스커피 (New Mix coffee)",
+    "korean": "뉴믹스커피 성수",
+    "note": "即溶咖啡禮盒 (伴手禮首選)、現煮咖啡、咖啡豆",
+    "lat": 37.5439611,
+    "lon": 127.0513053,
+    "category": "cafe"
+  },
+  {
+    "name": "hetras Seongsu",
+    "korean": "헤트라스 성수",
+    "note": "香水 No.29 (清新花香)、No.7 (木質調)、No.5 (經典款)；韓國小眾香水品牌",
+    "lat": 37.5419055,
+    "lon": 127.0567504,
+    "category": "shop"
+  },
+  {
+    "name": "眞味食堂",
+    "korean": "진미식당",
+    "note": "以及榮獲多年米其林認證的真味食堂 一直以來都超想來吃吃看 但只接受電話訂位比較麻煩 謝謝給力的韓國朋友幫我訂到了🥹  入座後不用點餐 以人數計價，醬蟹定食₩45,000/人",
+    "lat": 37.5505634,
+    "lon": 126.9557715,
+    "category": "food"
+  },
+  {
+    "name": "Butty Sandwich House",
+    "korean": "버티 샌드위치 하우스",
+    "note": "",
+    "lat": 37.5407442,
+    "lon": 127.0602133,
+    "category": "food"
+  },
+  {
+    "name": "Parole & Langue",
+    "korean": "파롤에랑그",
+    "note": "塔類甜點 (타르트)、水果塔、巧克力塔、咖啡；延南洞熱門店",
+    "lat": 37.5649616,
+    "lon": 126.92284409999999,
+    "category": "cafe"
+  },
+  {
+    "name": "Ground Seesaw Seochon",
+    "korean": "그라운드시소 서촌",
+    "note": "出現 * 2 美術館 展覽：wemer bronkhorst the whole world's canvas",
+    "lat": 37.577749399999995,
+    "lon": 126.97292039999999,
+    "category": "sight"
+  },
+  {
+    "name": "통영굴찜",
+    "korean": "통영굴찜",
+    "note": "蒸牡蠣套餐 (굴찜)、牡蠣煎餅 (굴전)；季節限定 (冬季最佳)",
+    "lat": 37.5262168,
+    "lon": 126.9311355,
+    "category": "food"
+  },
+  {
+    "name": "Jongsamyook",
+    "korean": "종삼육",
+    "note": "韓牛燒肉 (한우)、牛五花 (차돌박이)、調味牛排骨；鐘路三街老店",
+    "lat": 37.5728266,
+    "lon": 126.990979,
+    "category": "food"
+  },
+  {
+    "name": "달맞이 광장 바베큐",
+    "korean": "달맞이 광장 바베큐",
+    "note": "炸雞 (치킨)、啤酒套餐；乙支路復古風格酒吧 最後點餐 01:00",
+    "lat": 37.565828499999995,
+    "lon": 126.9904459,
+    "category": "food"
+  },
+  {
+    "name": "Ground Seesaw Central",
+    "korean": "그라운드시소 센트럴",
+    "note": "展覽：yosigo miles to go",
+    "lat": 37.557875599999996,
+    "lon": 126.9744016,
+    "category": "sight"
+  },
+  {
+    "name": "JO & DAWSON",
+    "korean": "조앤도슨",
+    "note": "焦糖布丁 (카라멜 푸딩)、巴斯克起司蛋糕、咖啡；人氣名店需排隊",
+    "lat": 37.5636203,
+    "lon": 126.92324939999999,
+    "category": "cafe"
+  },
+  {
+    "name": "Kyochon Pilbang",
+    "korean": "교촌필방",
+    "note": "炭火雞肉串 (닭꼬치)、雞肉丸串、雞皮串；週一公休",
+    "lat": 37.534071399999995,
+    "lon": 126.99385079999999,
+    "category": "food"
+  },
+  {
+    "name": "小豬存錢桶（石頭烤肉）",
+    "korean": "돼지저금통 홍대점",
+    "note": "鮮烤五花肉 (삼겹살)、豬頸肉 (목살)、蒜瓣烤肉；搭配包菜和醬料",
+    "lat": 37.5562533,
+    "lon": 126.9262318,
+    "category": "food"
+  },
+  {
+    "name": "無垢屋",
+    "korean": "무구옥",
+    "note": "鮑魚粥 (전복죽)、海鮮粥 (해물죽)、南瓜粥 (호박죽)；12:00開放當日訂位",
+    "lat": 37.5763898,
+    "lon": 126.9799003,
+    "category": "food"
+  },
+  {
+    "name": "神仙雪濃湯",
+    "korean": "신선설농탕",
+    "note": "牛骨雪濃湯 (설농탕)；建議加鹽巴、蔥花調味；附白飯和蘿蔔泡菜",
+    "lat": 37.5637994,
+    "lon": 126.9854142,
+    "category": "food"
+  },
+  {
+    "name": "倫敦貝果博物館 安國店",
+    "korean": "런던베이글뮤지엄 안국",
+    "note": "大蒜貝果 (마늘베이글)、奶油起司抹醬 (크림치즈)、火腿起司貝果；需排隊取號",
+    "lat": 37.579182599999996,
+    "lon": 126.98615199999999,
+    "category": "cafe"
+  },
+  {
+    "name": "青瓦屋",
+    "korean": "청와옥",
+    "note": "豬肉湯飯 (돼지국밥)、內臟湯飯 (내장국밥)；加鹽巴調味更佳",
+    "lat": 37.565982,
+    "lon": 126.99003409999999,
+    "category": "food"
+  },
+  {
+    "name": "Musinsa Standard Seongsu",
+    "korean": "무신사 스탠다드 성수",
+    "note": "很像 uniqlo 便宜發熱衣，連鎖店",
+    "lat": 37.541547099999995,
+    "lon": 127.058537,
+    "category": "shop"
+  },
+  {
+    "name": "廣藏市場",
+    "korean": "광장시장",
+    "note": "潮牌（但好像只有幾家，但便宜），可以買棉被",
+    "lat": 37.570039799999996,
+    "lon": 126.9996036,
+    "category": "sight"
+  },
+  {
+    "name": "漢南洞24小時馬鈴薯豬骨湯",
+    "korean": "",
+    "note": "乾的必吃",
+    "lat": 37.5334141,
+    "lon": 127.00616919999999,
+    "category": "food"
+  },
+  {
+    "name": "無垢屋",
+    "korean": "무구옥",
+    "note": "",
+    "lat": 37.544865099999996,
+    "lon": 127.0594472,
+    "category": "food"
+  },
+  {
+    "name": "孫家一隻雞",
+    "korean": "손가네한마리닭",
+    "note": "隱藏版名店",
+    "lat": 37.5736525,
+    "lon": 127.0213678,
+    "category": "food"
+  },
+  {
+    "name": "Malbang Gukbap - Seongsu",
+    "korean": "말방국밥 성수",
+    "note": "湯飯 https://www.instagram.com/reel/DN7LrQ-ksGV/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
+    "lat": 37.547786599999995,
+    "lon": 127.06368189999999,
+    "category": "food"
+  },
+  {
+    "name": "용용선생 마라도원",
+    "korean": "용용선생 마라도원",
+    "note": "最後點餐 21:00",
+    "lat": 37.544062499999995,
+    "lon": 127.05901499999999,
+    "category": "food"
+  },
+  {
+    "name": "파피어프로스트 papier prost",
+    "korean": "파피어프로스트",
+    "note": "文具店",
+    "lat": 37.5803499,
+    "lon": 126.96916429999999,
+    "category": "shop"
+  },
+  {
+    "name": "通仁市場",
+    "korean": "통인시장",
+    "note": "可以買一個塑膠餐盒 店家都會給1-2人份的量",
+    "lat": 37.5807649,
+    "lon": 126.97067559999999,
+    "category": "sight"
+  },
+  {
+    "name": "아르키스토 arkisto",
+    "korean": "아르키스토",
+    "note": "逛街一條街",
+    "lat": 37.5822977,
+    "lon": 126.97180619999999,
+    "category": "shop"
+  },
+  {
+    "name": "모노하 서촌 (MONOHA Seochon)",
+    "korean": "모노하 서촌",
+    "note": "逛街～ 這條路上很像很多可以逛的",
+    "lat": 37.5795295,
+    "lon": 126.9722455,
+    "category": "shop"
+  },
+  {
+    "name": "大林美術館",
+    "korean": "대림미술관",
+    "note": "攝影展美術館",
+    "lat": 37.5775023,
+    "lon": 126.97336259999999,
+    "category": "sight"
+  },
+  {
+    "name": "Dancing grandma",
+    "korean": "댄싱그랜마",
+    "note": "手織品",
+    "lat": 37.5775705,
+    "lon": 126.97118169999999,
+    "category": "food"
+  },
+  {
+    "name": "SOLSOT",
+    "korean": "솔솥",
+    "note": "釜飯",
+    "lat": 37.5780768,
+    "lon": 126.97148059999999,
+    "category": "food"
+  },
+  {
+    "name": "ETC Seoul Seochon",
+    "korean": "이티씨서울 서촌",
+    "note": "選品店",
+    "lat": 37.5767673,
+    "lon": 126.9693415,
+    "category": "shop"
+  },
+  {
+    "name": "Folki",
+    "korean": "폴키",
+    "note": "漂亮咖啡廳",
+    "lat": 37.5764692,
+    "lon": 126.9687697,
+    "category": "cafe"
+  },
+  {
+    "name": "首爾林公園",
+    "korean": "서울숲",
+    "note": "廁所",
+    "lat": 37.544387799999996,
+    "lon": 127.03744239999999,
+    "category": "sight"
+  },
+  {
+    "name": "PIZZA SLICE SEOUL",
+    "korean": "피자슬라이스 서울",
+    "note": "廁所",
+    "lat": 37.5430944,
+    "lon": 127.06167099999999,
+    "category": "food"
+  },
+  {
+    "name": "朝朝刀削麵",
+    "korean": "조조칼국수",
+    "note": "",
+    "lat": 37.5620483,
+    "lon": 126.9743115,
+    "category": "food"
+  },
+  {
+    "name": "AIRDROP COFFEE SEONGSU",
+    "korean": "에어드롭커피 성수",
+    "note": "廁所",
+    "lat": 37.544171999999996,
+    "lon": 127.05456559999999,
+    "category": "cafe"
+  },
+  {
+    "name": "纛島漢江公園雪橇場",
+    "korean": "뚝섬한강공원 눈썰매장",
+    "note": "2025/12/31 － 2026/02/18",
+    "lat": 37.5300436,
+    "lon": 127.06692729999999,
+    "category": "sight"
+  },
+  {
+    "name": "Downtowner Anguk",
+    "korean": "다운타우너 안국점",
+    "note": "酪梨漢堡，連鎖店",
+    "lat": 37.577463,
+    "lon": 126.9862466,
+    "category": "food"
+  },
+  {
+    "name": "仁川國際機場",
+    "korean": "인천국제공항",
+    "note": "",
+    "lat": 37.458666,
+    "lon": 126.4419679,
+    "category": "sight"
+  }
+]

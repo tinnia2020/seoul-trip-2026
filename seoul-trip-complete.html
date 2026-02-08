@@ -28,7 +28,7 @@
         .search-clear:hover{background:#ddd;transform:scale(1.1)}
         .search-close{background:transparent;border:none;cursor:pointer;padding:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
         .search-close svg{color:var(--text)}
-        .tabs{position:sticky;top:44px;z-index:900;background:var(--bg);padding:4px 0 6px;overflow-x:auto;white-space:nowrap}
+        .tabs{position:sticky;top:44px;z-index:900;background:var(--white);padding:8px 0;overflow-x:auto;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,0.04);border-bottom:1px solid #f0f0f0}
         .tabs::-webkit-scrollbar{display:none}
         .tabs-inner{padding:0 12px}
         .tab{display:inline-flex;align-items:center;gap:4px;margin-right:6px;padding:8px 14px;background:var(--white);border-radius:16px;font-size:0.8rem;font-weight:600;color:var(--text-sec);border:none;cursor:pointer;box-shadow:var(--shadow);transition:all 0.2s ease;min-height:36px}
@@ -36,15 +36,16 @@
         .tab.active{background:var(--text);color:white;box-shadow:0 3px 10px rgba(0,0,0,0.15)}
         .tab-count{font-size:0.7rem;background:rgba(0,0,0,0.08);padding:2px 6px;border-radius:10px;min-width:18px;text-align:center}
         .tab.active .tab-count{background:rgba(255,255,255,0.25)}
-        .zones{padding:0 12px 4px;overflow-x:auto;white-space:nowrap}
+        .zones{padding:8px 12px;overflow-x:auto;white-space:nowrap;background:var(--bg)}
         .zones::-webkit-scrollbar{display:none}
         .zone-pill{display:inline-block;padding:6px 12px;background:transparent;border:1px solid #ddd;border-radius:16px;font-size:0.72rem;color:#666;margin-right:6px;cursor:pointer;transition:all 0.2s ease;min-height:32px;display:inline-flex;align-items:center}
         .zone-pill:hover{border-color:#999;background:rgba(0,0,0,0.02)}
         .zone-pill.active{background:var(--text);color:white;border-color:var(--text);transform:scale(1.05)}
         .container{max-width:600px;margin:0 auto;padding:4px 12px}
         .result-info{display:none}
-        .card{background:var(--white);border-radius:14px;padding:14px;margin-bottom:10px;box-shadow:var(--shadow);transition:all 0.2s ease;position:relative}
-        .card:active{transform:scale(0.98);box-shadow:0 1px 2px rgba(0,0,0,0.08)}
+        .card{background:var(--white);border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,0.06);transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);position:relative;cursor:pointer;border:2px solid transparent}
+        .card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.12);transform:translateY(-2px)}
+        .card:active{transform:scale(0.98);border-color:var(--primary)}
         .card-badges{display:flex;gap:6px;margin-bottom:10px}
         .badge-cat{font-size:0.68rem;padding:4px 10px;border-radius:10px;font-weight:600;color:white}
         .badge-zone{font-size:0.68rem;padding:4px 10px;border-radius:10px;background:#e8e8ea;color:#555;font-weight:600}
@@ -54,12 +55,75 @@
         .cat-Work,.cat-展覽,.cat-工作咖啡{background:var(--work)}
         .cat-住宿{background:var(--accom)}
         .cat-景點{background:var(--attr)}
-        .name-cn{font-size:1.1rem;font-weight:700;margin-bottom:3px}
-        .name-kr{font-size:0.82rem;color:var(--text-sec);margin-bottom:10px}
+
+        /* Today's Picks Section */
+        .today-picks{padding:16px 12px;background:linear-gradient(135deg, #fff5f5 0%, #fff 100%)}
+        .today-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+        .today-title{font-size:1.1rem;font-weight:700;color:var(--text);display:flex;align-items:center;gap:6px}
+        .today-title svg{color:var(--primary)}
+        .today-date{font-size:0.75rem;color:var(--text-sec);font-weight:600}
+        .today-cards{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;scroll-snap-type:x mandatory}
+        .today-cards::-webkit-scrollbar{display:none}
+        .today-card{flex:0 0 280px;background:white;border-radius:16px;padding:14px;box-shadow:0 2px 12px rgba(0,0,0,0.08);scroll-snap-align:start;border:2px solid transparent;transition:all 0.3s ease}
+        .today-card:active{transform:scale(0.97);border-color:var(--primary)}
+        .today-card-header{display:flex;gap:10px;margin-bottom:10px}
+        .today-card-emoji{font-size:2rem;flex-shrink:0}
+        .today-card-info{flex:1;min-width:0}
+        .today-card-name{font-size:0.95rem;font-weight:700;color:var(--text);margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+        .today-card-zone{font-size:0.7rem;color:var(--text-sec);font-weight:600}
+        .today-card-highlight{background:linear-gradient(135deg,#fff9e6 0%,#fff 100%);border-radius:10px;padding:8px 10px;font-size:0.8rem;color:#d97706;line-height:1.4;margin-top:8px;border-left:3px solid #f59e0b}
+        
+        /* Quick Actions */
+        .quick-actions{padding:12px;background:var(--white);display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+        .quick-action{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 8px;background:var(--bg);border-radius:14px;text-decoration:none;color:var(--text);transition:all 0.2s ease;min-height:80px;justify-content:center}
+        .quick-action:active{transform:scale(0.95);background:#e8e8ea}
+        .quick-action-icon{width:32px;height:32px;background:linear-gradient(135deg, var(--primary) 0%, #ff8787 100%);border-radius:10px;display:flex;align-items:center;justify-content:center}
+        .quick-action-icon svg{width:18px;height:18px;color:white}
+        .quick-action-label{font-size:0.7rem;font-weight:600;text-align:center;line-height:1.2}
+        
+        /* Section Divider */
+        .section-divider{height:8px;background:var(--bg)}
+
+        /* Place Detail Modal */
+        .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:2000;display:none;align-items:flex-end;animation:fadeIn 0.3s ease}
+        .modal-overlay.show{display:flex}
+        @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+        
+        .modal-content{width:100%;max-height:85vh;background:white;border-radius:20px 20px 0 0;overflow:hidden;transform:translateY(100%);transition:transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)}
+        .modal-overlay.show .modal-content{transform:translateY(0)}
+        
+        .modal-header{padding:16px;background:var(--bg);position:sticky;top:0;z-index:10;display:flex;justify-content:space-between;align-items:center}
+        .modal-close{background:white;border:none;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+        .modal-close svg{width:20px;height:20px}
+        
+        .modal-body{padding:20px;overflow-y:auto;max-height:calc(85vh - 68px)}
+        .modal-place-name{font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:6px}
+        .modal-place-name-kr{font-size:1rem;color:var(--text-sec);margin-bottom:16px;font-weight:600}
+        .modal-badges{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+        .modal-info-grid{display:grid;gap:12px;margin-bottom:20px}
+        .modal-info-item{display:flex;align-items:flex-start;gap:10px;padding:12px;background:var(--bg);border-radius:12px}
+        .modal-info-icon{width:24px;height:24px;flex-shrink:0;color:var(--primary)}
+        .modal-info-text{flex:1;font-size:0.9rem;color:var(--text);line-height:1.5}
+        .modal-actions{position:sticky;bottom:0;padding:16px;background:white;border-top:1px solid #f0f0f0;display:flex;gap:8px}
+        .modal-btn{flex:1;padding:14px;border-radius:14px;font-weight:700;font-size:0.9rem;border:none;cursor:pointer;transition:all 0.2s ease;display:flex;align-items:center;justify-content:center;gap:6px}
+        .modal-btn-favorite{background:#fff3f3;color:var(--primary);border:2px solid var(--primary)}
+        .modal-btn-favorite.active{background:var(--primary);color:white}
+        .modal-btn-navigate{background:var(--primary);color:white;box-shadow:0 4px 12px rgba(255,107,107,0.3)}
+        .modal-btn:active{transform:scale(0.97)}
+
+        /* Favorite System */
+        .favorite-btn{position:absolute;top:12px;right:12px;width:36px;height:36px;background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);border-radius:50%;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,0.1);transition:all 0.2s ease}
+        .favorite-btn:active{transform:scale(0.9)}
+        .favorite-btn svg{width:20px;height:20px;color:#ccc;transition:all 0.2s ease}
+        .favorite-btn.active svg{color:var(--primary);fill:var(--primary)}
+        .favorite-badge{position:absolute;top:8px;right:8px;background:linear-gradient(135deg, #ff6b6b 0%, #ff8787 100%);color:white;font-size:0.65rem;font-weight:700;padding:3px 8px;border-radius:10px;box-shadow:0 2px 6px rgba(255,107,107,0.4)}
+
+        .name-cn{font-size:1.15rem;font-weight:700;margin-bottom:4px;color:var(--text);letter-spacing:-0.3px;line-height:1.3}
+        .name-kr{font-size:0.8rem;color:#999;margin-bottom:12px;font-weight:500}
         .info{font-size:0.8rem;color:#666;margin-bottom:4px}
         .must{background:linear-gradient(135deg,#fffbeb 0%,#fef3c7 100%);border-left:4px solid #f59e0b;border-radius:12px;padding:14px;margin:12px 0;box-shadow:0 2px 6px rgba(245,158,11,0.15)}
         .must-title{font-size:0.72rem;font-weight:700;color:#d97706;margin-bottom:6px}
-        .must-text{font-size:0.85rem;color:#333;line-height:1.5}
+        .must-text{font-size:0.88rem;color:#1a1a1a;line-height:1.6;font-weight:500}
         .price{display:inline-block;background:white;color:#666;font-size:0.72rem;padding:4px 10px;border-radius:8px;margin-top:8px}
         .actions{margin-top:14px;display:flex;gap:8px}
         .btn{flex:1;padding:12px;text-align:center;border-radius:12px;font-weight:600;text-decoration:none;font-size:0.82rem;transition:all 0.2s ease;min-height:44px;display:flex;align-items:center;justify-content:center}
@@ -753,6 +817,126 @@ var ZONES=[].concat.apply([],D.map(function(p){return p.zone})).filter(function(
 var EMO={'美食':'🍜','早午餐':'🍳','咖啡甜點':'☕','購物':'🛍️','服飾':'👕','選物':'🎁','彩妝':'💄','雜貨':'📦','Work':'💻','工作咖啡':'💻','展覽':'🎨','住宿':'🏠','景點':'📍'};
 function match(c,f){return f==='all'||c===f||(f==='購物'&&['服飾','選物','彩妝','雜貨','購物'].indexOf(c)>=0)||(f==='Work'&&['Work','工作咖啡','展覽'].indexOf(c)>=0)||(f==='咖啡甜點'&&['咖啡甜點','早午餐'].indexOf(c)>=0)}
 function count(c){return D.filter(function(p){return match(p.cat,c)}).length}
+
+// ===== 詳情模態框功能 =====
+var currentPlaceIndex = -1;
+var favoritePlaces = JSON.parse(localStorage.getItem('favoritePlaces') || '[]');
+
+function openPlaceDetail(index) {
+    currentPlaceIndex = index;
+    var place = D[index];
+    
+    var modal = document.createElement('div');
+    modal.className = 'modal-overlay';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <div style="font-size:0.9rem;font-weight:700;color:var(--text)">地點詳情</div>
+                <button class="modal-close" onclick="closeModal()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-place-name">${place.cn}</div>
+                <div class="modal-place-name-kr">${place.kr}</div>
+                <div class="modal-badges">
+                    <span class="badge-cat cat-${place.cat}">${place.cat}</span>
+                    <span class="badge-zone">${place.zone}</span>
+                </div>
+                ${place.must ? `
+                <div class="must">
+                    <div class="must-text">${place.must}</div>
+                    ${place.price ? '<div class="price">💰 ' + place.price + '</div>' : ''}
+                </div>
+                ` : ''}
+                <div class="modal-info-grid">
+                    <div class="modal-info-item">
+                        <svg class="modal-info-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+                        <div class="modal-info-text">${place.hours || '營業時間未提供'}</div>
+                    </div>
+                    ${place.note ? `
+                    <div class="modal-info-item">
+                        <svg class="modal-info-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4m0 4h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+                        <div class="modal-info-text">${place.note}</div>
+                    </div>
+                    ` : ''}
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn modal-btn-favorite ${favoritePlaces.includes(index) ? 'active' : ''}" onclick="toggleFavorite(${index})">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="${favoritePlaces.includes(index) ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2"><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"/></svg>
+                    ${favoritePlaces.includes(index) ? '已收藏' : '收藏'}
+                </button>
+                <button class="modal-btn modal-btn-navigate" onclick="navigateToPlace(${index})">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4m0 12v4m10-10h-4M6 12H2"/><circle cx="12" cy="12" r="3"/></svg>
+                    導航
+                </button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    setTimeout(function() { modal.classList.add('show'); }, 10);
+}
+
+function closeModal() {
+    var modal = document.querySelector('.modal-overlay');
+    if (modal) {
+        modal.classList.remove('show');
+        setTimeout(function() { modal.remove(); }, 300);
+    }
+}
+
+function toggleFavorite(index) {
+    var idx = favoritePlaces.indexOf(index);
+    if (idx > -1) {
+        favoritePlaces.splice(idx, 1);
+    } else {
+        favoritePlaces.push(index);
+    }
+    localStorage.setItem('favoritePlaces', JSON.stringify(favoritePlaces));
+    
+    // 更新按鈕狀態
+    var btn = document.querySelector('.modal-btn-favorite');
+    if (btn) {
+        btn.classList.toggle('active');
+        btn.innerHTML = favoritePlaces.includes(index) ? 
+            '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"/></svg>已收藏' :
+            '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"/></svg>收藏';
+    }
+    
+    // 重新渲染列表以顯示收藏徽章
+    draw();
+}
+
+function navigateToPlace(index) {
+    var place = D[index];
+    window.open('https://map.naver.com/p/search/' + encodeURIComponent(place.kr), '_blank');
+    closeModal();
+}
+
+// 模態框點擊外部關閉
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('modal-overlay')) {
+        closeModal();
+    }
+});
+
+// ===== 今日推薦功能 =====
+function getTodayPicks() {
+    // 從每個分類隨機選一個
+    var picks = [];
+    var categories = ['美食', '咖啡甜點', '購物'];
+    categories.forEach(function(cat) {
+        var items = D.filter(function(p) { return p.cat === cat && p.must; });
+        if (items.length > 0) {
+            picks.push(items[Math.floor(Math.random() * items.length)]);
+        }
+    });
+    return picks;
+}
+
+
 function draw(){
     var ts=document.getElementById('tabs');
     var zs=document.getElementById('zones');
@@ -767,7 +951,9 @@ function draw(){
         var qe=encodeURIComponent(p.kr||p.cn);
         var cc='cat-'+p.cat;
         var mh=p.must?'<div class="must"><div class="must-text">'+p.must+'</div>'+(p.price?'<span class="price"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:text-bottom;margin-right:2px"><circle cx="12" cy="12" r="9"/><path d="M14.8 9a2 2 0 0 0 -1.8 -1h-2a2 2 0 0 0 0 4h2a2 2 0 0 1 0 4h-2a2 2 0 0 1 -1.8 -1"/><path d="M12 6v2m0 8v2"/></svg> '+p.price+'</span>':'')+'</div>':'';
-        return '<div class="card"><div class="card-badges"><span class="badge-cat '+cc+'">'+p.cat+'</span><span class="badge-zone">'+p.zone+'</span></div><div class="name-cn">'+p.cn+'</div><div class="name-kr">'+p.kr+'</div><div class="info"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:text-bottom;margin-right:2px"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> '+p.hours+'</div>'+mh+'<div class="actions"><a href="https://www.google.com/maps/search/?api=1&query='+qe+'" target="_blank" class="btn btn-g">Google</a><a href="https://map.naver.com/p/search/'+qe+'" target="_blank" class="btn btn-n">Naver</a></div></div>'
+        return '<div class="card" onclick="openPlaceDetail(' + D.indexOf(p) + ')">' + 
+        (favoritePlaces.includes(D.indexOf(p)) ? '<span class="favorite-badge">❤️ 已收藏</span>' : '') + 
+        '<div class="card-badges"><span class="badge-cat '+cc+'">'+p.cat+'</span><span class="badge-zone">'+p.zone+'</span></div><div class="name-cn">'+p.cn+'</div><div class="name-kr">'+p.kr+'</div><div class="info"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:text-bottom;margin-right:2px"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> '+p.hours+'</div>'+mh+'<div class="actions"><a href="https://www.google.com/maps/search/?api=1&query='+qe+'" target="_blank" class="btn btn-g">Google</a><a href="https://map.naver.com/p/search/'+qe+'" target="_blank" class="btn btn-n">Naver</a></div></div>'
     }).join('')
 }
 document.getElementById('search').addEventListener('input',function(e){q=e.target.value.toLowerCase().trim();document.getElementById('clear').classList.toggle('show',q.length>0);draw();filterMapBySearch(q)});

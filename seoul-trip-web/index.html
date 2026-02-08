@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🇰🇷 首爾行程懶人包</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
+    <style>
+        :root {
+            --primary: #1877F2;
+            --bg: #F0F2F5;
+            --white: #FFFFFF;
+            --text: #050505;
+            --text-sec: #65676B;
+            --food: #ff6b6b;
+            --cafe: #48dbfb;
+            --shop: #a29bfe;
+            --work: #57606f;
+            --accom: #1dd1a1;
+            --attr: #ff9f43;
+        }
+        
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { margin: 0; font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: var(--text); padding-bottom: 80px; }
+        
+        .app-header {
+            background: rgba(255,255,255,0.98);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .app-title { font-size: 1.2rem; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+        .map-toggle-btn {
+            background: #eee;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .map-toggle-btn.active { background: var(--primary); color: white; }
+
+        .search-container {
+            padding: 10px 15px;
+            background: var(--bg);
+            position: sticky;
+            top: 71px;
+            z-index: 950;
+        }
+        .search-box {
+            width: 100%;
+            padding: 12px 16px 12px 42px;
+            border: 1px solid #ddd;
+            border-radius: 24px;
+            font-size: 1rem;
+            background: var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23999'%3E%3Cpath d='M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3C/svg%3E") 14px center no-repeat;
+            background-size: 20px;
+            outline: none;
+            transition: 0.2s;
+        }
+        .search-box:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.1);
+        }
+        .search-box::placeholder { color: #aaa; }
+
+        .tabs-container {
+            position: sticky;
+            top: 125px; 
+            z-index: 900;
+            background: var(--bg);
+            padding: 10px 0;
+            overflow-x: auto;
+            white-space: nowrap;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        .tabs-container::-webkit-scrollbar { display: none; }
+        
+        .tab-btn {
+            display: inline-block;
+            margin-left: 12px;
+            padding: 8px 16px;
+            background: var(--white);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-sec);
+            border: 1px solid #ddd;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .tab-btn:last-child { margin-right: 12px; }
+        .tab-btn.active {
+            background: var(--text);
+            color: white;
+            border-color: var(--text);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .container { 
+            max-width: 600px; 
+            margin: 0 auto; 
+            padding: 10px 15px; 
+            min-height: 300px;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+        
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+        .card-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+        .badge { font-size: 0.75rem; padding: 3px 8px; border-radius: 6px; color: white; font-weight: 600; }
+        .badge.zone { background: #eee; color: #555; }
+        
+        .cat-美食 { background: var(--food); }
+        .cat-早午餐 { background: #feca57; color: #333; }
+        .cat-咖啡甜點 { background: var(--cafe); color: #333; }
+        .cat-購物, .cat-選物, .cat-服飾, .cat-彩妝, .cat-雜貨 { background: var(--shop); }
+        .cat-Work, .cat-展覽, .cat-工作咖啡 { background: var(--work); }
+        .cat-住宿 { background: var(--accom); }
+        .cat-景點 { background: var(--attr); }
+
+        .place-name-cn { font-size: 1.15rem; font-weight: 700; color: #111; margin-bottom: 4px; line-height: 1.3; }
+        .place-name-kr { font-size: 0.9rem; color: #777; font-weight: 500; margin-bottom: 10px; font-family: "Malgun Gothic", sans-serif; }
+        
+        .info-row { display: flex; align-items: flex-start; gap: 6px; font-size: 0.85rem; color: #555; margin-bottom: 4px; }
+        
+        /* 必吃必買區塊 - 醒目樣式 */
+        .must-try-box {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-left: 4px solid #ff9800;
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin: 12px 0;
+        }
+        .must-try-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #e65100;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .must-try-content {
+            font-size: 0.9rem;
+            color: #333;
+            line-height: 1.5;
+        }
+        .price-tag {
+            display: inline-block;
+            background: #fff;
+            color: #555;
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-top: 6px;
+            border: 1px solid #ddd;
+        }
+        
+        .actions { margin-top: 15px; display: flex; gap: 10px; }
+        .action-btn {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .btn-google { background: #e8f0fe; color: #1967d2; }
+        .btn-naver { background: #e0f8eb; color: #03c75a; }
+
+        #map-container {
+            position: fixed;
+            top: 72px; 
+            left: 0;
+            width: 100%;
+            height: calc(100% - 72px);
+            background: white;
+            z-index: 950;
+            display: none; 
+        }
+        #map-container.visible { display: block; }
+        #map { width: 100%; height: 100%; }
+        
+        #itinerary-container {
+            position: fixed;
+            top: 72px;
+            left: 0;
+            width: 100%;
+            height: calc(100% - 72px);
+            background: var(--bg);
+            z-index: 950;
+            display: none;
+            overflow-y: auto;
+            padding: 15px;
+        }
+        #itinerary-container.visible { display: block; }
+        
+        .day-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        .day-date {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .day-theme {
+            font-size: 0.85rem;
+            color: var(--text-sec);
+            background: #f5f5f5;
+            padding: 4px 10px;
+            border-radius: 12px;
+        }
+        .schedule-item {
+            display: flex;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        .schedule-item:last-child { border-bottom: none; }
+        .schedule-time {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary);
+            min-width: 50px;
+        }
+        .schedule-content { flex: 1; }
+        .schedule-place {
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 3px;
+        }
+        .schedule-note {
+            font-size: 0.85rem;
+            color: var(--text-sec);
+        }
+        .schedule-tag {
+            display: inline-block;
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-right: 5px;
+        }
+        .tag-meal { background: #ffe5e5; color: #d63031; }
+        .tag-cafe { background: #e5f3ff; color: #0984e3; }
+        .tag-shop { background: #f3e5ff; color: #6c5ce7; }
+        .tag-sight { background: #fff5e5; color: #e17055; }
+        .tag-event { background: #e5ffe5; color: #00b894; }
+        .work-notice {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-left: 4px solid #ff9800;
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            font-size: 0.85rem;
+        }
+        
+        .leaflet-popup-content-wrapper { border-radius: 12px; }
+        .popup-title { font-weight: bold; font-size: 1rem; margin-bottom: 5px; }
+        .popup-nav { display: block; margin-top: 8px; background: #03C75A; color: white; text-align: center; padding: 6px; border-radius: 6px; text-decoration: none; font-size: 0.8rem; }
+        
+        #error-msg { color: red; padding: 20px; text-align: center; display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="app-header">
+        <div class="app-title">🇰🇷 首爾行程懶人包</div>
+        <div style="display:flex; gap:8px;">
+            <button class="map-toggle-btn" id="itinerary-btn" onclick="toggleItinerary()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z"/><path d="M16 3v4"/><path d="M8 3v4"/><path d="M4 11h16"/><path d="M7 14h.013"/><path d="M10.01 14h.005"/><path d="M13.01 14h.005"/><path d="M16.015 14h.005"/><path d="M13.015 17h.005"/><path d="M7.01 17h.005"/><path d="M10.01 17h.005"/></svg>
+            </button>
+            <button class="map-toggle-btn" id="map-btn" onclick="toggleMode()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 18.5l-3 -1.5l-6 3v-13l6 -3l6 3l6 -3v7.5"/><path d="M9 4v13"/><path d="M15 7v5.5"/><path d="M21.121 20.121a3 3 0 1 0 -4.242 0c.418 .419 1.125 1.045 2.121 1.879c1.051 -.89 1.759 -1.516 2.121 -1.879z"/><path d="M19 18v.01"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <div class="search-container">
+        <input type="text" class="search-box" id="search-input" placeholder="搜尋地點、餐廳、咖啡廳..." oninput="searchPlaces()">
+    </div>
+
+    <div class="tabs-container" id="category-tabs">
+        <div class="tab-btn active" onclick="filter('all')">全部</div>
+        <div class="tab-btn" onclick="filter('美食')">🍜 美食</div>
+        <div class="tab-btn" onclick="filter('咖啡甜點')">☕ 咖啡/甜點</div>
+        <div class="tab-btn" onclick="filter('購物')">🛍️ 購物/逛街</div>
+        <div class="tab-btn" onclick="filter('Work')">💻 Work</div>
+        <div class="tab-btn" onclick="filter('住宿')">🏠 住宿</div>
+        <div class="tab-btn" onclick="filter('景點')">📍 景點</div>
+    </div>
+
+    <div id="map-container">
+        <div id="map"></div>
+    </div>
+
+    <div id="itinerary-container">
+        <div style="max-width:600px; margin:0 auto;">
+            <!-- Day 1 -->
+            <div class="day-card">
+                <div class="day-header">
+                    <div class="day-date">2/23 (一)</div>
+                    <div class="day-theme">✈️ 抵達日</div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">18:15</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place">🛫 桃園機場出發</div>
+                        <div class="schedule-note">TR 896 Scoot・飛行 2.5hr</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">21:45</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place">🛬 抵達仁川機場</div>
+                        <div class="schedule-note">入境、領行李、換錢</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">23:00</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place">🏠 入住住宿</div>
+                        <div class="schedule-note">43 Gyeongdongsijang-ro 12-gil・便利商店買宵夜</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 2 -->
+            <div class="day-card">
+                <div class="day-header">
+                    <div class="day-date">2/24 (二)</div>
+                    <div class="day-theme">🏙️ 聖水洞</div>
+                </div>
+                <div class="work-notice">⚠️ 工作日｜Bian 11-20 / Tina 10-19</div>
+                <div class="schedule-item">
+                    <div class="schedule-time">08:30</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place"><span class="schedule-tag tag-cafe">☕</span>自然島鹽麵包</div>
+                        <div class="schedule-note">자연도소금빵 성수점・鹽麵包早餐</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">10:00</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place">💻 工作時間</div>
+                        <div class="schedule-note">找咖啡廳工作：Brautor / AIRDROP COFFEE</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">19:30</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place"><span class="schedule-tag tag-meal">🍜</span>龍龍先生 마라도원</div>
+                        <div class="schedule-note">용용선생・麻辣香鍋晚餐（最後點餐21:00）</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">21:00</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place"><span class="schedule-tag tag-sight">📍</span>聖水洞夜逛</div>
+                        <div class="schedule-note">DIOR 打卡・周邊散步</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 3 -->
+            <div class="day-card">
+                <div class="day-header">
+                    <div class="day-date">2/25 (三)</div>
+                    <div class="day-theme">🏛️ 明洞/鍾路</div>
+                </div>
+                <div class="work-notice">⚠️ 工作日｜Bian 11-20 / Tina 10-19</div>
+                <div class="schedule-item">
+                    <div class="schedule-time">08:00</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place"><span class="schedule-tag tag-cafe">🥯</span>倫敦貝果博物館</div>
+                        <div class="schedule-note">런던베이글뮤지엄 안국점・推大蒜口味（需排隊）</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">10:00</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place">💻 工作時間</div>
+                        <div class="schedule-note">找咖啡廳：Blue Bottle 三清 / COFFEE & CIGARETTES</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">19:30</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place"><span class="schedule-tag tag-meal">🍜</span>青瓦屋 湯飯</div>
+                        <div class="schedule-note">청와옥 을지로・劉在石推薦！加鹽巴調味</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">21:00</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place"><span class="schedule-tag tag-cafe">🍵</span>清水堂</div>
+                        <div class="schedule-note">청수당・益善洞竹林韓屋咖啡廳</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 4 -->
+            <div class="day-card">
+                <div class="day-header">
+                    <div class="day-date">2/26 (四)</div>
+                    <div class="day-theme">🎨 弘大/延南</div>
+                </div>
+                <div class="work-notice">⚠️ 工作日｜Bian 11-20 / Tina 10-19</div>
+                <div class="schedule-item">
+                    <div class="schedule-time">09:00</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place"><span class="schedule-tag tag-cafe">🥐</span>Layered 延南</div>
+                        <div class="schedule-note">레이어드 연남・司康名店（奶油司康必點）</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">10:00</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place">💻 工作時間</div>
+                        <div class="schedule-note">Hollys Coffee 弘大站・24H 適合筆電工作</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">19:30</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place"><span class="schedule-tag tag-meal">🥩</span>小豬存錢筒</div>
+                        <div class="schedule-note">돼지저금통 홍대점・烤五花肉（14:00-02:00）</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">21:30</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place"><span class="schedule-tag tag-cafe">🍮</span>JO & DAWSON</div>
+                        <div class="schedule-note">조앤도슨・焦糖布丁名店（需排隊）</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 5 -->
+            <div class="day-card">
+                <div class="day-header">
+                    <div class="day-date">2/27 (五)</div>
+                    <div class="day-theme">🏯 北村+夜景</div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">09:00</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place"><span class="schedule-tag tag-cafe">🥐</span>Artist Bakery</div>
+                        <div class="schedule-note">아티스트 베이커리・鹽可頌排隊名店</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">10:00</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place"><span class="schedule-tag tag-sight">🏛️</span>景福宮+北村韓屋村</div>
+                        <div class="schedule-note">穿韓服拍照・三清洞逛街</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">12:30</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place"><span class="schedule-tag tag-meal">🍲</span>無垢屋</div>
+                        <div class="schedule-note">무구옥・鮑魚粥午餐（12:00 開放訂位）</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">14:00</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place"><span class="schedule-tag tag-sight">🎨</span>國立現代美術館 MMCA</div>
+                        <div class="schedule-note">국립현대미술관 서울・韓國當代藝術殿堂</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">16:00</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place"><span class="schedule-tag tag-cafe">🍵</span>素賢堂</div>
+                        <div class="schedule-note">소현당・韓屋茶室（傳統韓茶+藥菓）</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">18:30</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place"><span class="schedule-tag tag-meal">🥩</span>鐘三六 韓牛</div>
+                        <div class="schedule-note">종삼육・鐘路三街韓牛老店</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">21:00</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place"><span class="schedule-tag tag-sight">🌃</span>南山塔夜景</div>
+                        <div class="schedule-note">N Seoul Tower・首爾夜景必去</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 6 -->
+            <div class="day-card">
+                <div class="day-header">
+                    <div class="day-date">2/28 (六)</div>
+                    <div class="day-theme">🏔️ 南怡島+冰谷</div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">07:00</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place">🚌 出發往南怡島</div>
+                        <div class="schedule-note">車程約 1.5 小時・建議搭 ITX 青春列車</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">09:00</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place"><span class="schedule-tag tag-sight">🌲</span>南怡島</div>
+                        <div class="schedule-note">冬季戀歌拍攝地・銀杏/杉樹林道</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">13:00</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place"><span class="schedule-tag tag-meal">🍜</span>島上午餐</div>
+                        <div class="schedule-note">春川辣炒雞 / 蕎麥麵</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">14:30</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place"><span class="schedule-tag tag-sight">❄️</span>Eobi冰谷</div>
+                        <div class="schedule-note">冬季限定冰柱奇景</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">18:00</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place">🚌 返回首爾</div>
+                        <div class="schedule-note">車程約 1.5 小時</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">20:00</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place"><span class="schedule-tag tag-meal">🍜</span>神仙雪濃湯</div>
+                        <div class="schedule-note">신선설농탕 명동점・24H 營業（加鹽巴更好吃）</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 7 -->
+            <div class="day-card">
+                <div class="day-header">
+                    <div class="day-date">3/1 (日)</div>
+                    <div class="day-theme">💒 婚禮日</div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">09:30</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place">🚗 出發前往婚禮</div>
+                        <div class="schedule-note">通勤約 1 小時・提早出門</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">11:00</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place"><span class="schedule-tag tag-event">💒</span>婚禮</div>
+                        <div class="schedule-note">Wedding Ceremony</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">15:00</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place"><span class="schedule-tag tag-shop">🛍️</span>仁川逛街 (可選)</div>
+                        <div class="schedule-note">或返回首爾休息</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">19:00</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place"><span class="schedule-tag tag-meal">🍜</span>晚餐自選</div>
+                        <div class="schedule-note">回住宿附近覓食</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 8 -->
+            <div class="day-card">
+                <div class="day-header">
+                    <div class="day-date">3/2 (一)</div>
+                    <div class="day-theme">🚧 DMZ 北緯38度線</div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">07:00</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place">🚌 DMZ Tour 出發</div>
+                        <div class="schedule-note">需事先預約 DMZ 半日遊（護照必帶）</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">08:30</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place"><span class="schedule-tag tag-sight">🔭</span>第三隧道</div>
+                        <div class="schedule-note">제3땅굴・北韓挖掘的秘密隧道</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">10:00</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place"><span class="schedule-tag tag-sight">🔭</span>都羅展望台</div>
+                        <div class="schedule-note">眺望北韓領土</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">13:00</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place">🚌 返回首爾</div>
+                        <div class="schedule-note">半日遊結束</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">15:00</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place"><span class="schedule-tag tag-shop">🛍️</span>聖水洞購物</div>
+                        <div class="schedule-note">hetras・fwee・ADER ERROR・NYUNYU</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">19:00</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place"><span class="schedule-tag tag-meal">🍜</span>능동미나리 水芹牛骨湯</div>
+                        <div class="schedule-note">Hebe、東海都來吃過！</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 9 -->
+            <div class="day-card">
+                <div class="day-header">
+                    <div class="day-date">3/3 (二)</div>
+                    <div class="day-theme">🏘️ 恩平韓屋村</div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">09:00</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place"><span class="schedule-tag tag-meal">🍜</span>住宿附近早餐</div>
+                        <div class="schedule-note">輕食或便利商店</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">10:00</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place"><span class="schedule-tag tag-sight">🏘️</span>恩平韓屋村</div>
+                        <div class="schedule-note">은평한옥마을・傳統韓屋村落</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">12:00</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place"><span class="schedule-tag tag-cafe">☕</span>1人1杯</div>
+                        <div class="schedule-note">1인1잔 은평한옥마을・絕美環景咖啡廳</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">14:00</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place"><span class="schedule-tag tag-sight">🛕</span>津寬寺</div>
+                        <div class="schedule-note">進賢寺・韓國傳統寺廟</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">17:00</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place">🚇 返回市區</div>
+                        <div class="schedule-note">西村逛街・通仁市場</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">19:00</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place"><span class="schedule-tag tag-meal">🦀</span>眞味食堂 醬蟹</div>
+                        <div class="schedule-note">진미식당・米其林認證！₩45,000/人（需電話訂位）</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 10 -->
+            <div class="day-card">
+                <div class="day-header">
+                    <div class="day-date">3/4 (三)</div>
+                    <div class="day-theme">🛍️ 最後採購日</div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">09:00</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place"><span class="schedule-tag tag-cafe">🥐</span>Standard Bread</div>
+                        <div class="schedule-note">스탠다드브레드 성수・鐵鍋焦糖法式吐司</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">10:00</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place"><span class="schedule-tag tag-shop">🛍️</span>聖水洞採購</div>
+                        <div class="schedule-note">hetras 香水・newmix 即溶咖啡・MilkyShop 餅乾</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">12:00</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place"><span class="schedule-tag tag-meal">🍜</span>훼미리손칼국수보쌈</div>
+                        <div class="schedule-note">菜包肉+刀削麵・在地人愛店</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">14:00</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place"><span class="schedule-tag tag-shop">🛍️</span>廣藏市場 156號</div>
+                        <div class="schedule-note">광장시장 156호・韓國製手工棉被</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">16:00</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place"><span class="schedule-tag tag-shop">🛒</span>樂天超市</div>
+                        <div class="schedule-note">롯데마트 월드타워점・伴手禮採購（記得拿 L.Point 卡）</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">18:30</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place"><span class="schedule-tag tag-meal">🍜</span>最後晚餐</div>
+                        <div class="schedule-note">想吃什麼就吃什麼！</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">20:00</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place">🚇 前往仁川機場</div>
+                        <div class="schedule-note">提早 3 小時到機場</div>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-time">23:00</div>
+                    <div class="schedule-content">
+                        <div class="schedule-place">✈️ 回台灣</div>
+                        <div class="schedule-note">TR 897 Scoot → 00:45+1 抵達桃園</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align:center; margin-top:30px; color:#aaa; font-size:0.8rem; padding-bottom:30px;">
+                Made with 🦞 • 首爾行程 2026
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="list-container">
+        <div id="loading-msg" style="text-align:center; padding:40px; color:#888;">Loading... ⏳</div>
+        <div id="error-msg"></div>
+    </div>
+
+    <script>
+        // 完整資料：含必吃必買
+        const places = [
+            {"cn_name":"清和屋 乙支路直營店","kr_name":"청와옥 을지로3가직영점","category":"美食","note":"劉在石推薦湯飯","hours":"08:00 - 22:00","zone":"明洞/鍾路","lat":37.5660015,"lon":126.9901968,
+             "mustTry":"招牌：豬肉湯飯 (돼지국밥)、內臟湯飯 (내장국밥)；加鹽巴調味更佳","price":"₩10,000-15,000"},
+            {"cn_name":"倫敦貝果博物館 安國店","kr_name":"런던베이글뮤지엄 안국점","category":"早午餐","note":"推大蒜口味","hours":"08:00 - 18:00","zone":"明洞/鍾路","lat":37.5792526,"lon":126.9859384,
+             "mustTry":"必點：大蒜貝果 (마늘베이글)、奶油起司抹醬 (크림치즈)、火腿起司貝果；需排隊取號","price":"₩5,000-12,000"},
+            {"cn_name":"新仙雪濃湯 明洞店","kr_name":"신선설농탕 명동점","category":"美食","note":"建議加鹽巴","hours":"24 小時營業","zone":"明洞/鍾路","lat":37.5647104,"lon":126.9867180,
+             "mustTry":"招牌：牛骨雪濃湯 (설농탕)；建議加鹽巴、蔥花調味；附白飯和蘿蔔泡菜","price":"₩12,000-15,000"},
+            {"cn_name":"無垢屋","kr_name":"무구옥","category":"美食","note":"12:00 開放訂位","hours":"11:30 - 21:00","zone":"明洞/鍾路","lat":37.5775630,"lon":126.9813512,
+             "mustTry":"必點：鮑魚粥 (전복죽)、海鮮粥 (해물죽)、南瓜粥 (호박죽)；12:00開放當日訂位","price":"₩15,000-25,000"},
+            {"cn_name":"朝朝刀削麵 市廳店","kr_name":"조조칼국수 시청점","category":"美食","note":"","hours":"10:00 - 21:30","zone":"明洞/鍾路","lat":37.5620078,"lon":126.9754246,
+             "mustTry":"招牌：手工刀削麵 (칼국수)、餃子 (만두)、海鮮刀削麵 (해물칼국수)","price":"₩9,000-13,000"},
+            {"cn_name":"豬仔存錢筒","kr_name":"돼지저금통","category":"美食","note":"弘大站 8 號出口","hours":"14:00 - 02:00","zone":"弘大/延南","lat":37.5562643,"lon":126.9262793,
+             "mustTry":"必點：鮮烤五花肉 (삼겹살)、豬頸肉 (목살)、蒜瓣烤肉；搭配包菜和醬料","price":"₩15,000-20,000/人"},
+            {"cn_name":"橋村筆房","kr_name":"교촌필방","category":"美食","note":"週一公休","hours":"16:00 - 23:30","zone":"漢南/梨泰院","lat":37.5256549,"lon":127.0014189,
+             "mustTry":"招牌：炭火雞肉串 (닭꼬치)、雞肉丸串、雞皮串；週一公休","price":"₩3,000-6,000/串"},
+            {"cn_name":"JO & DAWSON","kr_name":"조앤도슨","category":"咖啡甜點","note":"焦糖布丁名店","hours":"12:00 - 21:00","zone":"弘大/延南","lat":37.5636894,"lon":126.9228307,
+             "mustTry":"必點：焦糖布丁 (카라멜 푸딩)、巴斯克起司蛋糕、咖啡；人氣名店需排隊","price":"₩8,000-15,000"},
+            {"cn_name":"達摩吉 乙支路店","kr_name":"달마지 을지로점","category":"美食","note":"最後點餐 01:00","hours":"16:00 - 02:00","zone":"明洞/鍾路","lat":37.5662506,"lon":126.9987609,
+             "mustTry":"推薦：炸雞 (치킨)、啤酒套餐；乙支路復古風格酒吧","price":"₩18,000-25,000"},
+            {"cn_name":"龍龍先生 聖水店","kr_name":"용용선생 성수점","category":"美食","note":"最後點餐 21:00","hours":"16:00 - 22:00","zone":"聖水洞","lat":37.5440368,"lon":127.0565971,
+             "mustTry":"必點：麻辣香鍋 (마라샹궈)、水煮牛肉、擔擔麵；人氣中華料理","price":"₩15,000-25,000"},
+            {"cn_name":"鐘三六","kr_name":"종삼육","category":"美食","note":"鐘路三街站","hours":"14:00 - 23:30","zone":"明洞/鍾路","lat":37.5725657,"lon":126.9900452,
+             "mustTry":"招牌：韓牛燒肉 (한우)、牛五花 (차돌박이)、調味牛排骨；鐘路三街老店","price":"₩30,000-50,000/人"},
+            {"cn_name":"孫家燉雞","kr_name":"손가네닭한마리","category":"美食","note":"隱藏版名店","hours":"11:00 - 22:00","zone":"明洞/鍾路","lat":37.5735870,"lon":127.0213125,
+             "mustTry":"必點：一隻雞 (닭한마리)；雞肉燉鍋、加麵條收尾；隱藏版人氣名店","price":"₩25,000-30,000"},
+            {"cn_name":"統營蒸牡蠣","kr_name":"통영굴찜","category":"美食","note":"季節限定","hours":"11:00 - 22:00","zone":"汝矣島","lat":37.5267088,"lon":126.9238000,
+             "mustTry":"招牌：蒸牡蠣套餐 (굴찜)、牡蠣煎餅 (굴전)；季節限定 (冬季最佳)","price":"₩25,000-40,000"},
+            {"cn_name":"無垢屋 聖水店","kr_name":"무구옥 성수점","category":"美食","note":"聖水站分店","hours":"11:30 - 21:00","zone":"聖水洞","lat":37.5447374,"lon":127.0593428,
+             "mustTry":"必點：鮑魚粥 (전복죽)、南瓜粥 (호박죽)、蔬菜粥；聖水分店","price":"₩15,000-25,000"},
+            {"cn_name":"漢南洞馬鈴薯排骨湯","kr_name":"한남동감자탕","category":"美食","note":"必吃老店","hours":"24 小時營業","zone":"漢南/梨泰院","lat":37.5308068,"lon":126.9967969,
+             "mustTry":"招牌：馬鈴薯排骨湯 (감자탕)、豬骨湯、加泡麵更豐富；24小時營業","price":"₩12,000-20,000"},
+            {"cn_name":"Parole & Langue","kr_name":"파롤앤랑그","category":"咖啡甜點","note":"塔類甜點熱門店","hours":"13:00 - 21:00","zone":"弘大/延南","lat":37.5651538,"lon":126.9229985,
+             "mustTry":"必點：塔類甜點 (타르트)、水果塔、巧克力塔、咖啡；延南洞熱門店","price":"₩8,000-15,000"},
+            {"cn_name":"Butty三明治","kr_name":"버티샌드위치","category":"咖啡甜點","note":"巧巴達三明治","hours":"11:00 - 19:00","zone":"弘大/延南","lat":37.5558600,"lon":126.9008700,
+             "mustTry":"招牌：巧巴達三明治 (치아바타 샌드위치)、火腿起司款、雞蛋沙拉款","price":"₩8,000-12,000"},
+            {"cn_name":"馬山老奶奶鮟鱇魚蒸","kr_name":"마산할매아구찜","category":"美食","note":"在地口碑店","hours":"11:00 - 22:00","zone":"漢南/梨泰院","lat":37.5501100,"lon":126.9802800,
+             "mustTry":"必點：辣蒸鮟鱇魚 (아구찜)、加豆芽菜；在地老字號名店","price":"₩35,000-50,000"},
+            {"cn_name":"hetras 聖水","kr_name":"헤트라스 성수","category":"購物","note":"推薦 No.29, No.7, No.5","hours":"11:00 - 20:00","zone":"聖水洞","lat":37.5411759,"lon":127.0595267,
+             "mustTry":"必買：香水 No.29 (清新花香)、No.7 (木質調)、No.5 (經典款)；韓國小眾香水品牌","price":"₩80,000-150,000"},
+            {"cn_name":"newmix coffee","kr_name":"뉴믹스커피","category":"咖啡甜點","note":"必買即溶咖啡伴手禮","hours":"11:00 - 20:00","zone":"聖水洞","lat":37.5411759,"lon":127.0595267,
+             "mustTry":"必買：即溶咖啡禮盒 (伴手禮首選)、現煮咖啡、咖啡豆","price":"₩15,000-35,000"},
+            {"cn_name":"ADERERROR 聖水","kr_name":"아더 성수 스페이스","category":"服飾","note":"旗艦概念店","hours":"13:00 - 21:00","zone":"聖水洞","lat":37.5364697,"lon":127.0538762,
+             "mustTry":"推薦：經典Logo衛衣、解構設計外套、配件小物；旗艦概念店","price":"₩100,000-400,000"},
+            {"cn_name":"BLUE ELEPHANT 聖水","kr_name":"블루엘리펀트 성수","category":"服飾","note":"平價墨鏡品牌","hours":"11:00 - 20:00","zone":"聖水洞","lat":37.5411234,"lon":127.0565635,
+             "mustTry":"必買：平價太陽眼鏡 (墨鏡)、韓系鏡框款式；CP值高的韓國墨鏡品牌","price":"₩25,000-60,000"},
+            {"cn_name":"fwee Agit","kr_name":"퓌 아지트","category":"彩妝","note":"必買布丁唇泥","hours":"11:00 - 21:00","zone":"聖水洞","lat":37.5430688,"lon":127.0541356,
+             "mustTry":"必買：布丁唇泥 (푸딩 틴트)、光澤唇蜜、腮紅；韓國人氣彩妝品牌","price":"₩15,000-30,000"},
+            {"cn_name":"DIOR 聖水","kr_name":"디올 성수","category":"景點","note":"熱門地標拍照","hours":"11:00 - 20:00","zone":"聖水洞","lat":37.5441865,"lon":127.0528823,
+             "mustTry":"拍照打卡點；定期更換展覽主題；可預約進場","price":"免費入場"},
+            {"cn_name":"NYUNYU 聖水","kr_name":"뉴뉴 성수","category":"服飾","note":"飾品購物聖地","hours":"11:00 - 23:00","zone":"聖水洞","lat":37.5445,"lon":127.056,
+             "mustTry":"必買：韓系飾品、耳環、項鏈、戒指；飾品購物聖地","price":"₩10,000-50,000"},
+            {"cn_name":"띵굴 聖水","kr_name":"띵굴스토어 성수","category":"選物","note":"生活選物店","hours":"11:00 - 21:00","zone":"聖水洞","lat":37.5411234,"lon":127.0565635,
+             "mustTry":"推薦：生活選物、文具雜貨、香氛蠟燭、設計小物","price":"₩10,000-80,000"},
+            {"cn_name":"KODAK 東大門","kr_name":"코닥어패럴 동대문","category":"服飾","note":"位於 DunDun 2 樓","hours":"10:30 - 22:00","zone":"明洞/鍾路","lat":37.5693468,"lon":127.0105160,
+             "mustTry":"必買：復古風外套、帽T、相機圖案T恤；DunDun 2樓","price":"₩50,000-150,000"},
+            {"cn_name":"ept 聖水","kr_name":"이피티 성수","category":"服飾","note":"韓國熱門運動鞋","hours":"11:00 - 20:00","zone":"聖水洞","lat":37.5411759,"lon":127.0595267,
+             "mustTry":"必買：韓國熱門運動鞋、厚底休閒鞋、聯名款式","price":"₩100,000-200,000"},
+            {"cn_name":"HAUS NOWHERE","kr_name":"하우스 노웨어","category":"選物","note":"臘腸狗地標/新品牌","hours":"11:00 - 21:00","zone":"聖水洞","lat":37.541,"lon":127.059,
+             "mustTry":"推薦：設計師品牌服飾、配件；臘腸狗地標建築必拍","price":"₩80,000-300,000"},
+            {"cn_name":"thisisneverthat","kr_name":"디스이즈네버댓","category":"服飾","note":"街頭潮流第一站","hours":"12:00 - 21:00","zone":"弘大/延南","lat":37.5516170,"lon":126.9197938,
+             "mustTry":"必買：街頭潮流T恤、衛衣、外套、帽子；韓國代表性街牌","price":"₩50,000-200,000"},
+            {"cn_name":"KITH 首爾","kr_name":"키스 서울","category":"服飾","note":"潮流名店","hours":"11:00 - 20:00","zone":"聖水洞","lat":37.5411759,"lon":127.0595267,
+             "mustTry":"推薦：聯名限定款、潮流運動服飾、球鞋；聖水潮流據點","price":"₩100,000-500,000"},
+            {"cn_name":"HUMAN MADE","kr_name":"휴먼메이드","category":"服飾","note":"熱門潮牌","hours":"11:00 - 20:00","zone":"聖水洞","lat":37.5412470,"lon":127.0542669,
+             "mustTry":"必買：NIGO設計經典愛心Logo、動物圖案T恤、配件","price":"₩150,000-400,000"},
+            {"cn_name":"MUSINSA EMPTY","kr_name":"무신사 엠프티","category":"選物","note":"大型選品店","hours":"11:00 - 20:00","zone":"聖水洞","lat":37.5364697,"lon":127.0538762,
+             "mustTry":"推薦：韓國設計師品牌集合店、獨家聯名款；大型選品店","price":"₩30,000-300,000"},
+            {"cn_name":"清水堂","kr_name":"청수당","category":"咖啡甜點","note":"益善洞竹林造景","hours":"11:30 - 22:00","zone":"明洞/鍾路","lat":37.5736272,"lon":126.9905422,
+             "mustTry":"必點：竹林座位區拍照、紅豆粥 (팥죽)、傳統飲品；益善洞名店","price":"₩8,000-15,000"},
+            {"cn_name":"YM Coffee House","kr_name":"YM커피하우스","category":"咖啡甜點","note":"教堂風格專業手沖","hours":"12:00 - 22:00","zone":"首爾市區","lat":37.6201729,"lon":126.9174055,
+             "mustTry":"推薦：手沖咖啡、單品咖啡豆、甜點；教堂風格咖啡廳","price":"₩6,000-12,000"},
+            {"cn_name":"Cafe Layered 延南店","kr_name":"카페 레이어드 연남점","category":"咖啡甜點","note":"司康名店","hours":"11:00 - 22:00","zone":"弘大/延南","lat":37.5649847,"lon":126.9241878,
+             "mustTry":"必點：司康 (스콘)、奶油司康、果醬司康、草莓鮮奶油款","price":"₩5,000-10,000"},
+            {"cn_name":"Thanks Oat 延南","kr_name":"땡스오트 연남","category":"咖啡甜點","note":"延南洞手工優格","hours":"10:00 - 19:00","zone":"弘大/延南","lat":37.5650202,"lon":126.9206249,
+             "mustTry":"必點：手工優格 (요거트)、燕麥碗、水果優格；健康早午餐","price":"₩8,000-15,000"},
+            {"cn_name":"今天也足夠","kr_name":"오늘도충분해","category":"咖啡甜點","note":"週二公休","hours":"12:00 - 20:00","zone":"弘大/延南","lat":37.5598873,"lon":126.9254959,
+             "mustTry":"推薦：蛋糕、手工甜點、咖啡；週二公休；延禧洞氛圍咖啡廳","price":"₩7,000-15,000"},
+            {"cn_name":"素賢堂","kr_name":"소현당","category":"咖啡甜點","note":"韓屋茶室","hours":"11:00 - 20:00","zone":"明洞/鍾路","lat":37.5796200,"lon":126.9807300,
+             "mustTry":"必點：傳統韓茶、藥菓 (약과)、韓屋庭院座位；韓屋茶室體驗","price":"₩10,000-18,000"},
+            {"cn_name":"Artist Bakery","kr_name":"아티스트 베이커리","category":"咖啡甜點","note":"鹽可頌排隊名店","hours":"08:00 - 20:00","zone":"明洞/鍾路","lat":37.5763072,"lon":126.9843495,
+             "mustTry":"必點：鹽可頌 (소금 크로와상)、可頌、牛角麵包；排隊名店","price":"₩4,000-8,000"},
+            {"cn_name":"29CM 聖水","kr_name":"이구성수","category":"選物","note":"線上選品實體店","hours":"11:00 - 20:00","zone":"聖水洞","lat":37.5453108,"lon":127.0526786,
+             "mustTry":"推薦：韓國設計師品牌、選品服飾、生活雜貨；線上選品實體店","price":"₩30,000-200,000"},
+            {"cn_name":"Ground Seesaw 西村","kr_name":"그라운드시소 서촌","category":"展覽","note":"質感展覽空間","hours":"10:00 - 19:00","zone":"明洞/鍾路","lat":37.5781385,"lon":126.9729372,
+             "mustTry":"推薦：當期展覽、藝術展、攝影展；質感展覽空間門票","price":"₩15,000-20,000"},
+            {"cn_name":"廣藏市場 156號","kr_name":"광장시장 156호","category":"雜貨","note":"購買韓國製棉被","hours":"09:00 - 18:00","zone":"明洞/鍾路","lat":37.5700967,"lon":126.9998283,
+             "mustTry":"必買：韓國製手工棉被、蠶絲被、枕頭；傳統市場老店","price":"₩100,000-500,000"},
+            {"cn_name":"Cociety 首爾林","kr_name":"코사이어티 서울숲","category":"工作咖啡","note":"創意工作空間 (週一休)","hours":"12:00 - 20:00","zone":"聖水洞","lat":37.5559574,"lon":127.0433184,
+             "mustTry":"推薦：咖啡、甜點、創意空間；週一公休；可工作","price":"₩6,000-12,000"},
+            {"cn_name":"Brautor","kr_name":"브라우터","category":"工作咖啡","note":"蝴蝶餅名店/整棟座位","hours":"08:00 - 22:00","zone":"聖水洞","lat":37.5493171,"lon":127.0450501,
+             "mustTry":"必點：蝴蝶餅 (프레즐)、德式椒鹽捲餅、咖啡；整棟建築都是座位","price":"₩5,000-12,000"},
+            {"cn_name":"Debunk","kr_name":"디벙크","category":"工作咖啡","note":"地下層讀書氛圍","hours":"10:00 - 23:00","zone":"弘大/延南","lat":37.5480049,"lon":126.9152430,
+             "mustTry":"推薦：咖啡、甜點；地下層讀書氛圍、適合工作","price":"₩5,000-10,000"},
+            {"cn_name":"Hollys Coffee 弘大站","kr_name":"할리스 홍대역점","category":"工作咖啡","note":"24小時/適合筆電","hours":"24 小時營業","zone":"弘大/延南","lat":37.5560817,"lon":126.9234301,
+             "mustTry":"推薦：美式咖啡、鬆餅、三明治；24小時營業、適合筆電工作","price":"₩5,000-12,000"},
+            {"cn_name":"Ediya Coffee Lab","kr_name":"이디야커피랩","category":"工作咖啡","note":"旗艦店/寬敞舒適","hours":"07:30 - 02:00","zone":"江南","lat":37.5105088,"lon":127.0326807,
+             "mustTry":"推薦：咖啡、甜點、寬敞座位；旗艦店概念、適合長時間停留","price":"₩4,000-10,000"},
+            {"cn_name":"Terarosa POSCO","kr_name":"테라로사 포스코센터점","category":"工作咖啡","note":"鋼鐵書架牆/江南","hours":"07:30 - 21:00","zone":"江南","lat":37.5056932,"lon":127.0558968,
+             "mustTry":"推薦：手沖咖啡、麵包、蛋糕；鋼鐵書架牆打卡點、江南商務區","price":"₩6,000-15,000"},
+            {"cn_name":"Mangrove 東大門","kr_name":"맹그로브 동대문","category":"住宿","note":"🏠 熱門 Co-living","hours":"Check-in 15:00","zone":"明洞/鍾路","lat":37.5651,"lon":127.0078},
+            {"cn_name":"Local Stitch 西橋","kr_name":"로컬스티치 크리에이터 타운 서교","category":"住宿","note":"🏠 弘大商圈","hours":"Check-in 15:00","zone":"弘大/延南","lat":37.5562,"lon":126.9167},
+            {"cn_name":"L7 弘大","kr_name":"L7 홍대","category":"住宿","note":"🏨 弘大入口站旁","hours":"Check-in 15:00","zone":"弘大/延南","lat":37.5552,"lon":126.9216}
+,
+            {"cn_name":"1人1杯","kr_name":"1인1잔 은평한옥마을","category":"美食","note":"絕美環景","hours":"","zone":"恩平區","lat":37.6410605,"lon":126.93788889999999},
+            {"cn_name":"43 Gyeongdongsijang-ro 12-gil","kr_name":"","category":"住宿","note":"🏠🏠住宿","hours":"","zone":"首爾市區","lat":37.5822619,"lon":127.04309219999999},
+            {"cn_name":"第三隧道","kr_name":"제3땅굴","category":"景點","note":"分界線","hours":"","zone":"恩平區","lat":37.916653,"lon":126.6982609},
+            {"cn_name":"Hotel Charis","kr_name":"호텔 카리스","category":"住宿","note":"婚禮會場","hours":"","zone":"首爾市區","lat":37.526314,"lon":126.72301999999999},
+            {"cn_name":"恩平韓屋村","kr_name":"은평한옥마을","category":"景點","note":"韓屋村！","hours":"","zone":"恩平區","lat":37.6413191,"lon":126.93920399999999},
+            {"cn_name":"Dotom","kr_name":"도톰 성수","category":"美食","note":"位置在 首爾廣津區 Gwangjin-gu 是很多在地人下班後會來吃的那種「真正好吃」的烤肉店！","hours":"","zone":"首爾市區","lat":37.5563161,"lon":127.0779539},
+            {"cn_name":"樂天超級市場 世界塔店","kr_name":"롯데마트 월드타워점","category":"景點","note":"","hours":"","zone":"蠶室/樂天","lat":37.5141637,"lon":127.1048524},
+            {"cn_name":"大使館換錢所","kr_name":"대사관환전소","category":"購物","note":"","hours":"","zone":"明洞/鍾路","lat":37.5621715,"lon":126.98247359999999},
+            {"cn_name":"Maljillo","kr_name":"말질로","category":"美食","note":"生魚片","hours":"","zone":"首爾市區","lat":37.564749899999995,"lon":127.0202449},
+            {"cn_name":"훼미리손칼국수보쌈","kr_name":"훼미리손칼국수보쌈","category":"美食","note":"菜包肉 刀削麵","hours":"","zone":"聖水洞","lat":37.5494775,"lon":127.0446801},
+            {"cn_name":"Jayeondo Sogeumppang (Salt Bread) in Seongsu","kr_name":"자연도소금빵 성수점","category":"咖啡甜點","note":"自然島鹽麵包","hours":"","zone":"聖水洞","lat":37.542301699999996,"lon":127.05545819999999},
+            {"cn_name":"Kyewol Gomtang","kr_name":"계월곰탕","category":"美食","note":"湯飯","hours":"","zone":"聖水洞","lat":37.539526699999996,"lon":127.0476224},
+            {"cn_name":"Thweet Seongsu","kr_name":"트윗 성수","category":"美食","note":"THWEET威士忌冰淇淋","hours":"","zone":"聖水洞","lat":37.5446613,"lon":127.051779},
+            {"cn_name":"仁王山","kr_name":"인왕산","category":"景點","note":"仁王山 인왕산 Inwangsan 登山口可導航「Inwangsan (Hanyangdoseong Fortress)","hours":"","zone":"首爾市區","lat":37.5849489,"lon":126.95930419999999,"mustTry":"仁王山 인왕산 Inwangsan 登山口可導航「Inwangsan (Hanyangdoseong Fortress) Walking Trail Entrance」 想輕鬆些也可以搭乘Ub"},
+            {"cn_name":"Mangrove Dongdaemun","kr_name":"맹그로브 동대문","category":"美食","note":"","hours":"","zone":"明洞/鍾路","lat":37.564155299999996,"lon":127.00859949999999},
+            {"cn_name":"MilkyShop Seongsu Store","kr_name":"밀키샵 성수점","category":"購物","note":"MilkyShop Seongsu Store 밀키샵 성수점 最有名伴手禮「焦糖奶油餅乾」 🈺 12:00-21:0","hours":"","zone":"聖水洞","lat":37.5439021,"lon":127.05069519999999,"mustTry":"MilkyShop Seongsu Store 밀키샵 성수점 最有名伴手禮「焦糖奶油餅乾」 🈺 12:00-21:00"},
+            {"cn_name":"Kodak Corner Shop","kr_name":"코닥 코너숍 성수","category":"購物","note":"Kodak Corner Shop 코닥 코너숍 弘大明洞也有 周邊很可愛 🈺 10:30-20:30","hours":"","zone":"聖水洞","lat":37.5431112,"lon":127.0543075},
+            {"cn_name":"祖傳三代馬鈴薯排骨湯","kr_name":"소문난 성수 감자탕","category":"美食","note":"祖傳三代馬鈴薯排骨湯 소문난 성수 감자탕 24H","hours":"","zone":"聖水洞","lat":37.5428241,"lon":127.0543732},
+            {"cn_name":"Hollys Coffee Hongik Univ. station branch","kr_name":"할리스커피 홍대입구역점","category":"咖啡甜點","note":"美式咖啡、鬆餅、三明治；24小時營業、適合筆電工作","hours":"","zone":"弘大/延南","lat":37.5548054,"lon":126.922737},
+            {"cn_name":"Blue Elephant Space Seongsu","kr_name":"블루엘리펀트 스페이스 성수","category":"購物","note":"Blue Elephant Space Seongsu 未來感空間設計 韓國墨鏡品牌 🈺 10:00-22:00","hours":"","zone":"聖水洞","lat":37.5426718,"lon":127.0553783},
+            {"cn_name":"브라우터 강남 신세계백화점","kr_name":"브라우터 강남 신세계백화점","category":"咖啡甜點","note":"蝴蝶餅 (프레즐)、德式椒鹽捲餅、咖啡；整棟建築都是座位","hours":"","zone":"江南","lat":37.5043637,"lon":127.00362109999999},
+            {"cn_name":"29cm.home","kr_name":"이구홈 성수","category":"美食","note":"29cm.home 이구홈 성수 質感家居選物店 旁邊是知名開心果gelato 🈺 11:00-22:00","hours":"","zone":"聖水洞","lat":37.5425599,"lon":127.05575789999999},
+            {"cn_name":"로에 성수(LOE SEONGSU)","kr_name":"로에 성수","category":"購物","note":"韓國小眾品牌香水，免費客製化刻字 🈺 11:00-21:00","hours":"","zone":"聖水洞","lat":37.5424182,"lon":127.05621529999999},
+            {"cn_name":"Standard Bread","kr_name":"스탠다드브레드 성수","category":"咖啡甜點","note":"Standard Bread 스탠다드브레드 성수 烘焙咖啡｜鐵鍋焦糖法式吐司 🈺 9:00-21:00","hours":"","zone":"聖水洞","lat":37.5416751,"lon":127.0611416},
+            {"cn_name":"Neungdong Minari Seongsu","kr_name":"능동미나리 성수점","category":"美食","note":"Neungdong Minari 능동 미나리 성수점 連Hebe東海都來吃的水芹牛骨湯 🈺 平日9:30 假日9:0","hours":"","zone":"聖水洞","lat":37.542747999999996,"lon":127.05396069999999,"mustTry":"Neungdong Minari 능동 미나리 성수점 連Hebe東海都來吃的水芹牛骨湯 🈺 平日9:30 假日9:00-00:00"},
+            {"cn_name":"소현당 게스트하우스","kr_name":"소현당 게스트하우스","category":"景點","note":"傳統韓茶、藥菓 (약과)、韓屋庭院座位；韓屋茶室體驗","hours":"","zone":"明洞/鍾路","lat":37.5788782,"lon":126.9817678},
+            {"cn_name":"STAFF PICKS","kr_name":"스태프픽스 서촌","category":"咖啡甜點","note":"美咖啡廳","hours":"","zone":"明洞/鍾路","lat":37.5774665,"lon":126.96797369999999},
+            {"cn_name":"THANKS, OAT Yeonnam","kr_name":"땡스오트 연남","category":"美食","note":"","hours":"","zone":"弘大/延南","lat":37.5662646,"lon":126.9198948},
+            {"cn_name":"Layered Yeonnam","kr_name":"레이어드 연남","category":"咖啡甜點","note":"司康 (스콘)、奶油司康、果醬司康、草莓鮮奶油款","hours":"","zone":"弘大/延南","lat":37.5649754,"lon":126.92418219999999},
+            {"cn_name":"Milestone Coffee Hannam","kr_name":"마일스톤 커피 한남","category":"咖啡甜點","note":"旁邊是漢南洞潮流區","hours":"","zone":"漢南/梨泰院","lat":37.5378721,"lon":127.0026652},
+            {"cn_name":"YM COFFEE PROJECT 연신내","kr_name":"YM커피프로젝트 연신내","category":"咖啡甜點","note":"","hours":"","zone":"恩平區","lat":37.6191076,"lon":126.9176062},
+            {"cn_name":"首爾市立美術館","kr_name":"서울시립미술관","category":"景點","note":"美術館","hours":"","zone":"明洞/鍾路","lat":37.5640625,"lon":126.9738125},
+            {"cn_name":"Kith Seoul","kr_name":"키스 서울","category":"購物","note":"聯名限定款、潮流運動服飾、球鞋；聖水潮流據點","hours":"","zone":"聖水洞","lat":37.541768,"lon":127.0570027},
+            {"cn_name":"COFFEE & CIGARETTES","kr_name":"커피앤시가렛","category":"咖啡甜點","note":"17 樓的高空咖啡","hours":"","zone":"明洞/鍾路","lat":37.562716099999996,"lon":126.97401989999999},
+            {"cn_name":"EPT 성수점","kr_name":"EPT 성수점","category":"美食","note":"","hours":"","zone":"聖水洞","lat":37.5411808,"lon":127.0611888},
+            {"cn_name":"Blue Bottle Samcheong Cafe","kr_name":"블루보틀 삼청카페","category":"咖啡甜點","note":"風景很好的樣子","hours":"","zone":"明洞/鍾路","lat":37.5801151,"lon":126.9808482},
+            {"cn_name":"뭍 성수 플래그쉽 스토어(MUUT SEONGSU FLAGSHIP STORE)","kr_name":"뭍 성수 플래그십스토어","category":"購物","note":"","hours":"","zone":"聖水洞","lat":37.5410508,"lon":127.0595319},
+            {"cn_name":"NYU NYU","kr_name":"뉴뉴 성수","category":"美食","note":"","hours":"","zone":"聖水洞","lat":37.5415196,"lon":127.0592971},
+            {"cn_name":"國立現代美術館 首爾 MMCA","kr_name":"국립현대미술관 서울","category":"景點","note":"三清洞: 國立現代美術館MMCA'd7藍瓶咖啡 MMCA不僅是韓國當代藝術的最高殿堂,其建築本 身就是韓國近代史與空間轉","hours":"","zone":"明洞/鍾路","lat":37.5788333,"lon":126.9804281,"mustTry":"三清洞: 國立現代美術館MMCA'd7藍瓶咖啡 MMCA不僅是韓國當代藝術的最高殿堂,其建築本 身就是韓國近代史與空間轉化的深度展品。該地點曾 是朝鮮王室宗親府的所在,歷經日治時期的首"},
+            {"cn_name":"BLUE ELEPHANT SEONGSU FLAGSHIP STORE","kr_name":"블루엘리펀트 성수 플래그십","category":"購物","note":"","hours":"","zone":"聖水洞","lat":37.5437612,"lon":127.05116029999999},
+            {"cn_name":"ADER ERROR SEONGSU","kr_name":"아더에러 성수","category":"購物","note":"經典Logo衛衣、解構設計外套、配件小物；旗艦概念店","hours":"","zone":"聖水洞","lat":37.5422211,"lon":127.0565311},
+            {"cn_name":"뉴믹스커피 (New Mix coffee)","kr_name":"뉴믹스커피 성수","category":"咖啡甜點","note":"即溶咖啡禮盒 (伴手禮首選)、現煮咖啡、咖啡豆","hours":"","zone":"聖水洞","lat":37.5439611,"lon":127.0513053},
+            {"cn_name":"hetras Seongsu","kr_name":"헤트라스 성수","category":"購物","note":"香水 No.29 (清新花香)、No.7 (木質調)、No.5 (經典款)；韓國小眾香水品牌","hours":"","zone":"聖水洞","lat":37.5419055,"lon":127.0567504},
+            {"cn_name":"眞味食堂","kr_name":"진미식당","category":"美食","note":"以及榮獲多年米其林認證的真味食堂 一直以來都超想來吃吃看 但只接受電話訂位比較麻煩 謝謝給力的韓國朋友幫我訂到了🥹  ","hours":"","zone":"首爾市區","lat":37.5505634,"lon":126.9557715,"mustTry":"以及榮獲多年米其林認證的真味食堂 一直以來都超想來吃吃看 但只接受電話訂位比較麻煩 謝謝給力的韓國朋友幫我訂到了🥹  入座後不用點餐 以人數計價，醬蟹定食₩45,000/人"},
+            {"cn_name":"Butty Sandwich House","kr_name":"버티 샌드위치 하우스","category":"美食","note":"","hours":"","zone":"聖水洞","lat":37.5407442,"lon":127.0602133},
+            {"cn_name":"Ground Seesaw Seochon","kr_name":"그라운드시소 서촌","category":"景點","note":"出現 * 2 美術館 展覽：wemer bronkhorst the whole world's canvas","hours":"","zone":"明洞/鍾路","lat":37.577749399999995,"lon":126.97292039999999},
+            {"cn_name":"통영굴찜","kr_name":"통영굴찜","category":"美食","note":"蒸牡蠣套餐 (굴찜)、牡蠣煎餅 (굴전)；季節限定 (冬季最佳)","hours":"","zone":"首爾市區","lat":37.5262168,"lon":126.9311355},
+            {"cn_name":"Jongsamyook","kr_name":"종삼육","category":"美食","note":"韓牛燒肉 (한우)、牛五花 (차돌박이)、調味牛排骨；鐘路三街老店","hours":"","zone":"明洞/鍾路","lat":37.5728266,"lon":126.990979},
+            {"cn_name":"달맞이 광장 바베큐","kr_name":"달맞이 광장 바베큐","category":"美食","note":"炸雞 (치킨)、啤酒套餐；乙支路復古風格酒吧 最後點餐 01:00","hours":"","zone":"明洞/鍾路","lat":37.565828499999995,"lon":126.9904459},
+            {"cn_name":"Ground Seesaw Central","kr_name":"그라운드시소 센트럴","category":"景點","note":"展覽：yosigo miles to go","hours":"","zone":"首爾市區","lat":37.557875599999996,"lon":126.9744016},
+            {"cn_name":"Kyochon Pilbang","kr_name":"교촌필방","category":"美食","note":"炭火雞肉串 (닭꼬치)、雞肉丸串、雞皮串；週一公休","hours":"","zone":"漢南/梨泰院","lat":37.534071399999995,"lon":126.99385079999999},
+            {"cn_name":"小豬存錢桶（石頭烤肉）","kr_name":"돼지저금통 홍대점","category":"美食","note":"鮮烤五花肉 (삼겹살)、豬頸肉 (목살)、蒜瓣烤肉；搭配包菜和醬料","hours":"","zone":"弘大/延南","lat":37.5562533,"lon":126.9262318},
+            {"cn_name":"神仙雪濃湯","kr_name":"신선설농탕","category":"美食","note":"牛骨雪濃湯 (설농탕)；建議加鹽巴、蔥花調味；附白飯和蘿蔔泡菜","hours":"","zone":"明洞/鍾路","lat":37.5637994,"lon":126.9854142},
+            {"cn_name":"青瓦屋","kr_name":"청와옥","category":"美食","note":"豬肉湯飯 (돼지국밥)、內臟湯飯 (내장국밥)；加鹽巴調味更佳","hours":"","zone":"明洞/鍾路","lat":37.565982,"lon":126.99003409999999},
+            {"cn_name":"Musinsa Standard Seongsu","kr_name":"무신사 스탠다드 성수","category":"購物","note":"很像 uniqlo 便宜發熱衣，連鎖店","hours":"","zone":"聖水洞","lat":37.541547099999995,"lon":127.058537},
+            {"cn_name":"漢南洞24小時馬鈴薯豬骨湯","kr_name":"","category":"美食","note":"乾的必吃","hours":"","zone":"漢南/梨泰院","lat":37.5334141,"lon":127.00616919999999},
+            {"cn_name":"孫家一隻雞","kr_name":"손가네한마리닭","category":"美食","note":"隱藏版名店","hours":"","zone":"首爾市區","lat":37.5736525,"lon":127.0213678},
+            {"cn_name":"Malbang Gukbap - Seongsu","kr_name":"말방국밥 성수","category":"美食","note":"湯飯 https://www.instagram.com/reel/DN7LrQ-ksGV/?utm_source=ig","hours":"","zone":"聖水洞","lat":37.547786599999995,"lon":127.06368189999999,"mustTry":"湯飯 https://www.instagram.com/reel/DN7LrQ-ksGV/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="},
+            {"cn_name":"용용선생 마라도원","kr_name":"용용선생 마라도원","category":"美食","note":"最後點餐 21:00","hours":"","zone":"聖水洞","lat":37.544062499999995,"lon":127.05901499999999},
+            {"cn_name":"파피어프로스트 papier prost","kr_name":"파피어프로스트","category":"購物","note":"文具店","hours":"","zone":"明洞/鍾路","lat":37.5803499,"lon":126.96916429999999},
+            {"cn_name":"通仁市場","kr_name":"통인시장","category":"景點","note":"可以買一個塑膠餐盒 店家都會給1-2人份的量","hours":"","zone":"明洞/鍾路","lat":37.5807649,"lon":126.97067559999999},
+            {"cn_name":"아르키스토 arkisto","kr_name":"아르키스토","category":"購物","note":"逛街一條街","hours":"","zone":"明洞/鍾路","lat":37.5822977,"lon":126.97180619999999},
+            {"cn_name":"모노하 서촌 (MONOHA Seochon)","kr_name":"모노하 서촌","category":"購物","note":"逛街～ 這條路上很像很多可以逛的","hours":"","zone":"明洞/鍾路","lat":37.5795295,"lon":126.9722455},
+            {"cn_name":"大林美術館","kr_name":"대림미술관","category":"景點","note":"攝影展美術館","hours":"","zone":"明洞/鍾路","lat":37.5775023,"lon":126.97336259999999},
+            {"cn_name":"Dancing grandma","kr_name":"댄싱그랜마","category":"美食","note":"手織品","hours":"","zone":"明洞/鍾路","lat":37.5775705,"lon":126.97118169999999},
+            {"cn_name":"SOLSOT","kr_name":"솔솥","category":"美食","note":"釜飯","hours":"","zone":"明洞/鍾路","lat":37.5780768,"lon":126.97148059999999},
+            {"cn_name":"ETC Seoul Seochon","kr_name":"이티씨서울 서촌","category":"購物","note":"選品店","hours":"","zone":"明洞/鍾路","lat":37.5767673,"lon":126.9693415},
+            {"cn_name":"Folki","kr_name":"폴키","category":"咖啡甜點","note":"漂亮咖啡廳","hours":"","zone":"明洞/鍾路","lat":37.5764692,"lon":126.9687697},
+            {"cn_name":"首爾林公園","kr_name":"서울숲","category":"景點","note":"廁所","hours":"","zone":"首爾市區","lat":37.544387799999996,"lon":127.03744239999999},
+            {"cn_name":"PIZZA SLICE SEOUL","kr_name":"피자슬라이스 서울","category":"美食","note":"廁所","hours":"","zone":"聖水洞","lat":37.5430944,"lon":127.06167099999999},
+            {"cn_name":"AIRDROP COFFEE SEONGSU","kr_name":"에어드롭커피 성수","category":"咖啡甜點","note":"廁所","hours":"","zone":"聖水洞","lat":37.544171999999996,"lon":127.05456559999999},
+            {"cn_name":"纛島漢江公園雪橇場","kr_name":"뚝섬한강공원 눈썰매장","category":"景點","note":"2025/12/31 － 2026/02/18","hours":"","zone":"首爾市區","lat":37.5300436,"lon":127.06692729999999},
+            {"cn_name":"Downtowner Anguk","kr_name":"다운타우너 안국점","category":"美食","note":"酪梨漢堡，連鎖店","hours":"","zone":"明洞/鍾路","lat":37.577463,"lon":126.9862466},
+            {"cn_name":"仁川國際機場","kr_name":"인천국제공항","category":"景點","note":"","hours":"","zone":"首爾市區","lat":37.458666,"lon":126.4419679}
+        ];
+
+        try {
+            const listContainer = document.getElementById('list-container');
+            const loadingMsg = document.getElementById('loading-msg');
+            
+            if (listContainer) {
+                if(loadingMsg) loadingMsg.remove();
+
+                let htmlContent = '';
+                
+                places.forEach(p => {
+                    const cn = p.cn_name || 'Unknown';
+                    const kr = p.kr_name || '';
+                    const cat = p.category || 'Other';
+                    const zone = p.zone || '';
+                    const note = p.note || '';
+                    const hours = p.hours || '';
+                    const mustTry = p.mustTry || '';
+                    const price = p.price || '';
+                    
+                    const query = encodeURIComponent(kr || cn);
+                    
+                    let catClass = 'cat-' + cat;
+                    if(cat === 'Work' || cat === '展覽' || cat === '工作咖啡') catClass = 'cat-Work';
+                    
+                    // 必吃必買區塊
+                    let mustTryHtml = '';
+                    if(mustTry) {
+                        mustTryHtml = `
+                        <div class="must-try-box">
+                            <div class="must-try-title">⭐ 必吃必買</div>
+                            <div class="must-try-content">${mustTry}</div>
+                            ${price ? `<span class="price-tag">💰 ${price}</span>` : ''}
+                        </div>`;
+                    }
+                    
+                    htmlContent += `
+                    <div class="card" data-cat="${cat}" data-zone="${zone}">
+                        <div class="card-header">
+                            <div class="card-badges">
+                                <span class="badge ${catClass}">${cat}</span>
+                                <span class="badge zone">${zone}</span>
+                            </div>
+                        </div>
+                        <div class="place-name-cn">${cn}</div>
+                        <div class="place-name-kr">${kr}</div>
+                        
+                        ${note ? `<div class="info-row">💡 ${note}</div>` : ''}
+                        <div class="info-row">🕒 ${hours}</div>
+                        
+                        ${mustTryHtml}
+                        
+                        <div class="actions">
+                            <a href="https://www.google.com/maps/search/?api=1&query=${query}" target="_blank" class="action-btn btn-google">Google</a>
+                            <a href="https://map.naver.com/p/search/${query}" target="_blank" class="action-btn btn-naver">Naver</a>
+                        </div>
+                    </div>`;
+                });
+                
+                htmlContent += `<div style="text-align:center; margin-top:40px; color:#aaa; font-size:0.8rem;">Made with 🦞 • 首爾行程懶人包</div>`;
+                
+                listContainer.innerHTML = htmlContent;
+            }
+        } catch(error) {
+            const errMsg = document.getElementById('error-msg');
+            if(errMsg) {
+                errMsg.style.display = 'block';
+                errMsg.innerHTML = "⚠️ Error: " + error.message;
+            }
+        }
+
+        function filter(cat) {
+            // Clear search when using category filter
+            const searchInput = document.getElementById('search-input');
+            if(searchInput) searchInput.value = '';
+            if(typeof currentSearchTerm !== 'undefined') currentSearchTerm = '';
+            
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            const btns = document.querySelectorAll('.tab-btn');
+            for(let b of btns) {
+                if(b.textContent.includes(cat) || (cat==='all' && b.textContent.includes('全部'))) {
+                    b.classList.add('active');
+                    break;
+                }
+            }
+
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                const cCat = card.getAttribute('data-cat') || '';
+                let show = false;
+                
+                if (cat === 'all') show = true;
+                else if (cCat.indexOf(cat) > -1) show = true;
+                else if (cat === '購物' && ['服飾','選物','彩妝','雜貨','購物'].includes(cCat)) show = true;
+                else if (cat === 'Work' && ['Work','工作咖啡','展覽'].includes(cCat)) show = true;
+                else if (cat === '咖啡甜點' && ['咖啡甜點','早午餐'].includes(cCat)) show = true;
+                
+                card.style.display = show ? 'block' : 'none';
+            });
+            
+            if(typeof updateMapFilter === 'function') updateMapFilter(cat);
+        }
+
+        let currentSearchTerm = '';
+        
+        function searchPlaces() {
+            const searchInput = document.getElementById('search-input');
+            const term = searchInput.value.toLowerCase().trim();
+            currentSearchTerm = term;
+            
+            // Reset category filter to "全部" when searching
+            if(term) {
+                document.querySelectorAll('.tab-btn').forEach(b => {
+                    b.classList.remove('active');
+                    if(b.textContent.includes('全部')) b.classList.add('active');
+                });
+            }
+            
+            const cards = document.querySelectorAll('.card');
+            let visibleCount = 0;
+            
+            cards.forEach(card => {
+                const cnName = card.querySelector('.place-name-cn')?.textContent.toLowerCase() || '';
+                const krName = card.querySelector('.place-name-kr')?.textContent.toLowerCase() || '';
+                const note = card.querySelector('.info-row')?.textContent.toLowerCase() || '';
+                const zone = card.getAttribute('data-zone')?.toLowerCase() || '';
+                const cat = card.getAttribute('data-cat')?.toLowerCase() || '';
+                const mustTry = card.querySelector('.must-try-content')?.textContent.toLowerCase() || '';
+                
+                const searchText = cnName + ' ' + krName + ' ' + note + ' ' + zone + ' ' + cat + ' ' + mustTry;
+                
+                if(!term || searchText.includes(term)) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            // Update map markers too
+            if(map && markers.length > 0) {
+                markers.forEach((m, i) => {
+                    const p = places[i];
+                    if(!p) return;
+                    const searchText = ((p.cn_name || '') + ' ' + (p.kr_name || '') + ' ' + (p.note || '') + ' ' + (p.zone || '') + ' ' + (p.category || '') + ' ' + (p.mustTry || '')).toLowerCase();
+                    
+                    if(!term || searchText.includes(term)) {
+                        m.marker.addTo(map);
+                    } else {
+                        m.marker.remove();
+                    }
+                });
+            }
+        }
+    </script>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script>
+        let map = null;
+        let markers = [];
+        let isMapMode = false;
+
+        function initMap() {
+            if(map) return;
+            if(typeof L === 'undefined') return;
+            
+            try {
+                map = L.map('map').setView([37.5665, 126.9780], 12);
+                
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+                    attribution: '&copy; OpenStreetMap',
+                    maxZoom: 20
+                }).addTo(map);
+
+                places.forEach(p => {
+                    if(p.lat && p.lon) {
+                        const marker = L.marker([p.lat, p.lon]);
+                        const popup = `
+                            <div style="text-align:center; min-width:160px;">
+                                <div class="popup-title">${p.cn_name}</div>
+                                <div style="font-size:0.8rem; color:#666; margin-bottom:5px;">${p.category}</div>
+                                ${p.mustTry ? `<div style="font-size:0.75rem; color:#e65100; margin:5px 0;">⭐ ${p.mustTry.substring(0,50)}...</div>` : ''}
+                                <a href="https://map.naver.com/p/search/${encodeURIComponent(p.kr_name)}" target="_blank" class="popup-nav">Naver 導航</a>
+                            </div>`;
+                        marker.bindPopup(popup);
+                        markers.push({marker: marker, category: p.category});
+                        marker.addTo(map);
+                    }
+                });
+            } catch(e) {
+                console.log("Map Error:", e);
+            }
+        }
+
+        function updateMapFilter(cat) {
+            if(!map) return;
+            markers.forEach(m => {
+                let show = false;
+                if (cat === 'all') show = true;
+                else if (m.category.indexOf(cat) > -1) show = true;
+                else if (cat === '購物' && ['服飾','選物','彩妝','雜貨','購物'].includes(m.category)) show = true;
+                else if (cat === 'Work' && ['Work','工作咖啡','展覽'].includes(m.category)) show = true;
+                else if (cat === '咖啡甜點' && ['咖啡甜點','早午餐'].includes(m.category)) show = true;
+
+                if(show) m.marker.addTo(map);
+                else m.marker.remove();
+            });
+        }
+
+        let isItineraryMode = false;
+
+        function toggleItinerary() {
+            const itineraryContainer = document.getElementById('itinerary-container');
+            const mapContainer = document.getElementById('map-container');
+            const listContainer = document.getElementById('list-container');
+            const itineraryBtn = document.getElementById('itinerary-btn');
+            const mapBtn = document.getElementById('map-btn');
+            const searchContainer = document.querySelector('.search-container');
+            const tabsContainer = document.querySelector('.tabs-container');
+            
+            isItineraryMode = !isItineraryMode;
+            
+            if (isItineraryMode) {
+                itineraryContainer.classList.add('visible');
+                mapContainer.classList.remove('visible');
+                listContainer.style.display = 'none';
+                if(searchContainer) searchContainer.style.display = 'none';
+                if(tabsContainer) tabsContainer.style.display = 'none';
+                itineraryBtn.classList.add('active');
+                mapBtn.classList.remove('active');
+                isMapMode = false;
+            } else {
+                itineraryContainer.classList.remove('visible');
+                listContainer.style.display = 'block';
+                if(searchContainer) searchContainer.style.display = 'block';
+                if(tabsContainer) tabsContainer.style.display = 'block';
+                itineraryBtn.classList.remove('active');
+            }
+        }
+
+        function toggleMode() {
+            const mapContainer = document.getElementById('map-container');
+            const listContainer = document.getElementById('list-container');
+            const itineraryContainer = document.getElementById('itinerary-container');
+            const btn = document.getElementById('map-btn');
+            const itineraryBtn = document.getElementById('itinerary-btn');
+            const searchContainer = document.querySelector('.search-container');
+            const tabsContainer = document.querySelector('.tabs-container');
+            
+            // If itinerary is open, close it first
+            if (isItineraryMode) {
+                isItineraryMode = false;
+                itineraryContainer.classList.remove('visible');
+                itineraryBtn.classList.remove('active');
+                if(searchContainer) searchContainer.style.display = 'block';
+                if(tabsContainer) tabsContainer.style.display = 'block';
+            }
+            
+            isMapMode = !isMapMode;
+            
+            if (isMapMode) {
+                mapContainer.classList.add('visible');
+                listContainer.style.display = 'none';
+                btn.classList.add('active');
+                btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"/><path d="M8 8l8 0"/><path d="M8 12l8 0"/><path d="M8 16l4 0"/></svg>'; 
+                
+                if(!map) initMap();
+                setTimeout(() => { if(map) map.invalidateSize(); }, 100);
+            } else {
+                mapContainer.classList.remove('visible');
+                listContainer.style.display = 'block';
+                btn.classList.remove('active');
+                btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 18.5l-3 -1.5l-6 3v-13l6 -3l6 3l6 -3v7.5"/><path d="M9 4v13"/><path d="M15 7v5.5"/><path d="M21.121 20.121a3 3 0 1 0 -4.242 0c.418 .419 1.125 1.045 2.121 1.879c1.051 -.89 1.759 -1.516 2.121 -1.879z"/><path d="M19 18v.01"/></svg>';
+            }
+        }
+    </script>
+</body>
+</html>

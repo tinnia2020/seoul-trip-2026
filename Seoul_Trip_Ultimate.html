@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Seoul Trip Ultimate 🇰🇷</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #1877F2;
+            --bg: #F0F2F5;
+            --white: #FFFFFF;
+            --text: #050505;
+            --text-sec: #65676B;
+            --food: #ff6b6b;
+            --cafe: #48dbfb;
+            --shop: #a29bfe;
+            --work: #57606f;
+            --accom: #1dd1a1;
+            --attr: #ff9f43;
+        }
+        
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { margin: 0; font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: var(--text); padding-bottom: 80px; }
+        
+        /* Header */
+        .app-header {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .app-title { font-size: 1.2rem; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+        .map-toggle-btn {
+            background: #eee;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .map-toggle-btn.active { background: var(--primary); color: white; }
+
+        /* Sticky Tabs */
+        .tabs-container {
+            position: sticky;
+            top: 67px; /* Height of header approx */
+            z-index: 900;
+            background: var(--bg);
+            padding: 10px 0;
+            overflow-x: auto;
+            white-space: nowrap;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        .tabs-container::-webkit-scrollbar { display: none; }
+        
+        .tab-btn {
+            display: inline-block;
+            margin-left: 12px;
+            padding: 8px 16px;
+            background: var(--white);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-sec);
+            border: 1px solid #ddd;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .tab-btn:last-child { margin-right: 12px; }
+        .tab-btn.active {
+            background: var(--text);
+            color: white;
+            border-color: var(--text);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        /* Container */
+        .container { max-width: 600px; margin: 0 auto; padding: 10px 15px; }
+
+        /* Cards */
+        .card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.03);
+            transition: 0.2s;
+        }
+        .card:active { transform: scale(0.98); }
+        
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+        .card-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+        .badge { font-size: 0.75rem; padding: 3px 8px; border-radius: 6px; color: white; font-weight: 600; }
+        .badge.zone { background: #eee; color: #555; }
+        
+        /* Category Colors */
+        .cat-美食 { background: var(--food); }
+        .cat-早午餐 { background: #feca57; color: #333; }
+        .cat-咖啡甜點 { background: var(--cafe); color: #333; }
+        .cat-購物, .cat-選物, .cat-服飾, .cat-彩妝, .cat-雜貨 { background: var(--shop); }
+        .cat-Work, .cat-展覽 { background: var(--work); }
+        .cat-住宿 { background: var(--accom); }
+        .cat-景點 { background: var(--attr); }
+
+        .place-name-cn { font-size: 1.15rem; font-weight: 700; color: #111; margin-bottom: 4px; line-height: 1.3; }
+        .place-name-kr { font-size: 0.9rem; color: #777; font-weight: 500; margin-bottom: 10px; font-family: "Malgun Gothic", sans-serif; }
+        
+        .info-row { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; color: #555; margin-bottom: 4px; }
+        
+        .actions { margin-top: 15px; display: flex; gap: 10px; }
+        .action-btn {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: 0.2s;
+        }
+        .btn-google { background: #e8f0fe; color: #1967d2; }
+        .btn-naver { background: #e0f8eb; color: #03c75a; }
+        .btn-google:active { background: #d2e3fc; }
+        .btn-naver:active { background: #b8f0d0; }
+
+        /* Map View */
+        #map-container {
+            position: fixed;
+            top: 60px; /* Below header */
+            left: 0;
+            width: 100%;
+            height: calc(100% - 60px);
+            background: white;
+            z-index: 800;
+            display: none; /* Hidden by default */
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        #map-container.visible { display: block; opacity: 1; }
+        #map { width: 100%; height: 100%; }
+        
+        /* Map Popup Styles */
+        .leaflet-popup-content-wrapper { border-radius: 12px; }
+        .popup-title { font-weight: bold; font-size: 1rem; margin-bottom: 5px; }
+        .popup-cat { font-size: 0.8rem; color: #777; }
+        .popup-nav { display: block; margin-top: 8px; background: #03C75A; color: white; text-align: center; padding: 6px; border-radius: 6px; text-decoration: none; font-size: 0.8rem; }
+
+        /* Floating Nav for Mobile (Optional) */
+        .nav-bar {
+            display: none; /* Maybe overkill */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-header">
+        <div class="app-title">🇰🇷 Seoul Trip</div>
+        <button class="map-toggle-btn" onclick="toggleMode()">🗺️</button>
+    </div>
+
+    <div class="tabs-container" id="category-tabs">
+        <div class="tab-btn active" onclick="filter('all')">全部</div>
+        <div class="tab-btn" onclick="filter('美食')">美食</div>
+        <div class="tab-btn" onclick="filter('咖啡甜點')">咖啡/甜點</div>
+        <div class="tab-btn" onclick="filter('購物')">購物/逛街</div>
+        <div class="tab-btn" onclick="filter('Work')">Work</div>
+        <div class="tab-btn" onclick="filter('住宿')">住宿</div>
+        <div class="tab-btn" onclick="filter('景點')">景點</div>
+    </div>
+
+    <!-- Map View -->
+    <div id="map-container">
+        <div id="map"></div>
+    </div>
+
+    <!-- List View -->
+    <div class="container" id="list-container">
+        
+        <div class="card" data-cat="美食" data-zone="明洞/鍾路">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-美食">美食</span>
+                    <span class="badge zone">明洞/鍾路</span>
+                </div>
+            </div>
+            <div class="place-name-cn">청와옥 을지로3가직영점 (Cheongwaok)</div>
+            <div class="place-name-kr">청와옥 을지로3가직영점 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 劉在石推薦湯飯</div>
+            <div class="info-row">🕒 08:00 - 22:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%EC%B2%AD%EC%99%80%EC%98%A5%20%EC%9D%84%EC%A7%80%EB%A1%9C3%EA%B0%80%EC%A7%81%EC%98%81%EC%A0%90%20(Cheongwaok)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EC%B2%AD%EC%99%80%EC%98%A5%20%EC%9D%84%EC%A7%80%EB%A1%9C3%EA%B0%80%EC%A7%81%EC%98%81%EC%A0%90%20(Cheongwaok)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="早午餐" data-zone="明洞/鍾路">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-早午餐">早午餐</span>
+                    <span class="badge zone">明洞/鍾路</span>
+                </div>
+            </div>
+            <div class="place-name-cn">런던베이글뮤지엄 안국점 (London Bagel Museum)</div>
+            <div class="place-name-kr">런던베이글뮤지엄 안국점 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 推大蒜口味</div>
+            <div class="info-row">🕒 08:00 - 18:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%EB%9F%B0%EB%8D%98%EB%B2%A0%EC%9D%B4%EA%B8%80%EB%AE%A4%EC%A7%80%EC%97%84%20%EC%95%88%EA%B5%AD%EC%A0%90%20(London%20Bagel%20Museum)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EB%9F%B0%EB%8D%98%EB%B2%A0%EC%9D%B4%EA%B8%80%EB%AE%A4%EC%A7%80%EC%97%84%20%EC%95%88%EA%B5%AD%EC%A0%90%20(London%20Bagel%20Museum)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="美食" data-zone="明洞/鍾路">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-美食">美食</span>
+                    <span class="badge zone">明洞/鍾路</span>
+                </div>
+            </div>
+            <div class="place-name-cn">신선설농탕 명동점 (Sinseon Seolnongtang)</div>
+            <div class="place-name-kr">신선설농탕 명동점 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 建議加鹽巴</div>
+            <div class="info-row">🕒 24 小時營業</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%EC%8B%A0%EC%84%A0%EC%84%A4%EB%86%8D%ED%83%95%20%EB%AA%85%EB%8F%99%EC%A0%90%20(Sinseon%20Seolnongtang)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EC%8B%A0%EC%84%A0%EC%84%A4%EB%86%8D%ED%83%95%20%EB%AA%85%EB%8F%99%EC%A0%90%20(Sinseon%20Seolnongtang)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="美食" data-zone="明洞/鍾路">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-美食">美食</span>
+                    <span class="badge zone">明洞/鍾路</span>
+                </div>
+            </div>
+            <div class="place-name-cn">무구옥 (Muguok)</div>
+            <div class="place-name-kr">무구옥 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 12:00 開放訂位</div>
+            <div class="info-row">🕒 11:30 - 21:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%EB%AC%B4%EA%B5%AC%EC%98%A5%20(Muguok)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EB%AC%B4%EA%B5%AC%EC%98%A5%20(Muguok)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="美食" data-zone="明洞/鍾路">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-美食">美食</span>
+                    <span class="badge zone">明洞/鍾路</span>
+                </div>
+            </div>
+            <div class="place-name-cn">조조칼국수 시청점 (Jojo Kalguksu)</div>
+            <div class="place-name-kr">조조칼국수 시청점 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            
+            <div class="info-row">🕒 10:00 - 21:30</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%EC%A1%B0%EC%A1%B0%EC%B9%BC%EA%B5%AD%EC%88%98%20%EC%8B%9C%EC%B2%AD%EC%A0%90%20(Jojo%20Kalguksu)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EC%A1%B0%EC%A1%B0%EC%B9%BC%EA%B5%AD%EC%88%98%20%EC%8B%9C%EC%B2%AD%EC%A0%90%20(Jojo%20Kalguksu)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="美食" data-zone="弘大/延南">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-美食">美食</span>
+                    <span class="badge zone">弘大/延南</span>
+                </div>
+            </div>
+            <div class="place-name-cn">돼지저금통 (Piggy Bank)</div>
+            <div class="place-name-kr">돼지저금통 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 弘大站 8 號出口</div>
+            <div class="info-row">🕒 14:00 - 02:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%EB%8F%BC%EC%A7%80%EC%A0%80%EA%B8%88%ED%86%B5%20(Piggy%20Bank)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EB%8F%BC%EC%A7%80%EC%A0%80%EA%B8%88%ED%86%B5%20(Piggy%20Bank)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="美食" data-zone="漢南/梨泰院">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-美食">美食</span>
+                    <span class="badge zone">漢南/梨泰院</span>
+                </div>
+            </div>
+            <div class="place-name-cn">교촌필방 (Kyochon Pilbang)</div>
+            <div class="place-name-kr">교촌필방 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 週一公休</div>
+            <div class="info-row">🕒 16:00 - 23:30</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%EA%B5%90%EC%B4%8C%ED%95%84%EB%B0%A9%20(Kyochon%20Pilbang)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EA%B5%90%EC%B4%8C%ED%95%84%EB%B0%A9%20(Kyochon%20Pilbang)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="咖啡甜點" data-zone="弘大/延南">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-咖啡甜點">咖啡甜點</span>
+                    <span class="badge zone">弘大/延南</span>
+                </div>
+            </div>
+            <div class="place-name-cn">조앤도슨 (JO & DAWSON)</div>
+            <div class="place-name-kr">조앤도슨 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 焦糖布丁名店</div>
+            <div class="info-row">🕒 12:00 - 21:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%EC%A1%B0%EC%95%A4%EB%8F%84%EC%8A%A8%20(JO%20%26%20DAWSON)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EC%A1%B0%EC%95%A4%EB%8F%84%EC%8A%A8%20(JO%20%26%20DAWSON)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="美食" data-zone="明洞/鍾路">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-美食">美食</span>
+                    <span class="badge zone">明洞/鍾路</span>
+                </div>
+            </div>
+            <div class="place-name-cn">달마지 을지로점 (Dalmaji)</div>
+            <div class="place-name-kr">달마지 을지로점 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 最後點餐 01:00</div>
+            <div class="info-row">🕒 16:00 - 02:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%EB%8B%AC%EB%A7%88%EC%A7%80%20%EC%9D%84%EC%A7%80%EB%A1%9C%EC%A0%90%20(Dalmaji)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EB%8B%AC%EB%A7%88%EC%A7%80%20%EC%9D%84%EC%A7%80%EB%A1%9C%EC%A0%90%20(Dalmaji)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="美食" data-zone="聖水洞">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-美食">美食</span>
+                    <span class="badge zone">聖水洞</span>
+                </div>
+            </div>
+            <div class="place-name-cn">용용선생 성수점 (Yongyong Teacher)</div>
+            <div class="place-name-kr">용용선생 성수점 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 最後點餐 21:00</div>
+            <div class="info-row">🕒 16:00 - 22:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%EC%9A%A9%EC%9A%A9%EC%84%A0%EC%83%9D%20%EC%84%B1%EC%88%98%EC%A0%90%20(Yongyong%20Teacher)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EC%9A%A9%EC%9A%A9%EC%84%A0%EC%83%9D%20%EC%84%B1%EC%88%98%EC%A0%90%20(Yongyong%20Teacher)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="美食" data-zone="明洞/鍾路">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-美食">美食</span>
+                    <span class="badge zone">明洞/鍾路</span>
+                </div>
+            </div>
+            <div class="place-name-cn">종삼육 (Jongsamyook)</div>
+            <div class="place-name-kr">종삼육 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 鐘路三街站</div>
+            <div class="info-row">🕒 14:00 - 23:30</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%EC%A2%85%EC%82%BC%EC%9C%A1%20(Jongsamyook)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EC%A2%85%EC%82%BC%EC%9C%A1%20(Jongsamyook)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="美食" data-zone="明洞/鍾路">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-美食">美食</span>
+                    <span class="badge zone">明洞/鍾路</span>
+                </div>
+            </div>
+            <div class="place-name-cn">손가네닭한마리 (Son's Chicken)</div>
+            <div class="place-name-kr">손가네닭한마리 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 隱藏版名店</div>
+            <div class="info-row">🕒 11:00 - 22:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%EC%86%90%EA%B0%80%EB%84%A4%EB%8B%AD%ED%95%9C%EB%A7%88%EB%A6%AC%20(Son's%20Chicken)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EC%86%90%EA%B0%80%EB%84%A4%EB%8B%AD%ED%95%9C%EB%A7%88%EB%A6%AC%20(Son's%20Chicken)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="美食" data-zone="汝矣島">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-美食">美食</span>
+                    <span class="badge zone">汝矣島</span>
+                </div>
+            </div>
+            <div class="place-name-cn">통영굴찜 (Tongyeong Oyster)</div>
+            <div class="place-name-kr">통영굴찜 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 季節限定</div>
+            <div class="info-row">🕒 11:00 - 22:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%ED%86%B5%EC%98%81%EA%B5%B4%EC%B0%9C%20(Tongyeong%20Oyster)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%ED%86%B5%EC%98%81%EA%B5%B4%EC%B0%9C%20(Tongyeong%20Oyster)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="美食" data-zone="聖水洞">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-美食">美食</span>
+                    <span class="badge zone">聖水洞</span>
+                </div>
+            </div>
+            <div class="place-name-cn">무구옥 성수점 (Muguok Seongsu)</div>
+            <div class="place-name-kr">무구옥 성수점 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 聖水站分店</div>
+            <div class="info-row">🕒 11:30 - 21:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%EB%AC%B4%EA%B5%AC%EC%98%A5%20%EC%84%B1%EC%88%98%EC%A0%90%20(Muguok%20Seongsu)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EB%AC%B4%EA%B5%AC%EC%98%A5%20%EC%84%B1%EC%88%98%EC%A0%90%20(Muguok%20Seongsu)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="美食" data-zone="漢南/梨泰院">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-美食">美食</span>
+                    <span class="badge zone">漢南/梨泰院</span>
+                </div>
+            </div>
+            <div class="place-name-cn">한남동감자탕 (Hannam-dong Gamjatang)</div>
+            <div class="place-name-kr">한남동감자탕 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 必吃老店</div>
+            <div class="info-row">🕒 24 小時營業</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%ED%95%9C%EB%82%A8%EB%8F%99%EA%B0%90%EC%9E%90%ED%83%95%20(Hannam-dong%20Gamjatang)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%ED%95%9C%EB%82%A8%EB%8F%99%EA%B0%90%EC%9E%90%ED%83%95%20(Hannam-dong%20Gamjatang)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="咖啡甜點" data-zone="弘大/延南">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-咖啡甜點">咖啡甜點</span>
+                    <span class="badge zone">弘大/延南</span>
+                </div>
+            </div>
+            <div class="place-name-cn">파롤앤랑그 (Parole & Langue)</div>
+            <div class="place-name-kr">파롤앤랑그 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 塔類甜點熱門店</div>
+            <div class="info-row">🕒 13:00 - 21:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%ED%8C%8C%EB%A1%A4%EC%95%A4%EB%9E%91%EA%B7%B8%20(Parole%20%26%20Langue)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%ED%8C%8C%EB%A1%A4%EC%95%A4%EB%9E%91%EA%B7%B8%20(Parole%20%26%20Langue)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="咖啡甜點" data-zone="弘大/延南">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-咖啡甜點">咖啡甜點</span>
+                    <span class="badge zone">弘大/延南</span>
+                </div>
+            </div>
+            <div class="place-name-cn">버티샌드위치 (Butty Sandwich)</div>
+            <div class="place-name-kr">버티샌드위치 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 巧巴達三明治</div>
+            <div class="info-row">🕒 11:00 - 19:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%EB%B2%84%ED%8B%B0%EC%83%8C%EB%93%9C%EC%9C%84%EC%B9%98%20(Butty%20Sandwich)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EB%B2%84%ED%8B%B0%EC%83%8C%EB%93%9C%EC%9C%84%EC%B9%98%20(Butty%20Sandwich)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="美食" data-zone="漢南/梨泰院">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-美食">美食</span>
+                    <span class="badge zone">漢南/梨泰院</span>
+                </div>
+            </div>
+            <div class="place-name-cn">마산할매아구찜 (Masan Halmae Agujjim)</div>
+            <div class="place-name-kr">마산할매아구찜 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 在地口碑店</div>
+            <div class="info-row">🕒 11:00 - 22:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%EB%A7%88%EC%82%B0%ED%95%A0%EB%A7%A4%EC%95%84%EA%B5%AC%EC%B0%9C%20(Masan%20Halmae%20Agujjim)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EB%A7%88%EC%82%B0%ED%95%A0%EB%A7%A4%EC%95%84%EA%B5%AC%EC%B0%9C%20(Masan%20Halmae%20Agujjim)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="購物" data-zone="聖水洞">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-購物">購物</span>
+                    <span class="badge zone">聖水洞</span>
+                </div>
+            </div>
+            <div class="place-name-cn">헤트라스 성수 (hetras)</div>
+            <div class="place-name-kr">헤트라스 성수 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 推薦 No.29, No.7, No.5</div>
+            <div class="info-row">🕒 11:00 - 20:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%ED%97%A4%ED%8A%B8%EB%9D%BC%EC%8A%A4%20%EC%84%B1%EC%88%98%20(hetras)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%ED%97%A4%ED%8A%B8%EB%9D%BC%EC%8A%A4%20%EC%84%B1%EC%88%98%20(hetras)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="咖啡甜點" data-zone="聖水洞">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-咖啡甜點">咖啡甜點</span>
+                    <span class="badge zone">聖水洞</span>
+                </div>
+            </div>
+            <div class="place-name-cn">뉴믹스커피 (newmix coffee)</div>
+            <div class="place-name-kr">뉴믹스커피 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 必買即溶咖啡伴手禮</div>
+            <div class="info-row">🕒 11:00 - 20:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%EB%89%B4%EB%AF%B9%EC%8A%A4%EC%BB%A4%ED%94%BC%20(newmix%20coffee)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EB%89%B4%EB%AF%B9%EC%8A%A4%EC%BB%A4%ED%94%BC%20(newmix%20coffee)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="服飾" data-zone="聖水洞">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-購物">服飾</span>
+                    <span class="badge zone">聖水洞</span>
+                </div>
+            </div>
+            <div class="place-name-cn">아더 성수 스페이스 (ADERERROR)</div>
+            <div class="place-name-kr">아더 성수 스페이스 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 旗艦概念店</div>
+            <div class="info-row">🕒 13:00 - 21:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%EC%95%84%EB%8D%94%20%EC%84%B1%EC%88%98%20%EC%8A%A4%ED%8E%98%EC%9D%B4%EC%8A%A4%20(ADERERROR)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EC%95%84%EB%8D%94%20%EC%84%B1%EC%88%98%20%EC%8A%A4%ED%8E%98%EC%9D%B4%EC%8A%A4%20(ADERERROR)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="服飾" data-zone="聖水洞">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-購物">服飾</span>
+                    <span class="badge zone">聖水洞</span>
+                </div>
+            </div>
+            <div class="place-name-cn">블루엘리펀트 성수 (BLUE ELEPHANT)</div>
+            <div class="place-name-kr">블루엘리펀트 성수 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 平價墨鏡品牌</div>
+            <div class="info-row">🕒 11:00 - 20:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%EB%B8%94%EB%A3%A8%EC%97%98%EB%A6%AC%ED%8E%80%ED%8A%B8%20%EC%84%B1%EC%88%98%20(BLUE%20ELEPHANT)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EB%B8%94%EB%A3%A8%EC%97%98%EB%A6%AC%ED%8E%80%ED%8A%B8%20%EC%84%B1%EC%88%98%20(BLUE%20ELEPHANT)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="彩妝" data-zone="聖水洞">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-彩妝">彩妝</span>
+                    <span class="badge zone">聖水洞</span>
+                </div>
+            </div>
+            <div class="place-name-cn">퓌 아지트 (fwee Agit)</div>
+            <div class="place-name-kr">퓌 아지트 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 必買布丁唇泥</div>
+            <div class="info-row">🕒 11:00 - 21:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%ED%93%8C%20%EC%95%84%EC%A7%80%ED%8A%B8%20(fwee%20Agit)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%ED%93%8C%20%EC%95%84%EC%A7%80%ED%8A%B8%20(fwee%20Agit)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="景點" data-zone="聖水洞">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-景點">景點</span>
+                    <span class="badge zone">聖水洞</span>
+                </div>
+            </div>
+            <div class="place-name-cn">디올 성수 (DIOR)</div>
+            <div class="place-name-kr">디올 성수 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 熱門地標拍照</div>
+            <div class="info-row">🕒 11:00 - 20:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%EB%94%94%EC%98%AC%20%EC%84%B1%EC%88%98%20(DIOR)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EB%94%94%EC%98%AC%20%EC%84%B1%EC%88%98%20(DIOR)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="服飾" data-zone="聖水洞">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-購物">服飾</span>
+                    <span class="badge zone">聖水洞</span>
+                </div>
+            </div>
+            <div class="place-name-cn">뉴뉴 성수 (NYUNYU)</div>
+            <div class="place-name-kr">뉴뉴 성수 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 飾品購物聖地</div>
+            <div class="info-row">🕒 11:00 - 23:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%EB%89%B4%EB%89%B4%20%EC%84%B1%EC%88%98%20(NYUNYU)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EB%89%B4%EB%89%B4%20%EC%84%B1%EC%88%98%20(NYUNYU)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="選物" data-zone="聖水洞">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-購物">選物</span>
+                    <span class="badge zone">聖水洞</span>
+                </div>
+            </div>
+            <div class="place-name-cn">띵굴스토어 성수 (Thingool)</div>
+            <div class="place-name-kr">띵굴스토어 성수 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 生活選物店</div>
+            <div class="info-row">🕒 11:00 - 21:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%EB%9D%B5%EA%B5%B4%EC%8A%A4%ED%86%A0%EC%96%B4%20%EC%84%B1%EC%88%98%20(Thingool)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EB%9D%B5%EA%B5%B4%EC%8A%A4%ED%86%A0%EC%96%B4%20%EC%84%B1%EC%88%98%20(Thingool)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="服飾" data-zone="明洞/鍾路">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-購物">服飾</span>
+                    <span class="badge zone">明洞/鍾路</span>
+                </div>
+            </div>
+            <div class="place-name-cn">코닥어패럴 동대문 (KODAK)</div>
+            <div class="place-name-kr">코닥어패럴 동대문 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 位於 DunDun 2 樓</div>
+            <div class="info-row">🕒 10:30 - 22:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%EC%BD%94%EB%8B%A5%EC%96%B4%ED%8C%A8%EB%9F%B4%20%EB%8F%99%EB%8C%80%EB%AC%B8%20(KODAK)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EC%BD%94%EB%8B%A5%EC%96%B4%ED%8C%A8%EB%9F%B4%20%EB%8F%99%EB%8C%80%EB%AC%B8%20(KODAK)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="服飾" data-zone="聖水洞">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-購物">服飾</span>
+                    <span class="badge zone">聖水洞</span>
+                </div>
+            </div>
+            <div class="place-name-cn">이피티 성수 (ept)</div>
+            <div class="place-name-kr">이피티 성수 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 韓國熱門運動鞋</div>
+            <div class="info-row">🕒 11:00 - 20:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%EC%9D%B4%ED%94%BC%ED%8B%B0%20%EC%84%B1%EC%88%98%20(ept)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EC%9D%B4%ED%94%BC%ED%8B%B0%20%EC%84%B1%EC%88%98%20(ept)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="選物" data-zone="聖水洞">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-購物">選物</span>
+                    <span class="badge zone">聖水洞</span>
+                </div>
+            </div>
+            <div class="place-name-cn">하우스 노웨어 (HAUS NOWHERE)</div>
+            <div class="place-name-kr">하우스 노웨어 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 臘腸狗地標/新品牌</div>
+            <div class="info-row">🕒 11:00 - 21:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%ED%95%98%EC%9A%B0%EC%8A%A4%20%EB%85%B8%EC%9B%A8%EC%96%B4%20(HAUS%20NOWHERE)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%ED%95%98%EC%9A%B0%EC%8A%A4%20%EB%85%B8%EC%9B%A8%EC%96%B4%20(HAUS%20NOWHERE)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="服飾" data-zone="弘大/延南">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-購物">服飾</span>
+                    <span class="badge zone">弘大/延南</span>
+                </div>
+            </div>
+            <div class="place-name-cn">디스이즈네버댓 (thisisneverthat)</div>
+            <div class="place-name-kr">디스이즈네버댓 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 街頭潮流第一站</div>
+            <div class="info-row">🕒 12:00 - 21:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%EB%94%94%EC%8A%A4%EC%9D%B4%EC%A6%88%EB%84%A4%EB%B2%84%EB%8C%93%20(thisisneverthat)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EB%94%94%EC%8A%A4%EC%9D%B4%EC%A6%88%EB%84%A4%EB%B2%84%EB%8C%93%20(thisisneverthat)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="服飾" data-zone="聖水洞">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-購物">服飾</span>
+                    <span class="badge zone">聖水洞</span>
+                </div>
+            </div>
+            <div class="place-name-cn">키스 서울 (KITH)</div>
+            <div class="place-name-kr">키스 서울 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 潮流名店</div>
+            <div class="info-row">🕒 11:00 - 20:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%ED%82%A4%EC%8A%A4%20%EC%84%9C%EC%9A%B8%20(KITH)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%ED%82%A4%EC%8A%A4%20%EC%84%9C%EC%9A%B8%20(KITH)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="服飾" data-zone="聖水洞">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-購物">服飾</span>
+                    <span class="badge zone">聖水洞</span>
+                </div>
+            </div>
+            <div class="place-name-cn">휴먼메이드 (HUMAN MADE)</div>
+            <div class="place-name-kr">휴먼메이드 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 熱門潮牌</div>
+            <div class="info-row">🕒 11:00 - 20:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%ED%9C%B4%EB%A8%BC%EB%A9%94%EC%9D%B4%EB%93%9C%20(HUMAN%20MADE)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%ED%9C%B4%EB%A8%BC%EB%A9%94%EC%9D%B4%EB%93%9C%20(HUMAN%20MADE)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="選物" data-zone="聖水洞">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-購物">選物</span>
+                    <span class="badge zone">聖水洞</span>
+                </div>
+            </div>
+            <div class="place-name-cn">무신사 엠프티 (MUSINSA EMPTY)</div>
+            <div class="place-name-kr">무신사 엠프티 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 大型選品店</div>
+            <div class="info-row">🕒 11:00 - 20:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%EB%AC%B4%EC%8B%A0%EC%82%AC%20%EC%97%A0%ED%94%84%ED%8B%B0%20(MUSINSA%20EMPTY)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EB%AC%B4%EC%8B%A0%EC%82%AC%20%EC%97%A0%ED%94%84%ED%8B%B0%20(MUSINSA%20EMPTY)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="咖啡甜點" data-zone="明洞/鍾路">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-咖啡甜點">咖啡甜點</span>
+                    <span class="badge zone">明洞/鍾路</span>
+                </div>
+            </div>
+            <div class="place-name-cn">청수당 (Cheongsudang)</div>
+            <div class="place-name-kr">청수당 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 益善洞竹林造景</div>
+            <div class="info-row">🕒 11:30 - 22:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%EC%B2%AD%EC%88%98%EB%8B%B9%20(Cheongsudang)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EC%B2%AD%EC%88%98%EB%8B%B9%20(Cheongsudang)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="咖啡甜點" data-zone="首爾市區">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-咖啡甜點">咖啡甜點</span>
+                    <span class="badge zone">首爾市區</span>
+                </div>
+            </div>
+            <div class="place-name-cn">YM커피하우스 (YM Coffee House)</div>
+            <div class="place-name-kr">YM커피하우스 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 教堂風格專業手沖</div>
+            <div class="info-row">🕒 12:00 - 22:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=YM%EC%BB%A4%ED%94%BC%ED%95%98%EC%9A%B0%EC%8A%A4%20(YM%20Coffee%20House)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/YM%EC%BB%A4%ED%94%BC%ED%95%98%EC%9A%B0%EC%8A%A4%20(YM%20Coffee%20House)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="咖啡甜點" data-zone="弘大/延南">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-咖啡甜點">咖啡甜點</span>
+                    <span class="badge zone">弘大/延南</span>
+                </div>
+            </div>
+            <div class="place-name-cn">카페 레이어드 연남점 (Cafe Layered)</div>
+            <div class="place-name-kr">카페 레이어드 연남점 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 司康名店</div>
+            <div class="info-row">🕒 11:00 - 22:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%EC%B9%B4%ED%8E%98%20%EB%A0%88%EC%9D%B4%EC%96%B4%EB%93%9C%20%EC%97%B0%EB%82%A8%EC%A0%90%20(Cafe%20Layered)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EC%B9%B4%ED%8E%98%20%EB%A0%88%EC%9D%B4%EC%96%B4%EB%93%9C%20%EC%97%B0%EB%82%A8%EC%A0%90%20(Cafe%20Layered)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="咖啡甜點" data-zone="弘大/延南">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-咖啡甜點">咖啡甜點</span>
+                    <span class="badge zone">弘大/延南</span>
+                </div>
+            </div>
+            <div class="place-name-cn">땡스오트 연남 (Thanks Oat)</div>
+            <div class="place-name-kr">땡스오트 연남 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 延南洞手工優格</div>
+            <div class="info-row">🕒 10:00 - 19:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%EB%95%A1%EC%8A%A4%EC%98%A4%ED%8A%B8%20%EC%97%B0%EB%82%A8%20(Thanks%20Oat)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EB%95%A1%EC%8A%A4%EC%98%A4%ED%8A%B8%20%EC%97%B0%EB%82%A8%20(Thanks%20Oat)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="咖啡甜點" data-zone="弘大/延南">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-咖啡甜點">咖啡甜點</span>
+                    <span class="badge zone">弘大/延南</span>
+                </div>
+            </div>
+            <div class="place-name-cn">오늘도충분해 (today's enough)</div>
+            <div class="place-name-kr">오늘도충분해 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 週二公休</div>
+            <div class="info-row">🕒 12:00 - 20:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%EC%98%A4%EB%8A%98%EB%8F%84%EC%B6%A9%EB%B6%84%ED%95%B4%20(today's%20enough)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EC%98%A4%EB%8A%98%EB%8F%84%EC%B6%A9%EB%B6%84%ED%95%B4%20(today's%20enough)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="咖啡甜點" data-zone="明洞/鍾路">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-咖啡甜點">咖啡甜點</span>
+                    <span class="badge zone">明洞/鍾路</span>
+                </div>
+            </div>
+            <div class="place-name-cn">소현당 (Sohyeondang)</div>
+            <div class="place-name-kr">소현당 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 韓屋茶室</div>
+            <div class="info-row">🕒 11:00 - 20:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%EC%86%8C%ED%98%84%EB%8B%B9%20(Sohyeondang)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EC%86%8C%ED%98%84%EB%8B%B9%20(Sohyeondang)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="咖啡甜點" data-zone="明洞/鍾路">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-咖啡甜點">咖啡甜點</span>
+                    <span class="badge zone">明洞/鍾路</span>
+                </div>
+            </div>
+            <div class="place-name-cn">아티스트 베이커리 (artist bakery)</div>
+            <div class="place-name-kr">아티스트 베이커리 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 鹽可頌排隊名店</div>
+            <div class="info-row">🕒 08:00 - 20:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%EC%95%84%ED%8B%B0%EC%8A%A4%ED%8A%B8%20%EB%B2%A0%EC%9D%B4%EC%BB%A4%EB%A6%AC%20(artist%20bakery)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EC%95%84%ED%8B%B0%EC%8A%A4%ED%8A%B8%20%EB%B2%A0%EC%9D%B4%EC%BB%A4%EB%A6%AC%20(artist%20bakery)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="選物" data-zone="聖水洞">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-購物">選物</span>
+                    <span class="badge zone">聖水洞</span>
+                </div>
+            </div>
+            <div class="place-name-cn">이구성수 (29CM SEONGSU)</div>
+            <div class="place-name-kr">이구성수 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 線上選品實體店</div>
+            <div class="info-row">🕒 11:00 - 20:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%EC%9D%B4%EA%B5%AC%EC%84%B1%EC%88%98%20(29CM%20SEONGSU)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EC%9D%B4%EA%B5%AC%EC%84%B1%EC%88%98%20(29CM%20SEONGSU)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="展覽" data-zone="明洞/鍾路">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-展覽">展覽</span>
+                    <span class="badge zone">明洞/鍾路</span>
+                </div>
+            </div>
+            <div class="place-name-cn">그라운드시소 서촌 (Ground Seesaw)</div>
+            <div class="place-name-kr">그라운드시소 서촌 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 質感展覽空間</div>
+            <div class="info-row">🕒 10:00 - 19:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%EA%B7%B8%EB%9D%BC%EC%9A%B4%EB%93%9C%EC%8B%9C%EC%86%8C%20%EC%84%9C%EC%B4%8C%20(Ground%20Seesaw)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EA%B7%B8%EB%9D%BC%EC%9A%B4%EB%93%9C%EC%8B%9C%EC%86%8C%20%EC%84%9C%EC%B4%8C%20(Ground%20Seesaw)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="雜貨" data-zone="明洞/鍾路">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-雜貨">雜貨</span>
+                    <span class="badge zone">明洞/鍾路</span>
+                </div>
+            </div>
+            <div class="place-name-cn">광장시장 156호 (Gwangjang Market)</div>
+            <div class="place-name-kr">광장시장 156호 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 購買韓國製棉被</div>
+            <div class="info-row">🕒 09:00 - 18:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%EA%B4%91%EC%9E%A5%EC%8B%9C%EC%9E%A5%20156%ED%98%B8%20(Gwangjang%20Market)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EA%B4%91%EC%9E%A5%EC%8B%9C%EC%9E%A5%20156%ED%98%B8%20(Gwangjang%20Market)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="💻 Work & Cafe" data-zone="聖水洞">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-Work">💻 Work & Cafe</span>
+                    <span class="badge zone">聖水洞</span>
+                </div>
+            </div>
+            <div class="place-name-cn">코사이어티 서울숲 (Cociety)</div>
+            <div class="place-name-kr">코사이어티 서울숲 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 創意工作空間 (週一休)</div>
+            <div class="info-row">🕒 12:00 - 20:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%EC%BD%94%EC%82%AC%EC%9D%B4%EC%96%B4%ED%8B%B0%20%EC%84%9C%EC%9A%B8%EC%88%B2%20(Cociety)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EC%BD%94%EC%82%AC%EC%9D%B4%EC%96%B4%ED%8B%B0%20%EC%84%9C%EC%9A%B8%EC%88%B2%20(Cociety)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="💻 Work & Cafe" data-zone="聖水洞">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-Work">💻 Work & Cafe</span>
+                    <span class="badge zone">聖水洞</span>
+                </div>
+            </div>
+            <div class="place-name-cn">브라우터 (Brautor)</div>
+            <div class="place-name-kr">브라우터 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 蝴蝶餅名店/整棟座位</div>
+            <div class="info-row">🕒 08:00 - 22:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%EB%B8%8C%EB%9D%BC%EC%9A%B0%ED%84%B0%20(Brautor)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EB%B8%8C%EB%9D%BC%EC%9A%B0%ED%84%B0%20(Brautor)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="💻 Work & Cafe" data-zone="弘大/延南">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-Work">💻 Work & Cafe</span>
+                    <span class="badge zone">弘大/延南</span>
+                </div>
+            </div>
+            <div class="place-name-cn">디벙크 (Debunk)</div>
+            <div class="place-name-kr">디벙크 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 地下層讀書氛圍</div>
+            <div class="info-row">🕒 10:00 - 23:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%EB%94%94%EB%B2%99%ED%81%AC%20(Debunk)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EB%94%94%EB%B2%99%ED%81%AC%20(Debunk)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="💻 Work & Cafe" data-zone="弘大/延南">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-Work">💻 Work & Cafe</span>
+                    <span class="badge zone">弘大/延南</span>
+                </div>
+            </div>
+            <div class="place-name-cn">할리스 홍대역점 (Hollys Coffee)</div>
+            <div class="place-name-kr">할리스 홍대역점 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 24小時/適合筆電</div>
+            <div class="info-row">🕒 24 小時營業</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%ED%95%A0%EB%A6%AC%EC%8A%A4%20%ED%99%8D%EB%8C%80%EC%97%AD%EC%A0%90%20(Hollys%20Coffee)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%ED%95%A0%EB%A6%AC%EC%8A%A4%20%ED%99%8D%EB%8C%80%EC%97%AD%EC%A0%90%20(Hollys%20Coffee)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="💻 Work & Cafe" data-zone="江南">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-Work">💻 Work & Cafe</span>
+                    <span class="badge zone">江南</span>
+                </div>
+            </div>
+            <div class="place-name-cn">이디야커피랩 (Ediya Coffee Lab)</div>
+            <div class="place-name-kr">이디야커피랩 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 旗艦店/寬敞舒適</div>
+            <div class="info-row">🕒 07:30 - 02:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%EC%9D%B4%EB%94%94%EC%95%BC%EC%BB%A4%ED%94%BC%EB%9E%A9%20(Ediya%20Coffee%20Lab)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EC%9D%B4%EB%94%94%EC%95%BC%EC%BB%A4%ED%94%BC%EB%9E%A9%20(Ediya%20Coffee%20Lab)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="💻 Work & Cafe" data-zone="江南">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-Work">💻 Work & Cafe</span>
+                    <span class="badge zone">江南</span>
+                </div>
+            </div>
+            <div class="place-name-cn">테라로사 포스코센터점 (Terarosa)</div>
+            <div class="place-name-kr">테라로사 포스코센터점 </div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 鋼鐵書架牆/江南</div>
+            <div class="info-row">🕒 07:30 - 21:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=%ED%85%8C%EB%9D%BC%EB%A1%9C%EC%82%AC%20%ED%8F%AC%EC%8A%A4%EC%BD%94%EC%84%BC%ED%84%B0%EC%A0%90%20(Terarosa)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%ED%85%8C%EB%9D%BC%EB%A1%9C%EC%82%AC%20%ED%8F%AC%EC%8A%A4%EC%BD%94%EC%84%BC%ED%84%B0%EC%A0%90%20(Terarosa)" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="住宿" data-zone="明洞/鍾路">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-住宿">住宿</span>
+                    <span class="badge zone">明洞/鍾路</span>
+                </div>
+            </div>
+            <div class="place-name-cn">Mangrove Dongdaemun (Co-living)</div>
+            <div class="place-name-kr">맹그로브 동대문</div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 🏠 熱門 Co-living, 適合數位遊牧</div>
+            <div class="info-row">🕒 Check-in 15:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=Mangrove%20Dongdaemun%20(Co-living)" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EB%A7%B9%EA%B7%B8%EB%A1%9C%EB%B8%8C%20%EB%8F%99%EB%8C%80%EB%AC%B8" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="住宿" data-zone="弘大/延南">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-住宿">住宿</span>
+                    <span class="badge zone">弘大/延南</span>
+                </div>
+            </div>
+            <div class="place-name-cn">Local Stitch Seogyo</div>
+            <div class="place-name-kr">로컬스티치 크리에이터 타운 서교</div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 🏠 弘大商圈, 設計師風格</div>
+            <div class="info-row">🕒 Check-in 15:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=Local%20Stitch%20Seogyo" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/%EB%A1%9C%EC%BB%AC%EC%8A%A4%ED%8B%B0%EC%B9%98%20%ED%81%AC%EB%A6%AC%EC%97%90%EC%9D%B4%ED%84%B0%20%ED%83%80%EC%9A%B4%20%EC%84%9C%EA%B5%90" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        <div class="card" data-cat="住宿" data-zone="弘大/延南">
+            <div class="card-header">
+                <div class="card-badges">
+                    <span class="badge cat-住宿">住宿</span>
+                    <span class="badge zone">弘大/延南</span>
+                </div>
+            </div>
+            <div class="place-name-cn">L7 Hongdae</div>
+            <div class="place-name-kr">L7 홍대</div> <!-- Fallback if no kr_name in object (CSV parser put it in name sometimes) -->
+            
+            <div class="info-row">💡 🏨 弘大入口站旁, 交通便利</div>
+            <div class="info-row">🕒 Check-in 15:00</div>
+            
+            <div class="actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=L7%20Hongdae" target="_blank" class="action-btn btn-google">
+                    Google
+                </a>
+                <a href="https://map.naver.com/p/search/L7%20%ED%99%8D%EB%8C%80" target="_blank" class="action-btn btn-naver">
+                    Naver
+                </a>
+            </div>
+        </div>
+        
+        <div style="text-align:center; margin-top:40px; color:#aaa; font-size:0.8rem;">
+            Made with OpenClaw • Night Shift Mode 🌙
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script>
+        const places = [{"name":"청와옥 을지로3가직영점 (Cheongwaok)","category":"美食","note":"劉在石推薦湯飯","hours":"08:00 - 22:00","address":"서울 중구 을지로 110","lat":"37.5660015","lon":"126.9901968","zone":"明洞/鍾路"},{"name":"런던베이글뮤지엄 안국점 (London Bagel Museum)","category":"早午餐","note":"推大蒜口味","hours":"08:00 - 18:00","address":"서울 종로구 북촌로4길 20","lat":"37.5792526","lon":"126.9859384","zone":"明洞/鍾路"},{"name":"신선설농탕 명동점 (Sinseon Seolnongtang)","category":"美食","note":"建議加鹽巴","hours":"24 小時營業","address":"서울 중구 명동길 56","lat":"37.5647104","lon":"126.9867180","zone":"明洞/鍾路"},{"name":"무구옥 (Muguok)","category":"美食","note":"12:00 開放訂位","hours":"11:30 - 21:00","address":"서울 종로구 율곡로1길 7","lat":"37.5775630","lon":"126.9813512","zone":"明洞/鍾路"},{"name":"조조칼국수 시청점 (Jojo Kalguksu)","category":"美食","note":"","hours":"10:00 - 21:30","address":"서울 중구 세종대로11길 27","lat":"37.5620078","lon":"126.9754246","zone":"明洞/鍾路"},{"name":"돼지저금통 (Piggy Bank)","category":"美食","note":"弘大站 8 號出口","hours":"14:00 - 02:00","address":"서울 마포구 어울마당로 146-1","lat":"37.5562643","lon":"126.9262793","zone":"弘大/延南"},{"name":"교촌필방 (Kyochon Pilbang)","category":"美食","note":"週一公休","hours":"16:00 - 23:30","address":"서울 용산구 보광로 127","lat":"37.5256549","lon":"127.0014189","zone":"漢南/梨泰院"},{"name":"조앤도슨 (JO & DAWSON)","category":"咖啡甜點","note":"焦糖布丁名店","hours":"12:00 - 21:00","address":"서울 마포구 동교로41길 31","lat":"37.5636894","lon":"126.9228307","zone":"弘大/延南"},{"name":"달마지 을지로점 (Dalmaji)","category":"美食","note":"最後點餐 01:00","hours":"16:00 - 02:00","address":"서울 중구 을지로 112-1","lat":"37.5662506","lon":"126.9987609","zone":"明洞/鍾路"},{"name":"용용선생 성수점 (Yongyong Teacher)","category":"美食","note":"最後點餐 21:00","hours":"16:00 - 22:00","address":"서울 성동구 아차산로 116","lat":"37.5440368","lon":"127.0565971","zone":"聖水洞"},{"name":"종삼육 (Jongsamyook)","category":"美食","note":"鐘路三街站","hours":"14:00 - 23:30","address":"서울 종로구 돈화문로11길 8-1","lat":"37.5725657","lon":"126.9900452","zone":"明洞/鍾路"},{"name":"손가네닭한마리 (Son's Chicken)","category":"美食","note":"隱藏版名店","hours":"11:00 - 22:00","address":"서울 종로구 종로66가길 10","lat":"37.5735870","lon":"127.0213125","zone":"明洞/鍾路"},{"name":"통영굴찜 (Tongyeong Oyster)","category":"美食","note":"季節限定","hours":"11:00 - 22:00","address":"서울 영등포구 여의도동 21-3","lat":"37.5267088","lon":"126.9238000","zone":"汝矣島"},{"name":"무구옥 성수점 (Muguok Seongsu)","category":"美食","note":"聖水站分店","hours":"11:30 - 21:00","address":"서울 성동구 아차산로11길 11","lat":"37.5447374","lon":"127.0593428","zone":"聖水洞"},{"name":"한남동감자탕 (Hannam-dong Gamjatang)","category":"美食","note":"必吃老店","hours":"24 小時營業","address":"서울 용산구 우사단로 43","lat":"37.5308068","lon":"126.9967969","zone":"漢南/梨泰院"},{"name":"파롤앤랑그 (Parole & Langue)","category":"咖啡甜點","note":"塔類甜點熱門店","hours":"13:00 - 21:00","address":"서울 마포구 성미산로29안길 8","lat":"37.5651538","lon":"126.9229985","zone":"弘大/延南"},{"name":"버티샌드위치 (Butty Sandwich)","category":"咖啡甜點","note":"巧巴達三明治","hours":"11:00 - 19:00","address":"서울 마포구 망원동 473-9","lat":"37.5558600","lon":"126.9008700","zone":"弘大/延南"},{"name":"마산할매아구찜 (Masan Halmae Agujjim)","category":"美食","note":"在地口碑店","hours":"11:00 - 22:00","address":"서울 용산구 후암동 44-8","lat":"37.5501100","lon":"126.9802800","zone":"漢南/梨泰院"},{"name":"헤트라스 성수 (hetras)","category":"購物","note":"推薦 No.29, No.7, No.5","hours":"11:00 - 20:00","address":"서울 성동구 연무장길 89","lat":"37.5411759","lon":"127.0595267","zone":"聖水洞"},{"name":"뉴믹스커피 (newmix coffee)","category":"咖啡甜點","note":"必買即溶咖啡伴手禮","hours":"11:00 - 20:00","address":"서울 성동구 연무장길 3","lat":"37.5411759","lon":"127.0595267","zone":"聖水洞"},{"name":"아더 성수 스페이스 (ADERERROR)","category":"服飾","note":"旗艦概念店","hours":"13:00 - 21:00","address":"서울 성동구 성수이로 82","lat":"37.5364697","lon":"127.0538762","zone":"聖水洞"},{"name":"블루엘리펀트 성수 (BLUE ELEPHANT)","category":"服飾","note":"平價墨鏡品牌","hours":"11:00 - 20:00","address":"서울 성동구 성수이로14길 14","lat":"37.5411234","lon":"127.0565635","zone":"聖水洞"},{"name":"퓌 아지트 (fwee Agit)","category":"彩妝","note":"必買布丁唇泥","hours":"11:00 - 21:00","address":"서울 성동구 연무장길 10","lat":"37.5430688","lon":"127.0541356","zone":"聖水洞"},{"name":"디올 성수 (DIOR)","category":"景點","note":"熱門地標拍照","hours":"11:00 - 20:00","address":"서울 성동구 연무장5길 7","lat":"37.5441865","lon":"127.0528823","zone":"聖水洞"},{"name":"뉴뉴 성수 (NYUNYU)","category":"服飾","note":"飾品購物聖地","hours":"11:00 - 23:00","address":"서울 성동구 연무장길 89 2-3F","lat":37.5445,"lon":127.056,"zone":"聖水洞"},{"name":"띵굴스토어 성수 (Thingool)","category":"選物","note":"生活選物店","hours":"11:00 - 21:00","address":"서울 성동구 성수이로14길 14","lat":"37.5411234","lon":"127.0565635","zone":"聖水洞"},{"name":"코닥어패럴 동대문 (KODAK)","category":"服飾","note":"位於 DunDun 2 樓","hours":"10:30 - 22:00","address":"서울 중구 장충단로 211","lat":"37.5693468","lon":"127.0105160","zone":"明洞/鍾路"},{"name":"이피티 성수 (ept)","category":"服飾","note":"韓國熱門運動鞋","hours":"11:00 - 20:00","address":"서울 성동구 연무장길 54","lat":"37.5411759","lon":"127.0595267","zone":"聖水洞"},{"name":"하우스 노웨어 (HAUS NOWHERE)","category":"選物","note":"臘腸狗地標/新品牌","hours":"11:00 - 21:00","address":"서울 성동구 경아길 11","lat":37.541,"lon":127.059,"zone":"聖水洞"},{"name":"디스이즈네버댓 (thisisneverthat)","category":"服飾","note":"街頭潮流第一站","hours":"12:00 - 21:00","address":"서울 마포구 잔다리로 32","lat":"37.5516170","lon":"126.9197938","zone":"弘大/延南"},{"name":"키스 서울 (KITH)","category":"服飾","note":"潮流名店","hours":"11:00 - 20:00","address":"서울 성동구 연무장길 70","lat":"37.5411759","lon":"127.0595267","zone":"聖水洞"},{"name":"휴먼메이드 (HUMAN MADE)","category":"服飾","note":"熱門潮牌","hours":"11:00 - 20:00","address":"서울 성동구 성수이로7길 39","lat":"37.5412470","lon":"127.0542669","zone":"聖水洞"},{"name":"무신사 엠프티 (MUSINSA EMPTY)","category":"選物","note":"大型選品店","hours":"11:00 - 20:00","address":"서울 성동구 성수이로 97","lat":"37.5364697","lon":"127.0538762","zone":"聖水洞"},{"name":"청수당 (Cheongsudang)","category":"咖啡甜點","note":"益善洞竹林造景","hours":"11:30 - 22:00","address":"서울 종로구 돈화문로11나길 31-9","lat":"37.5736272","lon":"126.9905422","zone":"明洞/鍾路"},{"name":"YM커피하우스 (YM Coffee House)","category":"咖啡甜點","note":"教堂風格專業手沖","hours":"12:00 - 22:00","address":"서울 은평구 연서로29길 14-8","lat":"37.6201729","lon":"126.9174055","zone":"首爾市區"},{"name":"카페 레이어드 연남점 (Cafe Layered)","category":"咖啡甜點","note":"司康名店","hours":"11:00 - 22:00","address":"서울 마포구 성미산로 161-4","lat":"37.5649847","lon":"126.9241878","zone":"弘大/延南"},{"name":"땡스오트 연남 (Thanks Oat)","category":"咖啡甜點","note":"延南洞手工優格","hours":"10:00 - 19:00","address":"서울 마포구 성미산로23길 68","lat":"37.5650202","lon":"126.9206249","zone":"弘大/延南"},{"name":"오늘도충분해 (today's enough)","category":"咖啡甜點","note":"週二公休","hours":"12:00 - 20:00","address":"서울 마포구 연희로1길 45","lat":"37.5598873","lon":"126.9254959","zone":"弘大/延南"},{"name":"소현당 (Sohyeondang)","category":"咖啡甜點","note":"韓屋茶室","hours":"11:00 - 20:00","address":"서울 종로구 소격동 157-1","lat":"37.5796200","lon":"126.9807300","zone":"明洞/鍾路"},{"name":"아티스트 베이커리 (artist bakery)","category":"咖啡甜點","note":"鹽可頌排隊名店","hours":"08:00 - 20:00","address":"서울 종로구 율곡로 45","lat":"37.5763072","lon":"126.9843495","zone":"明洞/鍾路"},{"name":"이구성수 (29CM SEONGSU)","category":"選物","note":"線上選品實體店","hours":"11:00 - 20:00","address":"서울 성동구 아차산로 78","lat":"37.5453108","lon":"127.0526786","zone":"聖水洞"},{"name":"그라운드시소 서촌 (Ground Seesaw)","category":"展覽","note":"質感展覽空間","hours":"10:00 - 19:00","address":"서울 종로구 자하문로6길 18-8","lat":"37.5781385","lon":"126.9729372","zone":"明洞/鍾路"},{"name":"광장시장 156호 (Gwangjang Market)","category":"雜貨","note":"購買韓國製棉被","hours":"09:00 - 18:00","address":"서울 종로구 창경궁로 88","lat":"37.5700967","lon":"126.9998283","zone":"明洞/鍾路"},{"name":"코사이어티 서울숲 (Cociety)","category":"💻 Work & Cafe","note":"創意工作空間 (週一休)","hours":"12:00 - 20:00","address":"서울 성동구 왕십리로 82-20","lat":"37.5559574","lon":"127.0433184","zone":"聖水洞"},{"name":"브라우터 (Brautor)","category":"💻 Work & Cafe","note":"蝴蝶餅名店/整棟座位","hours":"08:00 - 22:00","address":"서울 성동구 왕십리로14길 28-3","lat":"37.5493171","lon":"127.0450501","zone":"聖水洞"},{"name":"디벙크 (Debunk)","category":"💻 Work & Cafe","note":"地下層讀書氛圍","hours":"10:00 - 23:00","address":"서울 마포구 성지1길 30","lat":"37.5480049","lon":"126.9152430","zone":"弘大/延南"},{"name":"할리스 홍대역점 (Hollys Coffee)","category":"💻 Work & Cafe","note":"24小時/適合筆電","hours":"24 小時營業","address":"서울 마포구 양화로 156","lat":"37.5560817","lon":"126.9234301","zone":"弘大/延南"},{"name":"이디야커피랩 (Ediya Coffee Lab)","category":"💻 Work & Cafe","note":"旗艦店/寬敞舒適","hours":"07:30 - 02:00","address":"서울 강남구 논현로 636","lat":"37.5105088","lon":"127.0326807","zone":"江南"},{"name":"테라로사 포스코센터점 (Terarosa)","category":"💻 Work & Cafe","note":"鋼鐵書架牆/江南","hours":"07:30 - 21:00","address":"서울 강남구 테헤란로 440","lat":"37.5056932","lon":"127.0558968","zone":"江南"},{"name":"Mangrove Dongdaemun (Co-living)","kr_name":"맹그로브 동대문","category":"住宿","note":"🏠 熱門 Co-living, 適合數位遊牧","hours":"Check-in 15:00","address":"서울 중구 퇴계로 334","lat":37.5651,"lon":127.0078,"zone":"明洞/鍾路"},{"name":"Local Stitch Seogyo","kr_name":"로컬스티치 크리에이터 타운 서교","category":"住宿","note":"🏠 弘大商圈, 設計師風格","hours":"Check-in 15:00","address":"서울 마포구 월드컵북로5길 41","lat":37.5562,"lon":126.9167,"zone":"弘大/延南"},{"name":"L7 Hongdae","kr_name":"L7 홍대","category":"住宿","note":"🏨 弘大入口站旁, 交通便利","hours":"Check-in 15:00","address":"서울 마포구 양화로 141","lat":37.5552,"lon":126.9216,"zone":"弘大/延南"}];
+        let map, markers = [];
+        let isMapMode = false;
+
+        function initMap() {
+            if (map) return;
+            
+            // Default center (Seoul City Hall)
+            map = L.map('map').setView([37.5665, 126.9780], 12);
+            
+            // CartoDB Voyager (Nice and clean for apps)
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+                subdomains: 'abcd',
+                maxZoom: 20
+            }).addTo(map);
+
+            // Add Markers
+            places.forEach(p => {
+                if(p.lat && p.lon) {
+                    const marker = L.marker([p.lat, p.lon]).addTo(map);
+                    
+                    const popupHtml = `
+                        <div style="text-align:center; min-width:150px;">
+                            <div class="popup-title">${p.name}</div>
+                            <div class="popup-cat">${p.category} | ${p.zone}</div>
+                            <a href="https://map.naver.com/p/search/${encodeURIComponent(p.kr_name || p.name)}" target="_blank" class="popup-nav">
+                                Naver 導航
+                            </a>
+                        </div>
+                    `;
+                    
+                    marker.bindPopup(popupHtml);
+                    markers.push({marker: marker, data: p});
+                }
+            });
+        }
+
+        function toggleMode() {
+            const mapContainer = document.getElementById('map-container');
+            const listContainer = document.getElementById('list-container');
+            const tabs = document.getElementById('category-tabs'); // Keep tabs visible? Or hide?
+            const btn = document.querySelector('.map-toggle-btn');
+            
+            isMapMode = !isMapMode;
+            
+            if (isMapMode) {
+                mapContainer.classList.add('visible');
+                listContainer.style.display = 'none';
+                btn.classList.add('active');
+                btn.innerHTML = '📋'; // Switch icon to List
+                if(!map) initMap();
+            } else {
+                mapContainer.classList.remove('visible');
+                listContainer.style.display = 'block';
+                btn.classList.remove('active');
+                btn.innerHTML = '🗺️';
+            }
+        }
+
+        function filter(cat) {
+            // Update active tab
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.innerText.includes(cat) || (cat === 'all' && btn.innerText === '全部')) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Filter List
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                const cCat = card.getAttribute('data-cat');
+                if (cat === 'all') {
+                    card.style.display = 'block';
+                } else {
+                    // Match simplified category
+                    if (cCat.includes(cat) || 
+                       (cat === '購物' && (cCat.includes('服飾') || cCat.includes('選物'))) ||
+                       (cat === '咖啡甜點' && cCat.includes('咖啡'))) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                }
+            });
+
+            // Filter Map (if initialized)
+            if (map) {
+                markers.forEach(m => {
+                    const cCat = m.data.category;
+                    let visible = false;
+                    if (cat === 'all') visible = true;
+                    else if (cCat.includes(cat) || 
+                       (cat === '購物' && (cCat.includes('服飾') || cCat.includes('選物'))) ||
+                       (cat === '咖啡甜點' && cCat.includes('咖啡'))) visible = true;
+                    
+                    if (visible) m.marker.addTo(map);
+                    else m.marker.remove();
+                });
+            }
+        }
+    </script>
+</body>
+</html>

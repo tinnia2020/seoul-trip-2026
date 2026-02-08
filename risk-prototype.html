@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Risk Control Settings Prototype</title>
+    <style>
+        :root {
+            --primary: #1890ff;
+            --text: #333;
+            --text-secondary: #666;
+            --border: #d9d9d9;
+            --bg: #f0f2f5;
+            --card-bg: #fff;
+            --disabled: #f5f5f5;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg);
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            margin: 0;
+        }
+
+        .card {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 600px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 24px;
+        }
+
+        h2 {
+            margin-top: 0;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 16px;
+            font-size: 20px;
+        }
+
+        .section {
+            margin-bottom: 24px;
+        }
+
+        .form-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .form-item.indent {
+            margin-left: 28px;
+            padding-left: 12px;
+            border-left: 2px solid #eee;
+        }
+
+        label {
+            cursor: pointer;
+            flex: 1;
+            margin-left: 8px;
+            color: var(--text);
+            user-select: none;
+        }
+
+        /* Toggle Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 22px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(22px);
+        }
+
+        /* Checkbox */
+        input[type="checkbox"].custom-cb {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+
+        /* Inputs */
+        .inline-input {
+            width: 80px;
+            padding: 4px 8px;
+            margin: 0 8px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .inline-input:disabled {
+            background-color: var(--disabled);
+            cursor: not-allowed;
+            color: #ccc;
+        }
+
+        .disabled-text {
+            color: #999;
+        }
+        
+        .info-icon {
+            display: inline-block;
+            margin-left: 6px;
+            color: #999;
+            cursor: help;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            line-height: 16px;
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>風險設置 (Risk Settings)</h2>
+
+    <!-- Master Switch -->
+    <div class="section">
+        <div class="form-item">
+            <span style="margin-right: 12px; font-weight: bold;">是否需要風控</span>
+            <label class="switch">
+                <input type="checkbox" id="masterSwitch">
+                <span class="slider"></span>
+            </label>
+            <span class="info-icon" title="開啟後將執行下方勾選的風控規則">i</span>
+        </div>
+    </div>
+
+    <!-- Risk Items -->
+    <div id="riskItems" class="section">
+        
+        <div class="form-item indent">
+            <input type="checkbox" class="custom-cb" id="cb1">
+            <label for="cb1">禁止玩家首次提款 <span class="info-icon" title="玩家歷史無提款紀錄即阻擋">i</span></label>
+        </div>
+
+        <div class="form-item indent">
+            <input type="checkbox" class="custom-cb" id="cb2">
+            <label for="cb2">禁止銀行卡首次提款</label>
+        </div>
+
+        <div class="form-item indent">
+            <input type="checkbox" class="custom-cb" id="cb3">
+            <label for="cb3">需通過稽核 (Audit Passed)</label>
+        </div>
+
+        <div class="form-item indent">
+            <input type="checkbox" class="custom-cb" id="cb4">
+            <label for="cb4">總存款需大於總提款</label>
+        </div>
+
+        <div class="form-item indent">
+            <input type="checkbox" class="custom-cb" id="cb5">
+            <label for="cb5">本次提款不可超過期間存款 <span class="info-icon" title="追溯期：65天">i</span></label>
+        </div>
+
+        <!-- Complex Item 1 -->
+        <div class="form-item indent">
+            <input type="checkbox" class="custom-cb" id="cb6">
+            <label for="cb6">
+                距離上次提款少於 
+                <input type="text" class="inline-input" id="input6" disabled placeholder="10"> 
+                天需人工審核
+            </label>
+        </div>
+
+        <!-- Complex Item 2 -->
+        <div class="form-item indent">
+            <input type="checkbox" class="custom-cb" id="cb7">
+            <label for="cb7">
+                最大同時處理 
+                <input type="text" class="inline-input" id="input7" disabled placeholder="5"> 
+                筆
+            </label>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    const masterSwitch = document.getElementById('masterSwitch');
+    const riskItemsContainer = document.getElementById('riskItems');
+    const allCheckboxes = riskItemsContainer.querySelectorAll('input[type="checkbox"]');
+    const allInputs = riskItemsContainer.querySelectorAll('input[type="text"]');
+
+    // 1. Master Switch Logic
+    function toggleMaster() {
+        const isOn = masterSwitch.checked;
+        
+        if (isOn) {
+            riskItemsContainer.style.opacity = '1';
+            riskItemsContainer.style.pointerEvents = 'auto';
+        } else {
+            riskItemsContainer.style.opacity = '0.5';
+            riskItemsContainer.style.pointerEvents = 'none';
+        }
+    }
+
+    // 2. Input Enable/Disable Logic
+    function setupInputDependency(checkboxId, inputId) {
+        const cb = document.getElementById(checkboxId);
+        const input = document.getElementById(inputId);
+        
+        cb.addEventListener('change', () => {
+            input.disabled = !cb.checked;
+            if (cb.checked) {
+                input.focus();
+            }
+        });
+    }
+
+    // Init
+    masterSwitch.addEventListener('change', toggleMaster);
+    toggleMaster(); // Set initial state (OFF)
+
+    setupInputDependency('cb6', 'input6');
+    setupInputDependency('cb7', 'input7');
+
+</script>
+
+</body>
+</html>

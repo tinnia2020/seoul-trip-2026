@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Seoul Trip Ultimate 🇰🇷</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #1877F2;
+            --bg: #F0F2F5;
+            --white: #FFFFFF;
+            --text: #050505;
+            --text-sec: #65676B;
+            --food: #ff6b6b;
+            --cafe: #48dbfb;
+            --shop: #a29bfe;
+            --work: #57606f;
+            --accom: #1dd1a1;
+            --attr: #ff9f43;
+        }
+        
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { margin: 0; font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: var(--text); padding-bottom: 80px; }
+        
+        /* Header */
+        .app-header {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .app-title { font-size: 1.2rem; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+        .map-toggle-btn {
+            background: #eee;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .map-toggle-btn.active { background: var(--primary); color: white; }
+
+        /* Sticky Tabs */
+        .tabs-container {
+            position: sticky;
+            top: 67px; /* Height of header approx */
+            z-index: 900;
+            background: var(--bg);
+            padding: 10px 0;
+            overflow-x: auto;
+            white-space: nowrap;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        .tabs-container::-webkit-scrollbar { display: none; }
+        
+        .tab-btn {
+            display: inline-block;
+            margin-left: 12px;
+            padding: 8px 16px;
+            background: var(--white);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-sec);
+            border: 1px solid #ddd;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .tab-btn:last-child { margin-right: 12px; }
+        .tab-btn.active {
+            background: var(--text);
+            color: white;
+            border-color: var(--text);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        /* Container */
+        .container { max-width: 600px; margin: 0 auto; padding: 10px 15px; }
+
+        /* Cards */
+        .card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.03);
+            transition: 0.2s;
+        }
+        .card:active { transform: scale(0.98); }
+        
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+        .card-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+        .badge { font-size: 0.75rem; padding: 3px 8px; border-radius: 6px; color: white; font-weight: 600; }
+        .badge.zone { background: #eee; color: #555; }
+        
+        /* Category Colors */
+        .cat-美食 { background: var(--food); }
+        .cat-早午餐 { background: #feca57; color: #333; }
+        .cat-咖啡甜點 { background: var(--cafe); color: #333; }
+        .cat-購物, .cat-選物, .cat-服飾, .cat-彩妝, .cat-雜貨 { background: var(--shop); }
+        .cat-Work, .cat-展覽 { background: var(--work); }
+        .cat-住宿 { background: var(--accom); }
+        .cat-景點 { background: var(--attr); }
+
+        .place-name-cn { font-size: 1.15rem; font-weight: 700; color: #111; margin-bottom: 4px; line-height: 1.3; }
+        .place-name-kr { font-size: 0.9rem; color: #777; font-weight: 500; margin-bottom: 10px; font-family: "Malgun Gothic", sans-serif; }
+        
+        .info-row { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; color: #555; margin-bottom: 4px; }
+        
+        .actions { margin-top: 15px; display: flex; gap: 10px; }
+        .action-btn {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: 0.2s;
+        }
+        .btn-google { background: #e8f0fe; color: #1967d2; }
+        .btn-naver { background: #e0f8eb; color: #03c75a; }
+        .btn-google:active { background: #d2e3fc; }
+        .btn-naver:active { background: #b8f0d0; }
+
+        /* Map View */
+        #map-container {
+            position: fixed;
+            top: 60px; /* Below header */
+            left: 0;
+            width: 100%;
+            height: calc(100% - 60px);
+            background: white;
+            z-index: 800;
+            display: none; /* Hidden by default */
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        #map-container.visible { display: block; opacity: 1; }
+        #map { width: 100%; height: 100%; }
+        
+        /* Map Popup Styles */
+        .leaflet-popup-content-wrapper { border-radius: 12px; }
+        .popup-title { font-weight: bold; font-size: 1rem; margin-bottom: 5px; }
+        .popup-cat { font-size: 0.8rem; color: #777; }
+        .popup-nav { display: block; margin-top: 8px; background: #03C75A; color: white; text-align: center; padding: 6px; border-radius: 6px; text-decoration: none; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+
+    <div class="app-header">
+        <div class="app-title">🇰🇷 Seoul Trip</div>
+        <button class="map-toggle-btn" onclick="toggleMode()">🗺️</button>
+    </div>
+
+    <div class="tabs-container" id="category-tabs">
+        <div class="tab-btn active" onclick="filter('all')">全部</div>
+        <div class="tab-btn" onclick="filter('美食')">美食</div>
+        <div class="tab-btn" onclick="filter('咖啡甜點')">咖啡/甜點</div>
+        <div class="tab-btn" onclick="filter('購物')">購物/逛街</div>
+        <div class="tab-btn" onclick="filter('Work')">Work</div>
+        <div class="tab-btn" onclick="filter('住宿')">住宿</div>
+        <div class="tab-btn" onclick="filter('景點')">景點</div>
+    </div>
+
+    <!-- Map View -->
+    <div id="map-container">
+        <div id="map"></div>
+    </div>
+
+    <!-- List View -->
+    <div class="container" id="list-container">
+        <!-- JS Rendered Content -->
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script>
+        // Enhanced Data with Chinese Names
+        const places = [
+            {"cn_name":"青瓦屋 (Cheongwaok)","kr_name":"청와옥 을지로3가직영점","category":"美食","note":"劉在石推薦湯飯","hours":"08:00 - 22:00","address":"서울 중구 을지로 110","lat":37.5660015,"lon":126.9901968,"zone":"明洞/鍾路"},
+            {"cn_name":"倫敦貝果博物館 (London Bagel Museum)","kr_name":"런던베이글뮤지엄 안국점","category":"早午餐","note":"推大蒜口味","hours":"08:00 - 18:00","address":"서울 종로구 북촌로4길 20","lat":37.5792526,"lon":126.9859384,"zone":"明洞/鍾路"},
+            {"cn_name":"神仙雪濃湯 (Sinseon)","kr_name":"신선설농탕 명동점","category":"美食","note":"建議加鹽巴","hours":"24 小時營業","address":"서울 중구 명동길 56","lat":37.5647104,"lon":126.9867180,"zone":"明洞/鍾路"},
+            {"cn_name":"無垢屋 (Muguok)","kr_name":"무구옥","category":"美食","note":"12:00 開放訂位","hours":"11:30 - 21:00","address":"서울 종로구 율곡로1길 7","lat":37.5775630,"lon":126.9813512,"zone":"明洞/鍾路"},
+            {"cn_name":"曹曹刀削麵 (Jojo Kalguksu)","kr_name":"조조칼국수 시청점","category":"美食","note":"","hours":"10:00 - 21:30","address":"서울 중구 세종대로11길 27","lat":37.5620078,"lon":126.9754246,"zone":"明洞/鍾路"},
+            {"cn_name":"小豬存錢筒 (Piggy Bank)","kr_name":"돼지저금통","category":"美食","note":"弘大站 8 號出口","hours":"14:00 - 02:00","address":"서울 마포구 어울마당로 146-1","lat":37.5562643,"lon":126.9262793,"zone":"弘大/延南"},
+            {"cn_name":"校村筆房 (Kyochon Pilbang)","kr_name":"교촌필방","category":"美食","note":"週一公休","hours":"16:00 - 23:30","address":"서울 용산구 보광로 127","lat":37.5256549,"lon":127.0014189,"zone":"漢南/梨泰院"},
+            {"cn_name":"JO & DAWSON","kr_name":"조앤도슨","category":"咖啡甜點","note":"焦糖布丁名店","hours":"12:00 - 21:00","address":"서울 마포구 동교로41길 31","lat":37.5636894,"lon":126.9228307,"zone":"弘大/延南"},
+            {"cn_name":"迎月 (Dalmaji)","kr_name":"달마지 을지로점","category":"美食","note":"最後點餐 01:00","hours":"16:00 - 02:00","address":"서울 중구 을지로 112-1","lat":37.5662506,"lon":126.9987609,"zone":"明洞/鍾路"},
+            {"cn_name":"龍龍老師 (Yongyong Teacher)","kr_name":"용용선생 성수점","category":"美食","note":"最後點餐 21:00","hours":"16:00 - 22:00","address":"서울 성동구 아차산로 116","lat":37.5440368,"lon":127.0565971,"zone":"聖水洞"},
+            {"cn_name":"鐘三肉 (Jongsamyook)","kr_name":"종삼육","category":"美食","note":"鐘路三街站","hours":"14:00 - 23:30","address":"서울 종로구 돈화문로11길 8-1","lat":37.5725657,"lon":126.9900452,"zone":"明洞/鍾路"},
+            {"cn_name":"孫家一隻雞 (Son's Chicken)","kr_name":"손가네닭한마리","category":"美食","note":"隱藏版名店","hours":"11:00 - 22:00","address":"서울 종로구 종로66가길 10","lat":37.5735870,"lon":127.0213125,"zone":"明洞/鍾路"},
+            {"cn_name":"統營生蠔 (Tongyeong Oyster)","kr_name":"통영굴찜","category":"美食","note":"季節限定","hours":"11:00 - 22:00","address":"서울 영등포구 여의도동 21-3","lat":37.5267088,"lon":126.9238000,"zone":"汝矣島"},
+            {"cn_name":"無垢屋 聖水店 (Muguok)","kr_name":"무구옥 성수점","category":"美食","note":"聖水站分店","hours":"11:30 - 21:00","address":"서울 성동구 아차산로11길 11","lat":37.5447374,"lon":127.0593428,"zone":"聖水洞"},
+            {"cn_name":"漢南洞馬鈴薯排骨湯","kr_name":"한남동감자탕","category":"美食","note":"必吃老店","hours":"24 小時營業","address":"서울 용산구 우사단로 43","lat":37.5308068,"lon":126.9967969,"zone":"漢南/梨泰院"},
+            {"cn_name":"Parole & Langue","kr_name":"파롤앤랑그","category":"咖啡甜點","note":"塔類甜點熱門店","hours":"13:00 - 21:00","address":"서울 마포구 성미산로29안길 8","lat":37.5651538,"lon":126.9229985,"zone":"弘大/延南"},
+            {"cn_name":"Butty Sandwich","kr_name":"버티샌드위치","category":"咖啡甜點","note":"巧巴達三明治","hours":"11:00 - 19:00","address":"서울 마포구 망원동 473-9","lat":37.5558600,"lon":126.9008700,"zone":"弘大/延南"},
+            {"cn_name":"馬山大媽安康魚蒸","kr_name":"마산할매아구찜","category":"美食","note":"在地口碑店","hours":"11:00 - 22:00","address":"서울 용산구 후암동 44-8","lat":37.5501100,"lon":126.9802800,"zone":"漢南/梨泰院"},
+            {"cn_name":"hetras 聖水","kr_name":"헤트라스 성수","category":"購物","note":"推薦 No.29, No.7, No.5","hours":"11:00 - 20:00","address":"서울 성동구 연무장길 89","lat":37.5411759,"lon":127.0595267,"zone":"聖水洞"},
+            {"cn_name":"newmix coffee","kr_name":"뉴믹스커피","category":"咖啡甜點","note":"必買即溶咖啡伴手禮","hours":"11:00 - 20:00","address":"서울 성동구 연무장길 3","lat":37.5411759,"lon":127.0595267,"zone":"聖水洞"},
+            {"cn_name":"ADERERROR 聖水","kr_name":"아더 성수 스페이스","category":"服飾","note":"旗艦概念店","hours":"13:00 - 21:00","address":"서울 성동구 성수이로 82","lat":37.5364697,"lon":127.0538762,"zone":"聖水洞"},
+            {"cn_name":"BLUE ELEPHANT 聖水","kr_name":"블루엘리펀트 성수","category":"服飾","note":"平價墨鏡品牌","hours":"11:00 - 20:00","address":"서울 성동구 성수이로14길 14","lat":37.5411234,"lon":127.0565635,"zone":"聖水洞"},
+            {"cn_name":"fwee Agit","kr_name":"퓌 아지트","category":"彩妝","note":"必買布丁唇泥","hours":"11:00 - 21:00","address":"서울 성동구 연무장길 10","lat":37.5430688,"lon":127.0541356,"zone":"聖水洞"},
+            {"cn_name":"DIOR 聖水","kr_name":"디올 성수","category":"景點","note":"熱門地標拍照","hours":"11:00 - 20:00","address":"서울 성동구 연무장5길 7","lat":37.5441865,"lon":127.0528823,"zone":"聖水洞"},
+            {"cn_name":"NYUNYU 聖水","kr_name":"뉴뉴 성수","category":"服飾","note":"飾品購物聖地","hours":"11:00 - 23:00","address":"서울 성동구 연무장길 89 2-3F","lat":37.5445,"lon":127.056,"zone":"聖水洞"},
+            {"cn_name":"Thingool Store","kr_name":"띵굴스토어 성수","category":"選物","note":"生活選物店","hours":"11:00 - 21:00","address":"서울 성동구 성수이로14길 14","lat":37.5411234,"lon":127.0565635,"zone":"聖水洞"},
+            {"cn_name":"KODAK Apparel","kr_name":"코닥어패럴 동대문","category":"服飾","note":"位於 DunDun 2 樓","hours":"10:30 - 22:00","address":"서울 중구 장충단로 211","lat":37.5693468,"lon":127.0105160,"zone":"明洞/鍾路"},
+            {"cn_name":"ept 聖水","kr_name":"이피티 성수","category":"服飾","note":"韓國熱門運動鞋","hours":"11:00 - 20:00","address":"서울 성동구 연무장길 54","lat":37.5411759,"lon":127.0595267,"zone":"聖水洞"},
+            {"cn_name":"HAUS NOWHERE","kr_name":"하우스 노웨어","category":"選物","note":"臘腸狗地標/新品牌","hours":"11:00 - 21:00","address":"서울 성동구 경아길 11","lat":37.541,"lon":127.059,"zone":"聖水洞"},
+            {"cn_name":"thisisneverthat","kr_name":"디스이즈네버댓","category":"服飾","note":"街頭潮流第一站","hours":"12:00 - 21:00","address":"서울 마포구 잔다리로 32","lat":37.5516170,"lon":126.9197938,"zone":"弘大/延南"},
+            {"cn_name":"KITH Seoul","kr_name":"키스 서울","category":"服飾","note":"潮流名店","hours":"11:00 - 20:00","address":"서울 성동구 연무장길 70","lat":37.5411759,"lon":127.0595267,"zone":"聖水洞"},
+            {"cn_name":"HUMAN MADE","kr_name":"휴먼메이드","category":"服飾","note":"熱門潮牌","hours":"11:00 - 20:00","address":"서울 성동구 성수이로7길 39","lat":37.5412470,"lon":127.0542669,"zone":"聖水洞"},{"cn_name":"MUSINSA EMPTY","kr_name":"무신사 엠프티","category":"選物","note":"大型選品店","hours":"11:00 - 20:00","address":"서울 성동구 성수이로 97","lat":37.5364697,"lon":127.0538762,"zone":"聖水洞"},
+            {"cn_name":"清水堂 (Cheongsudang)","kr_name":"청수당","category":"咖啡甜點","note":"益善洞竹林造景","hours":"11:30 - 22:00","address":"서울 종로구 돈화문로11나길 31-9","lat":37.5736272,"lon":126.9905422,"zone":"明洞/鍾路"},
+            {"cn_name":"YM Coffee House","kr_name":"YM커피하우스","category":"咖啡甜點","note":"教堂風格專業手沖","hours":"12:00 - 22:00","address":"서울 은평구 연서로29길 14-8","lat":37.6201729,"lon":126.9174055,"zone":"首爾市區"},
+            {"cn_name":"Cafe Layered","kr_name":"카페 레이어드 연남점","category":"咖啡甜點","note":"司康名店","hours":"11:00 - 22:00","address":"서울 마포구 성미산로 161-4","lat":37.5649847,"lon":126.9241878,"zone":"弘大/延南"},
+            {"cn_name":"Thanks Oat","kr_name":"땡스오트 연남","category":"咖啡甜點","note":"延南洞手工優格","hours":"10:00 - 19:00","address":"서울 마포구 성미산로23길 68","lat":37.5650202,"lon":126.9206249,"zone":"弘大/延南"},
+            {"cn_name":"today's enough","kr_name":"오늘도충분해","category":"咖啡甜點","note":"週二公休","hours":"12:00 - 20:00","address":"서울 마포구 연희로1길 45","lat":37.5598873,"lon":126.9254959,"zone":"弘大/延南"},
+            {"cn_name":"昭賢堂 (Sohyeondang)","kr_name":"소현당","category":"咖啡甜點","note":"韓屋茶室","hours":"11:00 - 20:00","address":"서울 종로구 소격동 157-1","lat":37.5796200,"lon":126.9807300,"zone":"明洞/鍾路"},
+            {"cn_name":"Artist Bakery","kr_name":"아티스트 베이커리","category":"咖啡甜點","note":"鹽可頌排隊名店","hours":"08:00 - 20:00","address":"서울 종로구 율곡로 45","lat":37.5763072,"lon":126.9843495,"zone":"明洞/鍾路"},
+            {"cn_name":"29CM 聖水","kr_name":"이구성수","category":"選物","note":"線上選品實體店","hours":"11:00 - 20:00","address":"서울 성동구 아차산로 78","lat":37.5453108,"lon":127.0526786,"zone":"聖水洞"},
+            {"cn_name":"Ground Seesaw","kr_name":"그라운드시소 서촌","category":"展覽","note":"質感展覽空間","hours":"10:00 - 19:00","address":"서울 종로구 자하문로6길 18-8","lat":37.5781385,"lon":126.9729372,"zone":"明洞/鍾路"},
+            {"cn_name":"廣藏市場 156號","kr_name":"광장시장 156호","category":"雜貨","note":"購買韓國製棉被","hours":"09:00 - 18:00","address":"서울 종로구 창경궁로 88","lat":37.5700967,"lon":126.9998283,"zone":"明洞/鍾路"},
+            {"cn_name":"Cociety","kr_name":"코사이어티 서울숲","category":"💻 Work & Cafe","note":"創意工作空間 (週一休)","hours":"12:00 - 20:00","address":"서울 성동구 왕십리로 82-20","lat":37.5559574,"lon":127.0433184,"zone":"聖水洞"},
+            {"cn_name":"Brautor","kr_name":"브라우터","category":"💻 Work & Cafe","note":"蝴蝶餅名店/整棟座位","hours":"08:00 - 22:00","address":"서울 성동구 왕십리로14길 28-3","lat":37.5493171,"lon":127.0450501,"zone":"聖水洞"},
+            {"cn_name":"Debunk","kr_name":"디벙크","category":"💻 Work & Cafe","note":"地下層讀書氛圍","hours":"10:00 - 23:00","address":"서울 마포구 성지1길 30","lat":37.5480049,"lon":126.9152430,"zone":"弘大/延南"},
+            {"cn_name":"Hollys Coffee 弘大","kr_name":"할리스 홍대역점","category":"💻 Work & Cafe","note":"24小時/適合筆電","hours":"24 小時營業","address":"서울 마포구 양화로 156","lat":37.5560817,"lon":126.9234301,"zone":"弘大/延南"},
+            {"cn_name":"Ediya Coffee Lab","kr_name":"이디야커피랩","category":"💻 Work & Cafe","note":"旗艦店/寬敞舒適","hours":"07:30 - 02:00","address":"서울 강남구 논현로 636","lat":37.5105088,"lon":127.0326807,"zone":"江南"},
+            {"cn_name":"Terarosa POSCO","kr_name":"테라로사 포스코센터점","category":"💻 Work & Cafe","note":"鋼鐵書架牆/江南","hours":"07:30 - 21:00","address":"서울 강남구 테헤란로 440","lat":37.5056932,"lon":127.0558968,"zone":"江南"},
+            {"cn_name":"Mangrove 東大門","kr_name":"맹그로브 동대문","category":"住宿","note":"🏠 熱門 Co-living, 適合數位遊牧","hours":"Check-in 15:00","address":"서울 중구 퇴계로 334","lat":37.5651,"lon":127.0078,"zone":"明洞/鍾路"},
+            {"cn_name":"Local Stitch 西橋","kr_name":"로컬스티치 크리에이터 타운 서교","category":"住宿","note":"🏠 弘大商圈, 設計師風格","hours":"Check-in 15:00","address":"서울 마포구 월드컵북로5길 41","lat":37.5562,"lon":126.9167,"zone":"弘大/延南"},
+            {"cn_name":"L7 弘大","kr_name":"L7 홍대","category":"住宿","note":"🏨 弘大入口站旁, 交通便利","hours":"Check-in 15:00","address":"서울 마포구 양화로 141","lat":37.5552,"lon":126.9216,"zone":"弘大/延南"}
+        ];
+
+        let map, markers = [];
+        let isMapMode = false;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderList();
+        });
+
+        function renderList() {
+            const listContainer = document.getElementById('list-container');
+            listContainer.innerHTML = ''; // Clear
+
+            places.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.setAttribute('data-cat', p.category);
+                card.setAttribute('data-zone', p.zone);
+                
+                const krQuery = p.kr_name || p.cn_name;
+                
+                card.innerHTML = `
+                    <div class="card-header">
+                        <div class="card-badges">
+                            <span class="badge cat-${p.category}">${p.category}</span>
+                            <span class="badge zone">${p.zone}</span>
+                        </div>
+                    </div>
+                    <div class="place-name-cn">${p.cn_name}</div>
+                    <div class="place-name-kr">${p.kr_name}</div>
+                    
+                    ${p.note ? `<div class="info-row">💡 ${p.note}</div>` : ''}
+                    <div class="info-row">🕒 ${p.hours}</div>
+                    
+                    <div class="actions">
+                        <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(krQuery)}" target="_blank" class="action-btn btn-google">
+                            Google
+                        </a>
+                        <a href="https://map.naver.com/p/search/${encodeURIComponent(krQuery)}" target="_blank" class="action-btn btn-naver">
+                            Naver
+                        </a>
+                    </div>
+                `;
+                listContainer.appendChild(card);
+            });
+            
+            // Footer
+             const footer = document.createElement('div');
+             footer.style.cssText = "text-align:center; margin-top:40px; color:#aaa; font-size:0.8rem;";
+             footer.innerHTML = "Made with OpenClaw • Night Shift Mode 🌙";
+             listContainer.appendChild(footer);
+        }
+
+        function initMap() {
+            if (map) return;
+            
+            // Default center (Seoul City Hall)
+            map = L.map('map').setView([37.5665, 126.9780], 12);
+            
+            // CartoDB Voyager
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+                subdomains: 'abcd',
+                maxZoom: 20
+            }).addTo(map);
+
+            // Add Markers
+            places.forEach(p => {
+                if(p.lat && p.lon) {
+                    const marker = L.marker([p.lat, p.lon]).addTo(map);
+                    
+                    const popupHtml = `
+                        <div style="text-align:center; min-width:150px;">
+                            <div class="popup-title">${p.cn_name}</div>
+                            <div class="popup-cat">${p.category} | ${p.zone}</div>
+                            <a href="https://map.naver.com/p/search/${encodeURIComponent(p.kr_name || p.cn_name)}" target="_blank" class="popup-nav">
+                                Naver 導航
+                            </a>
+                        </div>
+                    `;
+                    
+                    marker.bindPopup(popupHtml);
+                    markers.push({marker: marker, data: p});
+                }
+            });
+        }
+
+        function toggleMode() {
+            const mapContainer = document.getElementById('map-container');
+            const listContainer = document.getElementById('list-container');
+            const btn = document.querySelector('.map-toggle-btn');
+            
+            isMapMode = !isMapMode;
+            
+            if (isMapMode) {
+                mapContainer.classList.add('visible');
+                listContainer.style.display = 'none';
+                btn.classList.add('active');
+                btn.innerHTML = '📋'; // Switch icon to List
+                
+                if(!map) initMap();
+                
+                // FIX: Invalidate size after becoming visible so tiles load correctly
+                setTimeout(() => {
+                    map.invalidateSize();
+                }, 200);
+            } else {
+                mapContainer.classList.remove('visible');
+                listContainer.style.display = 'block';
+                btn.classList.remove('active');
+                btn.innerHTML = '🗺️';
+            }
+        }
+
+        function filter(cat) {
+            // Update active tab
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.innerText.includes(cat) || (cat === 'all' && btn.innerText === '全部')) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Filter List
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                const cCat = card.getAttribute('data-cat');
+                if (cat === 'all') {
+                    card.style.display = 'block';
+                } else {
+                    if (cCat.includes(cat) || 
+                       (cat === '購物' && (cCat.includes('服飾') || cCat.includes('選物'))) ||
+                       (cat === '咖啡甜點' && cCat.includes('咖啡'))) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                }
+            });
+
+            // Filter Map
+            if (map) {
+                markers.forEach(m => {
+                    const cCat = m.data.category;
+                    let visible = false;
+                    if (cat === 'all') visible = true;
+                    else if (cCat.includes(cat) || 
+                       (cat === '購物' && (cCat.includes('服飾') || cCat.includes('選物'))) ||
+                       (cat === '咖啡甜點' && cCat.includes('咖啡'))) visible = true;
+                    
+                    if (visible) m.marker.addTo(map);
+                    else m.marker.remove();
+                });
+            }
+        }
+    </script>
+</body>
+</html>
