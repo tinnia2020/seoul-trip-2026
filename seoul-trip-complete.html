@@ -74,10 +74,10 @@
         .map-controls{position:absolute;top:76px;left:16px;right:16px;z-index:2000;display:flex;gap:8px;flex-wrap:wrap;pointer-events:none}
         .map-controls *{pointer-events:auto}
         .map-filter{position:relative}
-        .map-filter-btn{padding:10px 16px;background:var(--white);border:2px solid #e0e0e0;border-radius:20px;font-size:0.9rem;font-weight:600;color:var(--text);cursor:pointer;display:flex;align-items:center;gap:8px;font-family:inherit;min-width:160px}
+        .map-filter-btn{padding:10px 16px;background:var(--white);border:none;border-radius:20px;font-size:0.9rem;font-weight:600;color:var(--text);cursor:pointer;display:flex;align-items:center;gap:8px;font-family:inherit;min-width:160px;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
         .map-filter-btn svg{width:16px;height:16px;transition:transform 0.3s ease}
         .map-filter-btn.open svg{transform:rotate(180deg)}
-        .map-filter-dropdown{position:absolute;top:calc(100% + 8px);left:0;background:var(--white);border:2px solid #e0e0e0;border-radius:12px;min-width:160px;display:none;overflow:hidden}
+        .map-filter-dropdown{position:absolute;top:calc(100% + 8px);left:0;background:var(--white);border:none;border-radius:12px;min-width:160px;display:none;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
         .map-filter-dropdown.show{display:block}
         .map-filter-option{padding:10px 16px;cursor:pointer;font-size:0.9rem;font-weight:500;display:flex;align-items:center;gap:8px;color:var(--text);transition:background 0.2s ease}
         .map-filter-option:hover{background:#f7f7f9}
