@@ -14,9 +14,9 @@
         .header{background:var(--white);padding:6px 12px;position:sticky;top:0;z-index:1000;display:flex;justify-content:space-between;align-items:center;box-shadow:var(--shadow);height:44px}
         .title{font-size:1rem;font-weight:700;display:flex;align-items:center;gap:6px}
         .title svg{color:var(--primary);width:18px;height:18px}
-        .search-toggle{background:transparent;border:none;cursor:pointer;padding:6px;display:flex;align-items:center;justify-content:center;position:relative;z-index:1300;flex-shrink:0}
+        .search-toggle{background:transparent;border:none;cursor:pointer;padding:6px;display:flex;align-items:center;justify-content:center;position:relative;z-index:1200;flex-shrink:0}
         .search-toggle svg{color:var(--primary);width:20px;height:20px}
-        .search-wrap{position:fixed;top:10px;right:12px;height:40px;background:var(--white);z-index:1100;display:none;align-items:center;border-radius:20px;border:1px solid #e0e0e0;width:40px;overflow:hidden;transition:width 0.4s cubic-bezier(0.4, 0, 0.2, 1)}
+        .search-wrap{position:fixed;top:10px;right:12px;height:40px;background:var(--white);z-index:1200;display:none;align-items:center;border-radius:20px;border:1px solid #e0e0e0;width:40px;overflow:hidden;transition:width 0.4s cubic-bezier(0.4, 0, 0.2, 1)}
         .search-wrap.show{display:flex}
         .search-wrap.open{pointer-events:auto;width:calc(100% - 180px)}
         .search-box{display:flex;align-items:center;background:transparent;padding:0 12px;gap:10px;width:100%;opacity:0;transition:opacity 0.3s ease}
@@ -750,8 +750,8 @@ function draw(){
         return '<div class="card"><div class="card-badges"><span class="badge-cat '+cc+'">'+p.cat+'</span><span class="badge-zone">'+p.zone+'</span></div><div class="name-cn">'+p.cn+'</div><div class="name-kr">'+p.kr+'</div><div class="info"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:text-bottom;margin-right:2px"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> '+p.hours+'</div>'+mh+'<div class="actions"><a href="https://www.google.com/maps/search/?api=1&query='+qe+'" target="_blank" class="btn btn-g">Google</a><a href="https://map.naver.com/p/search/'+qe+'" target="_blank" class="btn btn-n">Naver</a></div></div>'
     }).join('')
 }
-document.getElementById('search').addEventListener('input',function(e){q=e.target.value.toLowerCase().trim();document.getElementById('clear').classList.toggle('show',q.length>0);draw()});
-function clearSearch(){document.getElementById('search').value='';q='';document.getElementById('clear').classList.remove('show');draw()}
+document.getElementById('search').addEventListener('input',function(e){q=e.target.value.toLowerCase().trim();document.getElementById('clear').classList.toggle('show',q.length>0);draw();filterMapBySearch(q)});
+function clearSearch(){document.getElementById('search').value='';q='';document.getElementById('clear').classList.remove('show');draw();filterMapBySearch('')}
 function toggleSearch(){
     var sw=document.getElementById('search-wrap');
     var si=document.getElementById('search');
