@@ -152,7 +152,7 @@
         .hour-line{position:relative;flex:1;padding:0 20px 0 0}
         .hour-line::before{content:'';position:absolute;left:0;top:10px;bottom:0;width:2px;background:#e8e8e8;border-left:2px dashed #e0e0e0}
         .hour-dot{position:absolute;left:-4px;top:10px;width:8px;height:8px;border-radius:50%;background:#ddd;z-index:1}
-        .event-card{background:white;border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,0.06);transition:all 0.3s ease;border-left:4px solid transparent}
+        .event-card{background:white;border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,0.06);transition:all 0.3s ease;border-left:4px solid transparent;position:relative}
         .event-card:hover{box-shadow:0 4px 12px rgba(0,0,0,0.12);transform:translateX(4px)}
         .event-card.flight{background:linear-gradient(135deg,#e3f2fd 0%,#f5f9ff 100%);border-left-color:#4285f4}
         .event-card.work{background:linear-gradient(135deg,#f3e5f5 0%,#faf5fc 100%);border-left-color:#a55eea}
@@ -335,14 +335,10 @@ var SCHEDULE_HOURLY = {
         {hour: 23, duration: 1, title: 'Check-in 住宿', desc: '43 Gyeongdongsijang-ro 12-gil', tag: '住宿', type: 'activity', icon: 'home'}
     ],
     1: [ // Day 2
-        {hour: 10, duration: 9, title: 'Tina 工作', desc: '工作時間', tag: '工作', type: 'work', icon: 'briefcase'},
-        {hour: 11, duration: 9, title: 'Bian 工作', desc: '工作時間', tag: '工作', type: 'work', icon: 'briefcase'},
-        {hour: 13, duration: 1, title: '午餐時間', desc: '', tag: '餐飲', type: 'food', icon: 'bowl'}
+        {hour: 10, duration: 10, title: '工作日', desc: 'Tina & Bian 工作時間\n13:00 午餐', tag: '工作', type: 'work', icon: 'briefcase'}
     ],
     2: [ // Day 3
-        {hour: 10, duration: 9, title: 'Tina 工作', desc: '工作時間', tag: '工作', type: 'work', icon: 'briefcase'},
-        {hour: 11, duration: 9, title: 'Bian 工作', desc: '工作時間', tag: '工作', type: 'work', icon: 'briefcase'},
-        {hour: 13, duration: 1, title: '午餐時間', desc: '', tag: '餐飲', type: 'food', icon: 'bowl'}
+        {hour: 10, duration: 10, title: '工作日', desc: 'Tina & Bian 工作時間\n13:00 午餐', tag: '工作', type: 'work', icon: 'briefcase'}
     ],
     3: [ // Day 4
         {hour: 10, duration: 8, title: 'Free Day', desc: '自由行程，隨意安排', tag: '自由活動', type: 'activity', icon: 'confetti'}
@@ -441,7 +437,11 @@ function renderHourlySchedule(dayIndex) {
             var endHour = evt.hour + evt.duration;
             var timeDetail = formatHour(evt.hour) + ' - ' + formatHour(Math.floor(endHour)) + ':' + (Math.floor((endHour % 1) * 60) || '00');
             
-            return '<div class="event-card ' + evt.type + '">' +
+            // 計算卡片高度（每小時約80px）
+            var cardHeight = evt.duration >= 2 ? (evt.duration * 70) + 'px' : 'auto';
+            var heightStyle = evt.duration >= 2 ? ' style="min-height:' + cardHeight + '"' : '';
+            
+            return '<div class="event-card ' + evt.type + '"' + heightStyle + '>' +
                 '<div class="event-title-text">' + icon + evt.title + '</div>' +
                 '<div class="event-meta">' +
                 '<span class="event-time-detail">' + ICONS.clock + timeDetail + '</span>' +
