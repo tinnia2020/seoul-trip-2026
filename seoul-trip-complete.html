@@ -132,47 +132,81 @@
         .empty{text-align:center;padding:60px 20px;color:var(--text-sec)}
 
         
-        /* Hourly Schedule Styles */
-        .schedule-header{padding:24px 20px 16px;background:var(--white)}
-        .schedule-date{font-size:0.85rem;color:var(--text-sec);margin-bottom:8px}
-        .schedule-today{font-size:2rem;font-weight:700;color:var(--text);margin-bottom:16px}
-        .week-calendar{display:flex;gap:12px;overflow-x:auto;padding-bottom:12px}
+        
+        /* Optimized Schedule Styles */
+        .schedule-wrapper{background:linear-gradient(180deg, #fafafa 0%, #f5f5f7 100%);min-height:100vh}
+        .schedule-header{padding:20px 20px 12px;background:var(--white);position:sticky;top:60px;z-index:800;box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+        .schedule-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+        .schedule-date{font-size:0.8rem;color:var(--text-sec);font-weight:500}
+        .today-btn{padding:6px 14px;background:var(--primary);color:white;border:none;border-radius:20px;font-size:0.8rem;font-weight:600;cursor:pointer;transition:all 0.2s ease}
+        .today-btn:active{transform:scale(0.95)}
+        .schedule-today{font-size:1.8rem;font-weight:700;color:var(--text);margin-bottom:12px;letter-spacing:-0.5px}
+        .week-calendar{display:flex;gap:8px;overflow-x:auto;padding-bottom:12px;scroll-behavior:smooth}
         .week-calendar::-webkit-scrollbar{display:none}
-        .week-day{flex-shrink:0;text-align:center;min-width:50px;cursor:pointer;transition:all 0.2s ease}
-        .week-day-label{font-size:0.75rem;color:var(--text-sec);margin-bottom:4px;font-weight:500}
-        .week-day-num{font-size:1.1rem;font-weight:600;color:var(--text);width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:50%;margin:0 auto}
+        .week-day{flex-shrink:0;text-align:center;min-width:48px;cursor:pointer;transition:all 0.25s cubic-bezier(0.4, 0, 0.2, 1);padding:8px 6px;border-radius:12px}
+        .week-day:hover{background:rgba(0,0,0,0.02)}
+        .week-day-label{font-size:0.7rem;color:var(--text-sec);margin-bottom:4px;font-weight:600;letter-spacing:0.3px;text-transform:uppercase}
+        .week-day-num{font-size:1rem;font-weight:700;color:var(--text);width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:50%;margin:0 auto;transition:all 0.25s ease}
         .week-day.active .week-day-label{color:var(--primary)}
-        .week-day.active .week-day-num{background:var(--primary);color:white}
-        .week-day-dot{width:4px;height:4px;background:var(--primary);border-radius:50%;margin:6px auto 0;opacity:0}
+        .week-day.active .week-day-num{background:var(--primary);color:white;box-shadow:0 2px 8px rgba(255,107,107,0.3)}
+        .week-day.today .week-day-num{border:2px solid var(--primary)}
+        .week-day-dot{width:4px;height:4px;background:var(--primary);border-radius:50%;margin:6px auto 0;opacity:0;transition:opacity 0.2s ease}
         .week-day.active .week-day-dot{opacity:1}
         
-        .hourly-schedule{padding:20px 0 80px;background:var(--bg);position:relative}
-        .hour-block{display:flex;gap:16px;min-height:80px;position:relative}
-        .hour-time{flex-shrink:0;width:60px;padding:8px 12px 0 20px;font-size:0.9rem;font-weight:600;color:var(--text-sec);text-align:right}
-        .hour-line{position:relative;flex:1;padding:0 20px 0 0}
-        .hour-line::before{content:'';position:absolute;left:0;top:10px;bottom:0;width:2px;background:#e8e8e8;border-left:2px dashed #e0e0e0}
-        .hour-dot{position:absolute;left:-4px;top:10px;width:8px;height:8px;border-radius:50%;background:#ddd;z-index:1}
-        .event-card{background:white;border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,0.06);transition:all 0.3s ease;border-left:4px solid transparent;position:relative}
-        .event-card:hover{box-shadow:0 4px 12px rgba(0,0,0,0.12);transform:translateX(4px)}
-        .event-card.flight{background:linear-gradient(135deg,#e3f2fd 0%,#f5f9ff 100%);border-left-color:#4285f4}
-        .event-card.work{background:linear-gradient(135deg,#f3e5f5 0%,#faf5fc 100%);border-left-color:#a55eea}
-        .event-card.food{background:linear-gradient(135deg,#fff3e0 0%,#fffbf5 100%);border-left-color:#ff9800}
-        .event-card.activity{background:linear-gradient(135deg,#e8f5e9 0%,#f5faf5 100%);border-left-color:#26de81}
-        .event-card.special{background:linear-gradient(135deg,#fce4ec 0%,#fff5f8 100%);border-left-color:#ff6b6b}
-        .event-title-text{font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:8px}
-        .event-title-text svg{flex-shrink:0}
-        .event-meta{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:8px}
-        .event-time-detail{font-size:0.8rem;color:var(--text-sec);display:flex;align-items:center;gap:4px}
-        .event-time-detail svg{width:14px;height:14px}
-        .event-tag{display:inline-block;padding:4px 10px;border-radius:12px;font-size:0.72rem;font-weight:600;background:rgba(0,0,0,0.08);color:var(--text-sec)}
-        .event-card.flight .event-tag{background:rgba(66,133,244,0.15);color:#1976d2}
-        .event-card.work .event-tag{background:rgba(165,94,234,0.15);color:#7c3aed}
+        .schedule-content{padding:0;background:transparent;position:relative;touch-action:pan-y}
+        .hourly-schedule{padding:16px 0 100px;max-width:600px;margin:0 auto}
+        .current-time-line{position:absolute;left:80px;right:20px;height:2px;background:var(--primary);z-index:100;pointer-events:none;box-shadow:0 0 8px rgba(255,107,107,0.4)}
+        .current-time-line::before{content:'';position:absolute;left:-6px;top:-4px;width:10px;height:10px;background:var(--primary);border-radius:50%;box-shadow:0 0 0 3px rgba(255,107,107,0.2)}
+        .current-time-label{position:absolute;left:12px;top:-10px;background:var(--primary);color:white;font-size:0.7rem;padding:2px 8px;border-radius:10px;font-weight:700;white-space:nowrap}
+        
+        .hour-block{display:flex;gap:12px;position:relative;min-height:70px}
+        .hour-block.past{opacity:0.5}
+        .hour-time{flex-shrink:0;width:60px;padding:4px 12px 0 16px;font-size:0.85rem;font-weight:700;color:var(--text-sec);text-align:right;position:sticky;top:140px;z-index:10}
+        .hour-line{position:relative;flex:1;padding:0 16px 0 0}
+        .hour-line::before{content:'';position:absolute;left:0;top:8px;bottom:-10px;width:1px;background:linear-gradient(180deg, #e5e5e5 0%, #f0f0f0 100%)}
+        .hour-dot{position:absolute;left:-3px;top:8px;width:6px;height:6px;border-radius:50%;background:#d0d0d0;z-index:1;transition:all 0.2s ease}
+        .hour-block:hover .hour-dot{background:var(--primary);transform:scale(1.3)}
+        
+        .event-card{background:white;border-radius:14px;padding:14px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,0.08);transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);border-left:3px solid transparent;cursor:pointer;position:relative;overflow:hidden}
+        .event-card::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 100%);opacity:0;transition:opacity 0.3s ease}
+        .event-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.12);transform:translateY(-2px) translateX(2px)}
+        .event-card:hover::before{opacity:1}
+        .event-card:active{transform:translateY(0) translateX(0);box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+        
+        .event-card.flight{background:linear-gradient(135deg,#e3f2fd 0%,#f8fbff 100%);border-left-color:#2196f3}
+        .event-card.work{background:linear-gradient(135deg,#f3e5f5 0%,#fdf9fe 100%);border-left-color:#9c27b0}
+        .event-card.food{background:linear-gradient(135deg,#fff3e0 0%,#fffcf7 100%);border-left-color:#ff9800}
+        .event-card.activity{background:linear-gradient(135deg,#e8f5e9 0%,#f7fcf8 100%);border-left-color:#4caf50}
+        .event-card.special{background:linear-gradient(135deg,#fce4ec 0%,#fff8fa 100%);border-left-color:#e91e63}
+        
+        .event-title-text{font-size:1rem;font-weight:700;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:6px;line-height:1.3}
+        .event-title-text svg{flex-shrink:0;opacity:0.8}
+        .event-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+        .event-time-detail{font-size:0.75rem;color:var(--text-sec);display:flex;align-items:center;gap:4px;font-weight:600}
+        .event-time-detail svg{width:13px;height:13px;opacity:0.7}
+        .event-tag{display:inline-block;padding:3px 9px;border-radius:10px;font-size:0.7rem;font-weight:700;letter-spacing:0.3px}
+        .event-card.flight .event-tag{background:rgba(33,150,243,0.15);color:#1976d2}
+        .event-card.work .event-tag{background:rgba(156,39,176,0.15);color:#7b1fa2}
         .event-card.food .event-tag{background:rgba(255,152,0,0.15);color:#f57c00}
-        .event-card.activity .event-tag{background:rgba(38,222,129,0.15);color:#16a34a}
-        .event-card.special .event-tag{background:rgba(255,107,107,0.15);color:#dc2626}
-        .event-desc{font-size:0.85rem;color:var(--text-sec);line-height:1.5;margin-top:8px}
-        .no-events{text-align:center;padding:60px 20px;color:var(--text-sec)}
-        .no-events svg{margin-bottom:12px;opacity:0.3}
+        .event-card.activity .event-tag{background:rgba(76,175,80,0.15);color:#388e3c}
+        .event-card.special .event-tag{background:rgba(233,30,99,0.15);color:#c2185b}
+        .event-desc{font-size:0.82rem;color:var(--text-sec);line-height:1.5;margin-top:8px;opacity:0.9}
+        
+        .event-expanded{max-height:500px;transition:max-height 0.3s ease}
+        .event-collapsed{max-height:90px;overflow:hidden}
+        
+        .empty-slot{background:rgba(0,0,0,0.02);border-radius:8px;padding:20px;text-align:center;color:var(--text-sec);font-size:0.8rem;margin:8px 0;border:1px dashed #e0e0e0}
+        
+        .no-events{text-align:center;padding:80px 20px;color:var(--text-sec)}
+        .no-events svg{margin-bottom:16px;opacity:0.2}
+        .no-events p{font-size:0.95rem;font-weight:500}
+        
+        @media (max-width: 480px){
+            .hour-time{width:50px;font-size:0.8rem}
+            .schedule-today{font-size:1.6rem}
+            .event-card{padding:12px}
+        }
+
 
     </style>
 </head>
@@ -208,63 +242,70 @@
         </div>
     </div>
         <div id="page-schedule" class="page">
-        <div class="schedule-header">
-            <div class="schedule-date" id="schedule-current-date">Feb 23, 2026</div>
-            <div class="schedule-today">Day <span id="schedule-day-num">1</span></div>
-            <div class="week-calendar" id="week-calendar">
-                <div class="week-day active" data-day="0">
-                    <div class="week-day-label">Mon</div>
-                    <div class="week-day-num">23</div>
-                    <div class="week-day-dot"></div>
+        <div class="schedule-wrapper">
+            <div class="schedule-header">
+                <div class="schedule-top">
+                    <div class="schedule-date" id="schedule-current-date">Feb 23, 2026</div>
+                    <button class="today-btn" onclick="jumpToToday()">Today</button>
                 </div>
-                <div class="week-day" data-day="1">
-                    <div class="week-day-label">Tue</div>
-                    <div class="week-day-num">24</div>
-                    <div class="week-day-dot"></div>
-                </div>
-                <div class="week-day" data-day="2">
-                    <div class="week-day-label">Wed</div>
-                    <div class="week-day-num">25</div>
-                    <div class="week-day-dot"></div>
-                </div>
-                <div class="week-day" data-day="3">
-                    <div class="week-day-label">Thu</div>
-                    <div class="week-day-num">26</div>
-                    <div class="week-day-dot"></div>
-                </div>
-                <div class="week-day" data-day="4">
-                    <div class="week-day-label">Fri</div>
-                    <div class="week-day-num">27</div>
-                    <div class="week-day-dot"></div>
-                </div>
-                <div class="week-day" data-day="5">
-                    <div class="week-day-label">Sat</div>
-                    <div class="week-day-num">28</div>
-                    <div class="week-day-dot"></div>
-                </div>
-                <div class="week-day" data-day="6">
-                    <div class="week-day-label">Sun</div>
-                    <div class="week-day-num">1</div>
-                    <div class="week-day-dot"></div>
-                </div>
-                <div class="week-day" data-day="7">
-                    <div class="week-day-label">Mon</div>
-                    <div class="week-day-num">2</div>
-                    <div class="week-day-dot"></div>
-                </div>
-                <div class="week-day" data-day="8">
-                    <div class="week-day-label">Tue</div>
-                    <div class="week-day-num">3</div>
-                    <div class="week-day-dot"></div>
-                </div>
-                <div class="week-day" data-day="9">
-                    <div class="week-day-label">Wed</div>
-                    <div class="week-day-num">4</div>
-                    <div class="week-day-dot"></div>
+                <div class="schedule-today">Day <span id="schedule-day-num">1</span></div>
+                <div class="week-calendar" id="week-calendar">
+                    <div class="week-day active today" data-day="0">
+                        <div class="week-day-label">Mon</div>
+                        <div class="week-day-num">23</div>
+                        <div class="week-day-dot"></div>
+                    </div>
+                    <div class="week-day" data-day="1">
+                        <div class="week-day-label">Tue</div>
+                        <div class="week-day-num">24</div>
+                        <div class="week-day-dot"></div>
+                    </div>
+                    <div class="week-day" data-day="2">
+                        <div class="week-day-label">Wed</div>
+                        <div class="week-day-num">25</div>
+                        <div class="week-day-dot"></div>
+                    </div>
+                    <div class="week-day" data-day="3">
+                        <div class="week-day-label">Thu</div>
+                        <div class="week-day-num">26</div>
+                        <div class="week-day-dot"></div>
+                    </div>
+                    <div class="week-day" data-day="4">
+                        <div class="week-day-label">Fri</div>
+                        <div class="week-day-num">27</div>
+                        <div class="week-day-dot"></div>
+                    </div>
+                    <div class="week-day" data-day="5">
+                        <div class="week-day-label">Sat</div>
+                        <div class="week-day-num">28</div>
+                        <div class="week-day-dot"></div>
+                    </div>
+                    <div class="week-day" data-day="6">
+                        <div class="week-day-label">Sun</div>
+                        <div class="week-day-num">1</div>
+                        <div class="week-day-dot"></div>
+                    </div>
+                    <div class="week-day" data-day="7">
+                        <div class="week-day-label">Mon</div>
+                        <div class="week-day-num">2</div>
+                        <div class="week-day-dot"></div>
+                    </div>
+                    <div class="week-day" data-day="8">
+                        <div class="week-day-label">Tue</div>
+                        <div class="week-day-num">3</div>
+                        <div class="week-day-dot"></div>
+                    </div>
+                    <div class="week-day" data-day="9">
+                        <div class="week-day-label">Wed</div>
+                        <div class="week-day-num">4</div>
+                        <div class="week-day-dot"></div>
+                    </div>
                 </div>
             </div>
+            <div class="schedule-content" id="schedule-content">
+                <div id="timeline-container"></div>
+            </div>
         </div>
-        <div class="timeline-container" id="timeline-container"></div>
     </div>
     <div id="map-wrap">
         <div class="map-sidebar">
@@ -491,6 +532,68 @@ document.addEventListener('DOMContentLoaded', function() {
     
     renderHourlySchedule(0);
 });
+
+
+var touchStartX = 0;
+var touchEndX = 0;
+
+function jumpToToday() {
+    showScheduleDay(0);
+}
+
+function toggleEventDetails(element) {
+    element.classList.toggle('event-expanded');
+    element.classList.toggle('event-collapsed');
+}
+
+// 滑動切換日期
+if (document.getElementById('schedule-content')) {
+    var scheduleContent = document.getElementById('schedule-content');
+    
+    scheduleContent.addEventListener('touchstart', function(e) {
+        touchStartX = e.changedTouches[0].screenX;
+    }, {passive: true});
+    
+    scheduleContent.addEventListener('touchend', function(e) {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    }, {passive: true});
+    
+    function handleSwipe() {
+        var diff = touchStartX - touchEndX;
+        if (Math.abs(diff) > 80) { // 最小滑動距離
+            if (diff > 0 && currentScheduleDay < 9) {
+                // 左滑 - 下一天
+                showScheduleDay(currentScheduleDay + 1);
+            } else if (diff < 0 && currentScheduleDay > 0) {
+                // 右滑 - 前一天
+                showScheduleDay(currentScheduleDay - 1);
+            }
+        }
+    }
+}
+
+// 當前時間指示線（僅 Day 1 顯示）
+function updateCurrentTimeLine() {
+    var now = new Date();
+    var currentHour = now.getHours();
+    var currentMinute = now.getMinutes();
+    
+    if (currentScheduleDay === 0) { // 只在 Day 1 顯示
+        var timeInHours = currentHour + (currentMinute / 60);
+        var container = document.getElementById('timeline-container');
+        var existingLine = container.querySelector('.current-time-line');
+        
+        if (existingLine) {
+            existingLine.remove();
+        }
+        
+        // 簡化：不顯示當前時間線（因為是未來日期）
+    }
+}
+
+// 更新 renderHourlySchedule 加入 current time line
+var originalRenderHourlySchedule = renderHourlySchedule;
 
 function showDay(i) {
     showScheduleDay(i);
