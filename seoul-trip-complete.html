@@ -15,8 +15,8 @@
         .title svg{color:var(--primary)}
         .search-toggle{background:transparent;border:none;cursor:pointer;padding:8px;display:flex;align-items:center;justify-content:center;position:relative;z-index:1200}
         .search-toggle svg{color:var(--text)}
-        .search-wrap{position:fixed;top:10px;right:10px;height:40px;background:var(--white);z-index:1150;display:flex;align-items:center;border-radius:20px;box-shadow:var(--shadow);width:40px;overflow:hidden;transition:all 0.3s ease;pointer-events:none}
-        .search-wrap.open{pointer-events:auto}
+        .search-wrap{position:fixed;top:10px;right:10px;height:40px;background:var(--white);z-index:1150;display:flex;align-items:center;border-radius:20px;border:2px solid #e0e0e0;width:40px;overflow:hidden;transition:all 0.3s ease;pointer-events:none}
+        .search-wrap.open{pointer-events:auto;border-color:var(--text)}
         .search-wrap.open{width:calc(100% - 20px);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
         .search-box{display:flex;align-items:center;background:transparent;padding:0 12px;gap:10px;width:100%;opacity:0;transition:opacity 0.2s ease}
         .search-wrap.open .search-box{opacity:1;transition-delay:0.1s}
