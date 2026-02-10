@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Seoul Trip</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🇰🇷</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>??</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     <style>
@@ -49,12 +49,12 @@
         .card-badges{display:flex;gap:6px;margin-bottom:10px}
         .badge-cat{font-size:0.68rem;padding:4px 10px;border-radius:10px;font-weight:600;color:white}
         .badge-zone{font-size:0.68rem;padding:4px 10px;border-radius:10px;background:#e8e8ea;color:#555;font-weight:600}
-        .cat-美食,.cat-早午餐{background:var(--food)}
-        .cat-咖啡甜點{background:var(--cafe)}
-        .cat-購物,.cat-選物,.cat-服飾,.cat-彩妝,.cat-雜貨{background:var(--shop)}
-        .cat-Work,.cat-展覽,.cat-工作咖啡{background:var(--work)}
-        .cat-住宿{background:var(--accom)}
-        .cat-景點{background:var(--attr)}
+        .cat-蝢?,.cat-?拙?擗background:var(--food)}
+        .cat-???{background:var(--cafe)}
+        .cat-鞈潛,.cat-?貊,.cat-?ˇ,.cat-敶拙?,.cat-?疏{background:var(--shop)}
+        .cat-Work,.cat-撅汗,.cat-撌乩??{background:var(--work)}
+        .cat-雿挪{background:var(--accom)}
+        .cat-?舫?{background:var(--attr)}
 
         /* Today's Picks Section */
         .today-picks{padding:16px 12px;background:linear-gradient(135deg, #fff5f5 0%, #fff 100%)}
@@ -212,12 +212,12 @@
         .locate-btn{position:absolute;bottom:90px;right:16px;width:44px;height:44px;background:white;border:none;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,0.2);cursor:pointer;z-index:1000;display:flex;align-items:center;justify-content:center}
         .custom-marker{width:28px;height:28px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,0.3);border:2px solid white}
         .custom-marker span{transform:rotate(45deg);font-size:12px}
-        .marker-美食,.marker-早午餐{background:#ff6b6b}
-        .marker-咖啡甜點{background:#f6b93b}
-        .marker-購物,.marker-服飾,.marker-選物,.marker-彩妝,.marker-雜貨{background:#a55eea}
-        .marker-Work,.marker-工作咖啡,.marker-展覽{background:#4a90d9}
-        .marker-住宿{background:#26de81}
-        .marker-景點{background:#fd9644}
+        .marker-蝢?,.marker-?拙?擗background:#ff6b6b}
+        .marker-???{background:#f6b93b}
+        .marker-鞈潛,.marker-?ˇ,.marker-?貊,.marker-敶拙?,.marker-?疏{background:#a55eea}
+        .marker-Work,.marker-撌乩??,.marker-撅汗{background:#4a90d9}
+        .marker-雿挪{background:#26de81}
+        .marker-?舫?{background:#fd9644}
         .my-marker{width:16px;height:16px;background:#4285f4;border:3px solid white;border-radius:50%;box-shadow:0 2px 6px rgba(66,133,244,0.5)}
         .leaflet-popup-content-wrapper{border-radius:12px}
         .popup-nav{display:block;margin-top:8px;background:#03C75A;color:white;text-align:center;padding:8px;border-radius:8px;text-decoration:none;font-size:0.8rem;font-weight:600}
@@ -324,7 +324,7 @@
     <div class="search-wrap" id="search-wrap">
         <div class="search-box">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" id="search" placeholder="搜尋店名、地區...">
+            <input type="text" id="search" placeholder="??摨???...">
             <button class="search-clear" id="clear" onclick="clearSearch()"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
         </div>
         <button class="search-close" onclick="toggleSearch()">
@@ -416,33 +416,33 @@
             <div class="map-controls">
                 <div class="map-filter">
                     <button class="map-filter-btn" onclick="toggleMapFilter()" id="map-filter-btn">
-                        <span id="map-filter-text"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:text-bottom;margin-right:4px"><circle cx="12" cy="11" r="3"/><path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.828 0l-4.243 -4.243a8 8 0 1 1 11.314 0z"/></svg>全部地標</span>
+                        <span id="map-filter-text"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:text-bottom;margin-right:4px"><circle cx="12" cy="11" r="3"/><path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.828 0l-4.243 -4.243a8 8 0 1 1 11.314 0z"/></svg>?券?唳?</span>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
                     </button>
                     <div class="map-filter-dropdown" id="map-filter-dropdown">
-                        <div class="map-filter-option active" data-value="all" data-label="全部地標">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:text-bottom;margin-right:4px"><circle cx="12" cy="11" r="3"/><path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.828 0l-4.243 -4.243a8 8 0 1 1 11.314 0z"/></svg>全部地標
+                        <div class="map-filter-option active" data-value="all" data-label="?券?唳?">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:text-bottom;margin-right:4px"><circle cx="12" cy="11" r="3"/><path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.828 0l-4.243 -4.243a8 8 0 1 1 11.314 0z"/></svg>?券?唳?
                         </div>
-                        <div class="map-filter-option" data-value="美食" data-label="美食">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:text-bottom;margin-right:4px"><path d="M4 8h16a1 1 0 0 1 1 1v.5c0 1.5 -2.517 5.573 -4 6.5v1a1 1 0 0 1 -1 1h-8a1 1 0 0 1 -1 -1v-1c-1.687 -1.054 -4 -5 -4 -6.5v-.5a1 1 0 0 1 1 -1z"/><path d="M12 4a2.4 2.4 0 0 0 -1 2a2.4 2.4 0 0 0 1 2"/></svg>美食
+                        <div class="map-filter-option" data-value="蝢?" data-label="蝢?">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:text-bottom;margin-right:4px"><path d="M4 8h16a1 1 0 0 1 1 1v.5c0 1.5 -2.517 5.573 -4 6.5v1a1 1 0 0 1 -1 1h-8a1 1 0 0 1 -1 -1v-1c-1.687 -1.054 -4 -5 -4 -6.5v-.5a1 1 0 0 1 1 -1z"/><path d="M12 4a2.4 2.4 0 0 0 -1 2a2.4 2.4 0 0 0 1 2"/></svg>蝢?
                         </div>
-                        <div class="map-filter-option" data-value="咖啡甜點" data-label="咖啡甜點">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:text-bottom;margin-right:4px"><path d="M3 14c.83 .642 2.077 1.017 3.5 1c1.423 .017 2.67 -.358 3.5 -1c.83 -.642 2.077 -1.017 3.5 -1c1.423 -.017 2.67 .358 3.5 1"/><path d="M8 3a2.4 2.4 0 0 0 -1 2a2.4 2.4 0 0 0 1 2"/><path d="M12 3a2.4 2.4 0 0 0 -1 2a2.4 2.4 0 0 0 1 2"/><path d="M3 10h14v5a6 6 0 0 1 -6 6h-2a6 6 0 0 1 -6 -6v-5z"/><path d="M16.746 16.726a3 3 0 1 0 .252 -5.555"/></svg>咖啡甜點
+                        <div class="map-filter-option" data-value="???" data-label="???">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:text-bottom;margin-right:4px"><path d="M3 14c.83 .642 2.077 1.017 3.5 1c1.423 .017 2.67 -.358 3.5 -1c.83 -.642 2.077 -1.017 3.5 -1c1.423 -.017 2.67 .358 3.5 1"/><path d="M8 3a2.4 2.4 0 0 0 -1 2a2.4 2.4 0 0 0 1 2"/><path d="M12 3a2.4 2.4 0 0 0 -1 2a2.4 2.4 0 0 0 1 2"/><path d="M3 10h14v5a6 6 0 0 1 -6 6h-2a6 6 0 0 1 -6 -6v-5z"/><path d="M16.746 16.726a3 3 0 1 0 .252 -5.555"/></svg>???
                         </div>
-                        <div class="map-filter-option" data-value="購物" data-label="購物">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:text-bottom;margin-right:4px"><path d="M6.331 8h11.339a2 2 0 0 1 1.977 2.304l-1.255 8.152a3 3 0 0 1 -2.966 2.544h-6.852a3 3 0 0 1 -2.965 -2.544l-1.255 -8.152a2 2 0 0 1 1.977 -2.304z"/><path d="M9 11v-5a3 3 0 0 1 6 0v5"/></svg>購物
+                        <div class="map-filter-option" data-value="鞈潛" data-label="鞈潛">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:text-bottom;margin-right:4px"><path d="M6.331 8h11.339a2 2 0 0 1 1.977 2.304l-1.255 8.152a3 3 0 0 1 -2.966 2.544h-6.852a3 3 0 0 1 -2.965 -2.544l-1.255 -8.152a2 2 0 0 1 1.977 -2.304z"/><path d="M9 11v-5a3 3 0 0 1 6 0v5"/></svg>鞈潛
                         </div>
                         <div class="map-filter-option" data-value="Work" data-label="Work">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:text-bottom;margin-right:4px"><rect x="3" y="5" width="18" height="14" rx="1"/><path d="M7 15v-6l2 2l2 -2v6"/><path d="M14 10h2"/><path d="M14 13h2"/></svg>Work
                         </div>
-                        <div class="map-filter-option" data-value="住宿" data-label="住宿">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:text-bottom;margin-right:4px"><path d="M5 12l-2 0l9 -9l9 9l-2 0l0 7a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z"/></svg>住宿
+                        <div class="map-filter-option" data-value="雿挪" data-label="雿挪">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:text-bottom;margin-right:4px"><path d="M5 12l-2 0l9 -9l9 9l-2 0l0 7a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z"/></svg>雿挪
                         </div>
-                        <div class="map-filter-option" data-value="展覽" data-label="展覽">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:text-bottom;margin-right:4px"><path d="M12 21a9 9 0 0 1 0 -18c4.97 0 9 3.582 9 8c0 1.06 -.474 2.078 -1.318 2.828c-.844 .75 -1.989 1.172 -3.182 1.172h-2.5a2 2 0 0 0 -1 3.75a1.3 1.3 0 0 1 -1 2.25"/><circle cx="7.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="12" cy="7.5" r=".5" fill="currentColor"/><circle cx="16.5" cy="10.5" r=".5" fill="currentColor"/></svg>展覽
+                        <div class="map-filter-option" data-value="撅汗" data-label="撅汗">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:text-bottom;margin-right:4px"><path d="M12 21a9 9 0 0 1 0 -18c4.97 0 9 3.582 9 8c0 1.06 -.474 2.078 -1.318 2.828c-.844 .75 -1.989 1.172 -3.182 1.172h-2.5a2 2 0 0 0 -1 3.75a1.3 1.3 0 0 1 -1 2.25"/><circle cx="7.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="12" cy="7.5" r=".5" fill="currentColor"/><circle cx="16.5" cy="10.5" r=".5" fill="currentColor"/></svg>撅汗
                         </div>
-                        <div class="map-filter-option" data-value="景點" data-label="景點">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:text-bottom;margin-right:4px"><path d="M5 7h1a2 2 0 0 0 2 -2a1 1 0 0 1 1 -1h6a1 1 0 0 1 1 1a2 2 0 0 0 2 2h1a2 2 0 0 1 2 2v9a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-9a2 2 0 0 1 2 -2"/><circle cx="12" cy="13" r="3"/></svg>景點
+                        <div class="map-filter-option" data-value="?舫?" data-label="?舫?">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:text-bottom;margin-right:4px"><path d="M5 7h1a2 2 0 0 0 2 -2a1 1 0 0 1 1 -1h6a1 1 0 0 1 1 1a2 2 0 0 0 2 2h1a2 2 0 0 1 2 2v9a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-9a2 2 0 0 1 2 -2"/><circle cx="12" cy="13" r="3"/></svg>?舫?
                         </div>
                     </div>
                 </div>
@@ -457,7 +457,7 @@
                 <div class="sheet-handle"></div>
                 <div class="sheet-title">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="11" r="3"/><path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.828 0l-4.243 -4.243a8 8 0 1 1 11.314 0z"/></svg>
-                    <span id="sheet-title-text">全部地點</span>
+                    <span id="sheet-title-text">?券?圈?</span>
                     <span class="sheet-count" id="sheet-count"></span>
                 </div>
             </div>
@@ -467,15 +467,15 @@
     <nav class="nav">
         <button class="nav-item active" onclick="go(0)">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="11" r="3"/><path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.828 0l-4.243 -4.243a8 8 0 1 1 11.314 0z"/></svg>
-            <span class="nav-label">景點</span>
+            <span class="nav-label">?舫?</span>
         </button>
         <button class="nav-item" onclick="go(1)">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="5" width="16" height="16" rx="2"/><line x1="16" y1="3" x2="16" y2="7"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="4" y1="11" x2="20" y2="11"/></svg>
-            <span class="nav-label">行程</span>
+            <span class="nav-label">銵?</span>
         </button>
         <button class="nav-item" onclick="go(2)">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
-            <span class="nav-label">地圖</span>
+            <span class="nav-label">?啣?</span>
         </button>
     </nav>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -483,37 +483,37 @@
 
 var SCHEDULE_HOURLY = {
     0: [ // Day 1
-        {hour: 18, duration: 3.5, title: '桃園 → 仁川', desc: 'TR 896 [Scoot B787-9]\nTaoyuan Intl Airport Terminal 1', tag: '航班', type: 'flight', icon: 'plane'}
+        {hour: 18, duration: 3.5, title: '獢? ??隞?', desc: 'TR 896 [Scoot B787-9]\nTaoyuan Intl Airport Terminal 1', tag: '?芰', type: 'flight', icon: 'plane'}
     ],
     1: [ // Day 2
-        {hour: 10, duration: 10, title: '工作日', desc: 'Tina & Bian 工作時間\n13:00 午餐', tag: '工作', type: 'work', icon: 'briefcase'}
+        {hour: 10, duration: 10, title: '撌乩???, desc: 'Tina & Bian 撌乩???\n13:00 ??', tag: '撌乩?', type: 'work', icon: 'briefcase'}
     ],
     2: [ // Day 3
-        {hour: 10, duration: 10, title: '工作日', desc: 'Tina & Bian 工作時間\n13:00 午餐', tag: '工作', type: 'work', icon: 'briefcase'}
+        {hour: 10, duration: 10, title: '撌乩???, desc: 'Tina & Bian 撌乩???\n13:00 ??', tag: '撌乩?', type: 'work', icon: 'briefcase'}
     ],
     3: [ // Day 4
-        {hour: 10, duration: 8, title: 'Free Day', desc: '自由行程，隨意安排', tag: '自由活動', type: 'activity', icon: 'confetti'}
+        {hour: 10, duration: 8, title: 'Free Day', desc: '?芰銵?嚗????, tag: '?芰瘣餃?', type: 'activity', icon: 'confetti'}
     ],
     4: [ // Day 5
-        {hour: 10, duration: 10, title: '逛街 / 北村+夜景', desc: '探索首爾傳統與現代', tag: '觀光', type: 'activity', icon: 'lantern'}
+        {hour: 10, duration: 10, title: '?? / ??+憭', desc: '?Ｙ揣擐?喟絞?隞?, tag: '閫??, type: 'activity', icon: 'lantern'}
     ],
     5: [ // Day 6
-        {hour: 9, duration: 10, title: 'Eobi 冰谷 & 南怡島', desc: '一日遊行程', tag: '戶外活動', type: 'activity', icon: 'mountain'}
+        {hour: 9, duration: 10, title: 'Eobi ?啗健 & ?∪雀', desc: '銝?仿?銵?', tag: '?嗅?瘣餃?', type: 'activity', icon: 'mountain'}
     ],
     6: [ // Day 7
-        {hour: 9, duration: 1, title: '通勤', desc: '約一小時車程', tag: '交通', type: 'activity', icon: 'car'},
-        {hour: 11, duration: 3, title: 'Wedding', desc: '婚禮典禮', tag: '特別活動', type: 'special', icon: 'church'},
-        {hour: 15, duration: 4, title: '仁川 or 逛街', desc: '自由活動時間', tag: '購物', type: 'activity', icon: 'shopping-bag'}
+        {hour: 9, duration: 1, title: '?', desc: '蝝?撠?頠?', tag: '鈭日?, type: 'activity', icon: 'car'},
+        {hour: 11, duration: 3, title: 'Wedding', desc: '憍旨?貊旨', tag: '?孵瘣餃?', type: 'special', icon: 'church'},
+        {hour: 15, duration: 4, title: '隞? or ??', desc: '?芰瘣餃???', tag: '鞈潛', type: 'activity', icon: 'shopping-bag'}
     ],
     7: [ // Day 8
-        {hour: 9, duration: 10, title: '北緯 38 度線', desc: 'DMZ 一日遊', tag: '觀光', type: 'activity', icon: 'world'}
+        {hour: 9, duration: 10, title: '?楝 38 摨衣?', desc: 'DMZ 銝?仿?', tag: '閫??, type: 'activity', icon: 'world'}
     ],
     8: [ // Day 9
-        {hour: 10, duration: 8, title: '恩平韓屋村', desc: '體驗傳統韓屋', tag: '文化體驗', type: 'activity', icon: 'building-monument'}
+        {hour: 10, duration: 8, title: '?拙像????, desc: '擃??喟絞??', tag: '??擃?', type: 'activity', icon: 'building-monument'}
     ],
     9: [ // Day 10
-        {hour: 10, duration: 10, title: '逛街 + 最後採購', desc: '準備回家囉', tag: '購物', type: 'activity', icon: 'shopping-bag'},
-        {hour: 23, duration: 1.75, title: '仁川 → 桃園', desc: 'TR 897 [Scoot B787-9]\nIncheon Intl Terminal 1', tag: '航班', type: 'flight', icon: 'plane'}
+        {hour: 10, duration: 10, title: '?? + ?敺鞈?, desc: '皞??振??, tag: '鞈潛', type: 'activity', icon: 'shopping-bag'},
+        {hour: 23, duration: 1.75, title: '隞? ??獢?', desc: 'TR 897 [Scoot B787-9]\nIncheon Intl Terminal 1', tag: '?芰', type: 'flight', icon: 'plane'}
     ]
 };
 
@@ -556,30 +556,29 @@ function renderHourlySchedule(dayIndex) {
     var events = SCHEDULE_HOURLY[dayIndex] || [];
     
     if (events.length === 0) {
-        container.innerHTML = '<div class="no-events"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="5" width="16" height="16" rx="2"/><line x1="16" y1="3" x2="16" y2="7"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="4" y1="11" x2="20" y2="11"/></svg><p>這天沒有安排行程</p></div>';
+        container.innerHTML = '<div class="no-events"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="5" width="16" height="16" rx="2"/><line x1="16" y1="3" x2="16" y2="7"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="4" y1="11" x2="20" y2="11"/></svg><p>?予瘝?摰?銵?</p></div>';
         return;
     }
     
-    // 找出行程覆蓋的時間範圍
-    var minHour = 24, maxHour = 0;
+    // ?曉銵?閬???????    var minHour = 24, maxHour = 0;
     events.forEach(function(e) {
         if (e.hour < minHour) minHour = e.hour;
         var endHour = e.hour + Math.ceil(e.duration);
         if (endHour > maxHour) maxHour = endHour;
     });
     
-    // 擴展範圍前後各1小時
+    // ?游?蝭?????撠?
     minHour = Math.max(0, minHour - 1);
     maxHour = Math.min(24, maxHour + 1);
     
-    // 建立時間-事件對照表（改為按結束時間）
+    // 撱箇???-鈭辣撠銵剁??寧??????
     var hourEvents = {};
     events.forEach(function(event) {
         if (!hourEvents[event.hour]) hourEvents[event.hour] = [];
         hourEvents[event.hour].push(event);
     });
     
-    var HOUR_HEIGHT = 80; // 每小時固定高度 80px
+    var HOUR_HEIGHT = 80; // 瘥??摰?摨?80px
     var html = '';
     
     for (var h = minHour; h < maxHour; h++) {
@@ -591,8 +590,8 @@ function renderHourlySchedule(dayIndex) {
             var endMinute = Math.floor((endHour % 1) * 60);
             var timeDetail = formatHour(evt.hour) + ' - ' + formatHour(Math.floor(endHour)) + ':' + (endMinute < 10 ? '0' : '') + (endMinute || '00');
             
-            // 精確計算卡片高度：duration × 每小時高度 - 間距
-            var cardHeight = (evt.duration * HOUR_HEIGHT) - 20; // 減去 margin
+            // 蝎曄Ⅱ閮??∠?擃漲嚗uration ? 瘥???摨?- ??
+            var cardHeight = (evt.duration * HOUR_HEIGHT) - 20; // 皜 margin
             var heightStyle = ' style="height:' + cardHeight + 'px"';
             
             return '<div class="event-card ' + evt.type + '"' + heightStyle + '>' +
@@ -659,7 +658,7 @@ function toggleEventDetails(element) {
     element.classList.toggle('event-collapsed');
 }
 
-// 滑動切換日期
+// 皛????交?
 if (document.getElementById('schedule-content')) {
     var scheduleContent = document.getElementById('schedule-content');
     
@@ -674,25 +673,21 @@ if (document.getElementById('schedule-content')) {
     
     function handleSwipe() {
         var diff = touchStartX - touchEndX;
-        if (Math.abs(diff) > 80) { // 最小滑動距離
-            if (diff > 0 && currentScheduleDay < 9) {
-                // 左滑 - 下一天
-                showScheduleDay(currentScheduleDay + 1);
+        if (Math.abs(diff) > 80) { // ?撠?????            if (diff > 0 && currentScheduleDay < 9) {
+                // 撌行? - 銝?憭?                showScheduleDay(currentScheduleDay + 1);
             } else if (diff < 0 && currentScheduleDay > 0) {
-                // 右滑 - 前一天
-                showScheduleDay(currentScheduleDay - 1);
+                // ?單? - ??憭?                showScheduleDay(currentScheduleDay - 1);
             }
         }
     }
 }
 
-// 當前時間指示線（僅 Day 1 顯示）
-function updateCurrentTimeLine() {
+// ?嗅????內蝺???Day 1 憿舐內嚗?function updateCurrentTimeLine() {
     var now = new Date();
     var currentHour = now.getHours();
     var currentMinute = now.getMinutes();
     
-    if (currentScheduleDay === 0) { // 只在 Day 1 顯示
+    if (currentScheduleDay === 0) { // ?芸 Day 1 憿舐內
         var timeInHours = currentHour + (currentMinute / 60);
         var container = document.getElementById('timeline-container');
         var existingLine = container.querySelector('.current-time-line');
@@ -701,11 +696,11 @@ function updateCurrentTimeLine() {
             existingLine.remove();
         }
         
-        // 簡化：不顯示當前時間線（因為是未來日期）
+        // 蝪∪?嚗?憿舐內?嗅???蝺???舀靘??
     }
 }
 
-// 更新 renderHourlySchedule 加入 current time line
+// ?湔 renderHourlySchedule ? current time line
 var originalRenderHourlySchedule = renderHourlySchedule;
 
 
@@ -725,7 +720,7 @@ function toggleBottomSheet() {
     }
 }
 
-// 觸控滑動支援
+// 閫豢皛??舀
 var sheetTouchStart = 0;
 var sheetTouchCurrent = 0;
 
@@ -747,8 +742,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (Math.abs(diff) > 50) {
                 if (diff > 0) {
-                    // 向下滑
-                    if (sheetState === 'expanded') {
+                    // ??皛?                    if (sheetState === 'expanded') {
                         sheetState = 'half';
                         sheet.className = 'bottom-sheet half';
                     } else if (sheetState === 'half') {
@@ -756,8 +750,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         sheet.className = 'bottom-sheet collapsed';
                     }
                 } else {
-                    // 向上滑
-                    if (sheetState === 'collapsed') {
+                    // ??皛?                    if (sheetState === 'collapsed') {
                         sheetState = 'half';
                         sheet.className = 'bottom-sheet half';
                     } else if (sheetState === 'half') {
@@ -810,15 +803,15 @@ var currentScheduleDay = 0;
 
 
 
-var D=[{cn:"清和屋 乙支路直營店",kr:"청와옥 을지로3가직영점",cat:"美食",note:"劉在石推薦湯飯",hours:"08:00-22:00",zone:"明洞/鍾路",lat:37.566,lon:126.99,must:"招牌：豬肉湯飯、內臟湯飯",price:"₩10,000-15,000"},{cn:"倫敦貝果博物館 安國店",kr:"런던베이글뮤지엄 안국점",cat:"早午餐",note:"推大蒜口味",hours:"08:00-18:00",zone:"明洞/鍾路",lat:37.579,lon:126.986,must:"必點：大蒜貝果、奶油起司抹醬",price:"₩5,000-12,000"},{cn:"新仙雪濃湯 明洞店",kr:"신선설농탕 명동점",cat:"美食",note:"建議加鹽巴",hours:"24小時",zone:"明洞/鍾路",lat:37.565,lon:126.987,must:"招牌：牛骨雪濃湯",price:"₩12,000-15,000"},{cn:"無垢屋",kr:"무구옥",cat:"美食",note:"12:00開放訂位",hours:"11:30-21:00",zone:"明洞/鍾路",lat:37.578,lon:126.981,must:"必點：鮑魚粥、海鮮粥、南瓜粥",price:"₩15,000-25,000"},{cn:"朝朝刀削麵 市廳店",kr:"조조칼국수 시청점",cat:"美食",hours:"10:00-21:30",zone:"明洞/鍾路",lat:37.562,lon:126.975,must:"招牌：手工刀削麵、餃子",price:"₩9,000-13,000"},{cn:"豬仔存錢筒",kr:"돼지저금통",cat:"美食",note:"弘大站8號出口",hours:"14:00-02:00",zone:"弘大/延南",lat:37.556,lon:126.926,must:"必點：鮮烤五花肉、豬頸肉",price:"₩15,000-20,000/人"},{cn:"橋村筆房",kr:"교촌필방",cat:"美食",note:"週一公休",hours:"16:00-23:30",zone:"漢南/梨泰院",lat:37.526,lon:127.001,must:"招牌：炭火雞肉串",price:"₩3,000-6,000/串"},{cn:"JO & DAWSON",kr:"조앤도슨",cat:"咖啡甜點",note:"焦糖布丁名店",hours:"12:00-21:00",zone:"弘大/延南",lat:37.564,lon:126.923,must:"必點：焦糖布丁、巴斯克起司蛋糕",price:"₩8,000-15,000"},{cn:"達摩吉 乙支路店",kr:"달마지 을지로점",cat:"美食",note:"最後點餐01:00",hours:"16:00-02:00",zone:"明洞/鍾路",lat:37.566,lon:126.999,must:"推薦：炸雞、啤酒套餐",price:"₩18,000-25,000"},{cn:"龍龍先生 聖水店",kr:"용용선생 성수점",cat:"美食",note:"最後點餐21:00",hours:"16:00-22:00",zone:"聖水洞",lat:37.544,lon:127.057,must:"必點：麻辣香鍋、水煮牛肉",price:"₩15,000-25,000"},{cn:"鐘三六",kr:"종삼육",cat:"美食",note:"鐘路三街站",hours:"14:00-23:30",zone:"明洞/鍾路",lat:37.573,lon:126.99,must:"招牌：韓牛燒肉、牛五花",price:"₩30,000-50,000/人"},{cn:"孫家燉雞",kr:"손가네닭한마리",cat:"美食",note:"隱藏版名店",hours:"11:00-22:00",zone:"明洞/鍾路",lat:37.574,lon:127.021,must:"必點：一隻雞燉鍋",price:"₩25,000-30,000"},{cn:"統營蒸牡蠣",kr:"통영굴찜",cat:"美食",note:"季節限定",hours:"11:00-22:00",zone:"汝矣島",lat:37.527,lon:126.924,must:"招牌：蒸牡蠣套餐",price:"₩25,000-40,000"},{cn:"無垢屋 聖水店",kr:"무구옥 성수점",cat:"美食",note:"聖水站分店",hours:"11:30-21:00",zone:"聖水洞",lat:37.545,lon:127.059,must:"必點：鮑魚粥、南瓜粥",price:"₩15,000-25,000"},{cn:"漢南洞馬鈴薯排骨湯",kr:"한남동감자탕",cat:"美食",note:"必吃老店",hours:"24小時",zone:"漢南/梨泰院",lat:37.531,lon:126.997,must:"招牌：馬鈴薯排骨湯",price:"₩12,000-20,000"},{cn:"Parole & Langue",kr:"파롤앤랑그",cat:"咖啡甜點",note:"塔類甜點熱門店",hours:"13:00-21:00",zone:"弘大/延南",lat:37.565,lon:126.923,must:"必點：水果塔、巧克力塔",price:"₩8,000-15,000"},{cn:"Butty三明治",kr:"버티샌드위치",cat:"咖啡甜點",note:"巧巴達三明治",hours:"11:00-19:00",zone:"弘大/延南",lat:37.556,lon:126.901,must:"招牌：巧巴達三明治",price:"₩8,000-12,000"},{cn:"馬山老奶奶鮟鱇魚蒸",kr:"마산할매아구찜",cat:"美食",note:"在地口碑店",hours:"11:00-22:00",zone:"漢南/梨泰院",lat:37.55,lon:126.98,must:"必點：辣蒸鮟鱇魚",price:"₩35,000-50,000"},{cn:"hetras 聖水",kr:"헤트라스 성수",cat:"購物",note:"推薦No.29,No.7,No.5",hours:"11:00-20:00",zone:"聖水洞",lat:37.541,lon:127.06,must:"必買：香水No.29、No.7、No.5",price:"₩80,000-150,000"},{cn:"newmix coffee",kr:"뉴믹스커피",cat:"咖啡甜點",note:"必買即溶咖啡伴手禮",hours:"11:00-20:00",zone:"聖水洞",lat:37.541,lon:127.06,must:"必買：即溶咖啡禮盒",price:"₩15,000-35,000"},{cn:"ADERERROR 聖水",kr:"아더 성수 스페이스",cat:"服飾",note:"旗艦概念店",hours:"13:00-21:00",zone:"聖水洞",lat:37.536,lon:127.054,must:"推薦：經典Logo衛衣",price:"₩100,000-400,000"},{cn:"BLUE ELEPHANT 聖水",kr:"블루엘리펀트 성수",cat:"服飾",note:"平價墨鏡品牌",hours:"11:00-20:00",zone:"聖水洞",lat:37.541,lon:127.057,must:"必買：平價太陽眼鏡",price:"₩25,000-60,000"},{cn:"fwee Agit",kr:"퓌 아지트",cat:"彩妝",note:"必買布丁唇泥",hours:"11:00-21:00",zone:"聖水洞",lat:37.543,lon:127.054,must:"必買：布丁唇泥、光澤唇蜜",price:"₩15,000-30,000"},{cn:"DIOR 聖水",kr:"디올 성수",cat:"景點",note:"熱門地標拍照",hours:"11:00-20:00",zone:"聖水洞",lat:37.544,lon:127.053,must:"拍照打卡點",price:"免費入場"},{cn:"NYUNYU 聖水",kr:"뉴뉴 성수",cat:"服飾",note:"飾品購物聖地",hours:"11:00-23:00",zone:"聖水洞",lat:37.545,lon:127.056,must:"必買：韓系飾品、耳環",price:"₩10,000-50,000"},{cn:"띵굴 聖水",kr:"띵굴스토어 성수",cat:"選物",note:"生活選物店",hours:"11:00-21:00",zone:"聖水洞",lat:37.541,lon:127.057,must:"推薦：文具雜貨、香氛蠟燭",price:"₩10,000-80,000"},{cn:"KODAK 東大門",kr:"코닥어패럴 동대문",cat:"服飾",note:"位於DunDun 2樓",hours:"10:30-22:00",zone:"明洞/鍾路",lat:37.569,lon:127.011,must:"必買：復古風外套、帽T",price:"₩50,000-150,000"},{cn:"ept 聖水",kr:"이피티 성수",cat:"服飾",note:"韓國熱門運動鞋",hours:"11:00-20:00",zone:"聖水洞",lat:37.541,lon:127.06,must:"必買：韓國熱門運動鞋",price:"₩100,000-200,000"},{cn:"HAUS NOWHERE",kr:"하우스 노웨어",cat:"選物",note:"臘腸狗地標",hours:"11:00-21:00",zone:"聖水洞",lat:37.541,lon:127.059,must:"推薦：設計師品牌服飾",price:"₩80,000-300,000"},{cn:"thisisneverthat",kr:"디스이즈네버댓",cat:"服飾",note:"街頭潮流第一站",hours:"12:00-21:00",zone:"弘大/延南",lat:37.552,lon:126.92,must:"必買：街頭潮流T恤、衛衣",price:"₩50,000-200,000"},{cn:"KITH 首爾",kr:"키스 서울",cat:"服飾",note:"潮流名店",hours:"11:00-20:00",zone:"聖水洞",lat:37.541,lon:127.06,must:"推薦：聯名限定款",price:"₩100,000-500,000"},{cn:"HUMAN MADE",kr:"휴먼메이드",cat:"服飾",note:"熱門潮牌",hours:"11:00-20:00",zone:"聖水洞",lat:37.541,lon:127.054,must:"必買：經典愛心Logo",price:"₩150,000-400,000"},{cn:"MUSINSA EMPTY",kr:"무신사 엠프티",cat:"選物",note:"大型選品店",hours:"11:00-20:00",zone:"聖水洞",lat:37.536,lon:127.054,must:"推薦：韓國設計師品牌",price:"₩30,000-300,000"},{cn:"清水堂",kr:"청수당",cat:"咖啡甜點",note:"益善洞竹林造景",hours:"11:30-22:00",zone:"明洞/鍾路",lat:37.574,lon:126.991,must:"必點：竹林座位區拍照、紅豆粥",price:"₩8,000-15,000"},{cn:"YM Coffee House",kr:"YM커피하우스",cat:"咖啡甜點",note:"教堂風格專業手沖",hours:"12:00-22:00",zone:"首爾市區",lat:37.62,lon:126.917,must:"推薦：手沖咖啡",price:"₩6,000-12,000"},{cn:"Cafe Layered 延南店",kr:"카페 레이어드 연남점",cat:"咖啡甜點",note:"司康名店",hours:"11:00-22:00",zone:"弘大/延南",lat:37.565,lon:126.924,must:"必點：司康、奶油司康",price:"₩5,000-10,000"},{cn:"Thanks Oat 延南",kr:"땡스오트 연남",cat:"咖啡甜點",note:"延南洞手工優格",hours:"10:00-19:00",zone:"弘大/延南",lat:37.565,lon:126.921,must:"必點：手工優格、燕麥碗",price:"₩8,000-15,000"},{cn:"今天也足夠",kr:"오늘도충분해",cat:"咖啡甜點",note:"週二公休",hours:"12:00-20:00",zone:"弘大/延南",lat:37.56,lon:126.925,must:"推薦：蛋糕、手工甜點",price:"₩7,000-15,000"},{cn:"素賢堂",kr:"소현당",cat:"咖啡甜點",note:"韓屋茶室",hours:"11:00-20:00",zone:"明洞/鍾路",lat:37.58,lon:126.981,must:"必點：傳統韓茶、藥菓",price:"₩10,000-18,000"},{cn:"Artist Bakery",kr:"아티스트 베이커리",cat:"咖啡甜點",note:"鹽可頌排隊名店",hours:"08:00-20:00",zone:"明洞/鍾路",lat:37.576,lon:126.984,must:"必點：鹽可頌",price:"₩4,000-8,000"},{cn:"29CM 聖水",kr:"이구성수",cat:"選物",note:"線上選品實體店",hours:"11:00-20:00",zone:"聖水洞",lat:37.545,lon:127.053,must:"推薦：韓國設計師品牌",price:"₩30,000-200,000"},{cn:"Ground Seesaw 西村",kr:"그라운드시소 서촌",cat:"展覽",note:"質感展覽空間",hours:"10:00-19:00",zone:"明洞/鍾路",lat:37.578,lon:126.973,must:"推薦：當期展覽",price:"₩15,000-20,000"},{cn:"廣藏市場 156號",kr:"광장시장 156호",cat:"雜貨",note:"購買韓國製棉被",hours:"09:00-18:00",zone:"明洞/鍾路",lat:37.57,lon:127,must:"必買：韓國製手工棉被",price:"₩100,000-500,000"},{cn:"Cociety 首爾林",kr:"코사이어티 서울숲",cat:"工作咖啡",note:"創意工作空間(週一休)",hours:"12:00-20:00",zone:"聖水洞",lat:37.556,lon:127.043,must:"推薦：咖啡、甜點",price:"₩6,000-12,000"},{cn:"Brautor",kr:"브라우터",cat:"工作咖啡",note:"蝴蝶餅名店",hours:"08:00-22:00",zone:"聖水洞",lat:37.549,lon:127.045,must:"必點：蝴蝶餅",price:"₩5,000-12,000"},{cn:"Debunk",kr:"디벙크",cat:"工作咖啡",note:"地下層讀書氛圍",hours:"10:00-23:00",zone:"弘大/延南",lat:37.548,lon:126.915,must:"推薦：咖啡",price:"₩5,000-10,000"},{cn:"Hollys Coffee 弘大站",kr:"할리스 홍대역점",cat:"工作咖啡",note:"24小時",hours:"24小時",zone:"弘大/延南",lat:37.556,lon:126.923,must:"推薦：美式咖啡",price:"₩5,000-12,000"},{cn:"Ediya Coffee Lab",kr:"이디야커피랩",cat:"工作咖啡",note:"旗艦店",hours:"07:30-02:00",zone:"江南",lat:37.511,lon:127.033,must:"推薦：咖啡、甜點",price:"₩4,000-10,000"},{cn:"Terarosa POSCO",kr:"테라로사 포스코센터점",cat:"工作咖啡",note:"鋼鐵書架牆",hours:"07:30-21:00",zone:"江南",lat:37.506,lon:127.056,must:"推薦：手沖咖啡",price:"₩6,000-15,000"},{cn:"1人1杯",kr:"1人1杯",cat:"咖啡甜點",note:"絕美環景",hours:"11:00-21:00",zone:"恩平區",lat:37.641,lon:126.938},{cn:"Dotom",kr:"Dotom",cat:"美食",note:"在地人下班後會來吃的烤肉店",hours:"17:00-23:00",zone:"建大/廣津區",lat:37.556,lon:127.078,must:"推薦：烤肉",price:"₩20,000-30,000/人"},{cn:"손칼국수보쌈",kr:"훼미리손칼국수보쌈",cat:"美食",note:"菜包肉 刀削麵",hours:"11:00-22:00",zone:"聖水洞",lat:37.549,lon:127.045,must:"必點：菜包肉、刀削麵",price:"₩12,000-18,000"},{cn:"自然島鹽麵包",kr:"Jayeondo Sogeumppang",cat:"咖啡甜點",note:"鹽麵包名店",hours:"08:00-20:00",zone:"聖水洞",lat:37.542,lon:127.055,must:"必買：鹽麵包",price:"₩3,000-5,000"},{cn:"Kyewol Gomtang",kr:"Kyewol Gomtang",cat:"美食",note:"湯飯",hours:"24小時",zone:"聖水洞",lat:37.54,lon:127.048,must:"招牌：牛骨湯飯",price:"₩10,000-13,000"},{cn:"Thweet Seongsu",kr:"Thweet Seongsu",cat:"咖啡甜點",note:"威士忌冰淇淋",hours:"13:00-22:00",zone:"聖水洞",lat:37.545,lon:127.052,must:"必點：威士忌冰淇淋",price:"₩8,000-12,000"},{cn:"MilkyShop Seongsu",kr:"MilkyShop Seongsu Store",cat:"購物",note:"焦糖奶油餅乾伴手禮",hours:"11:00-20:00",zone:"聖水洞",lat:37.544,lon:127.051,must:"必買：焦糖奶油餅乾",price:"₩12,000-18,000"},{cn:"祖傳三代馬鈴薯排骨湯",kr:"소문난 성수 감자탕",cat:"美食",note:"24小時營業",hours:"24小時",zone:"聖水洞",lat:37.543,lon:127.054,must:"招牌：馬鈴薯排骨湯",price:"₩13,000-18,000"},{cn:"29cm.home",kr:"29cm.home",cat:"選物",note:"質感家居選物店 gelato",hours:"12:00-21:00",zone:"聖水洞",lat:37.543,lon:127.056,must:"推薦：開心果gelato、設計選物",price:"₩5,000-50,000"},{cn:"LOE SEONGSU",kr:"로에 성수",cat:"購物",note:"韓國小眾品牌香水 免費刻字",hours:"11:00-20:00",zone:"聖水洞",lat:37.542,lon:127.056,must:"必買：小眾香水、免費刻字服務",price:"₩50,000-120,000"},{cn:"Standard Bread",kr:"Standard Bread",cat:"咖啡甜點",note:"鐵鍋焦糖法式吐司",hours:"08:00-19:00",zone:"聖水洞",lat:37.542,lon:127.061,must:"必點：鐵鍋焦糖法式吐司",price:"₩6,000-15,000"},{cn:"Neungdong Minari",kr:"Neungdong Minari Seongsu",cat:"美食",note:"Hebe東海來吃過",hours:"10:00-22:00",zone:"聖水洞",lat:37.543,lon:127.054,must:"招牌：水芹牛骨湯",price:"₩12,000-15,000"},{cn:"STAFF PICKS",kr:"STAFF PICKS",cat:"咖啡甜點",note:"美咖啡廳",hours:"10:00-21:00",zone:"首爾市區",lat:37.577,lon:126.968},{cn:"Milestone Coffee",kr:"Milestone Coffee Hannam",cat:"咖啡甜點",note:"漢南洞潮流區",hours:"09:00-20:00",zone:"漢南/梨泰院",lat:37.538,lon:127.003},{cn:"COFFEE & CIGARETTES",kr:"COFFEE & CIGARETTES",cat:"咖啡甜點",note:"17樓高空咖啡",hours:"11:00-23:00",zone:"明洞/鍾路",lat:37.563,lon:126.974},{cn:"Blue Bottle 三清",kr:"Blue Bottle Samcheong Cafe",cat:"咖啡甜點",note:"風景很好",hours:"08:00-20:00",zone:"三清洞",lat:37.58,lon:126.981},{cn:"뭍 MUUT",kr:"뭍 성수 플래그쉽 스토어",cat:"選物",note:"設計品牌",hours:"12:00-21:00",zone:"聖水洞",lat:37.541,lon:127.06},{cn:"國立現代美術館",kr:"國立現代美術館 首爾 MMCA",cat:"展覽",note:"韓國當代藝術最高殿堂",hours:"10:00-18:00",zone:"三清洞",lat:37.579,lon:126.98,must:"推薦：當期展覽",price:"₩5,000-10,000"},{cn:"首爾市立美術館",kr:"首爾市立美術館",cat:"展覽",note:"美術館",hours:"10:00-20:00",zone:"明洞/鍾路",lat:37.564,lon:126.974},{cn:"眞味食堂",kr:"眞味食堂",cat:"美食",note:"米其林認證 醬蟹定食",hours:"11:00-22:00",zone:"首爾市區",lat:37.551,lon:126.956,must:"招牌：醬蟹定食",price:"₩45,000/人"},{cn:"Ground Seesaw Central",kr:"Ground Seesaw Central",cat:"展覽",note:"展覽空間",hours:"11:00-19:00",zone:"首爾市區",lat:37.558,lon:126.974},{cn:"Musinsa Standard",kr:"Musinsa Standard Seongsu",cat:"服飾",note:"像 uniqlo 便宜發熱衣",hours:"11:00-21:00",zone:"聖水洞",lat:37.542,lon:127.059,must:"必買：發熱衣、基本款",price:"₩10,000-50,000"},{cn:"Malbang Gukbap",kr:"Malbang Gukbap - Seongsu",cat:"美食",note:"湯飯",hours:"08:00-21:00",zone:"聖水洞",lat:37.548,lon:127.064,must:"招牌：湯飯",price:"₩9,000-12,000"},{cn:"papier prost",kr:"파피어프로스트",cat:"購物",note:"文具店",hours:"12:00-20:00",zone:"西村",lat:37.58,lon:126.969},{cn:"通仁市場",kr:"通仁市場",cat:"景點",note:"可以買塑膠餐盒",hours:"09:00-19:00",zone:"西村",lat:37.581,lon:126.971},{cn:"arkisto",kr:"아르키스토",cat:"購物",note:"逛街一條街",hours:"11:00-20:00",zone:"西村",lat:37.582,lon:126.972},{cn:"MONOHA Seochon",kr:"모노하 서촌",cat:"購物",note:"逛街區域",hours:"11:00-20:00",zone:"西村",lat:37.58,lon:126.972},{cn:"大林美術館",kr:"大林美術館",cat:"展覽",note:"攝影展美術館",hours:"11:00-19:00",zone:"西村",lat:37.578,lon:126.973},{cn:"Dancing grandma",kr:"Dancing grandma",cat:"購物",note:"手織品",hours:"12:00-18:00",zone:"西村",lat:37.578,lon:126.971},{cn:"SOLSOT",kr:"SOLSOT",cat:"美食",note:"釜飯",hours:"11:30-21:00",zone:"西村",lat:37.578,lon:126.971,must:"招牌：釜飯",price:"₩12,000-18,000"},{cn:"ETC Seoul Seochon",kr:"ETC Seoul Seochon",cat:"選物",note:"選品店",hours:"12:00-20:00",zone:"西村",lat:37.577,lon:126.969},{cn:"Folki",kr:"Folki",cat:"咖啡甜點",note:"漂亮咖啡廳",hours:"10:00-21:00",zone:"西村",lat:37.576,lon:126.969},{cn:"PIZZA SLICE SEOUL",kr:"PIZZA SLICE SEOUL",cat:"美食",note:"披薩",hours:"12:00-22:00",zone:"聖水洞",lat:37.543,lon:127.062,must:"推薦：披薩片",price:"₩5,000-8,000"},{cn:"AIRDROP COFFEE",kr:"AIRDROP COFFEE SEONGSU",cat:"咖啡甜點",note:"聖水咖啡",hours:"09:00-20:00",zone:"聖水洞",lat:37.544,lon:127.055},{cn:"Downtowner Anguk",kr:"Downtowner Anguk",cat:"美食",note:"酪梨漢堡",hours:"11:00-21:00",zone:"安國/三清",lat:37.577,lon:126.986,must:"招牌：酪梨漢堡",price:"₩12,000-16,000"}];
+var D=[{cn:"皜?撅?銋頝舐??",kr:"麮原?????諢?穈鴔???,cat:"蝢?",note:"??單?行僖憌?,hours:"08:00-22:00",zone:"??/?曇楝",lat:37.566,lon:126.99,must:"??嚗惇?僖憌胯?僖憌?,price:"??0,000-15,000"},{cn:"?急鞎??擗?摰?摨?,kr:"?圉?貒篣諿木????筏??,cat:"?拙?擗?,note:"?典之???,hours:"08:00-18:00",zone:"??/?曇楝",lat:37.579,lon:126.986,must:"敹?嚗之???扒瘝寡絲?豢??,price:"??,000-12,000"},{cn:"?唬??芣?皝???摨?,kr:"???月???諈???,cat:"蝢?",note:"撱箄降?厭撌?,hours:"24撠?",zone:"??/?曇楝",lat:37.565,lon:126.987,must:"??嚗?撉券瞈僖",price:"??2,000-15,000"},{cn:"?∪撅?,kr:"諡湊筋??,cat:"蝢?",note:"12:00?閮?",hours:"11:30-21:00",zone:"??/?曇楝",lat:37.578,lon:126.981,must:"敹?嚗?擳畦?絲擙桃畦???畦",price:"??5,000-25,000"},{cn:"????熊 撣輒摨?,kr:"魽域※儦澎筏???痍??,cat:"蝢?",hours:"10:00-21:30",zone:"??/?曇楝",lat:37.562,lon:126.975,must:"??嚗?撌亙??熊??摮?,price:"??,000-13,000"},{cn:"鞊砌?摮蝑?,kr:"?潰??篣",cat:"蝢?",note:"撘之蝡????,hours:"14:00-02:00",zone:"撘之/撱嗅?",lat:37.556,lon:126.926,must:"敹?嚗悅?支??梯??惇?貉?",price:"??5,000-20,000/鈭?},{cn:"璈?蝑",kr:"窱??骨",cat:"蝢?",note:"?曹??砌?",hours:"16:00-23:30",zone:"瞍Ｗ?/璇冽陸??,lat:37.526,lon:127.001,must:"??嚗?恍??葡",price:"??,000-6,000/銝?},{cn:"JO & DAWSON",kr:"魽域?",cat:"???",note:"?衣?撣???",hours:"12:00-21:00",zone:"撘之/撱嗅?",lat:37.564,lon:126.923,must:"敹?嚗蝟?銝毀?臬?韏瑕??",price:"??,000-15,000"},{cn:"???銋頝臬?",kr:"?禺?鴔 ??諢?",cat:"蝢?",note:"?敺?擗?1:00",hours:"16:00-02:00",zone:"??/?曇楝",lat:37.566,lon:126.999,must:"?刻嚗???擗?,price:"??8,000-25,000"},{cn:"樴??? ?偌摨?,kr:"?拖?? ?桿???,cat:"蝢?",note:"?敺?擗?1:00",hours:"16:00-22:00",zone:"?偌瘣?,lat:37.544,lon:127.057,must:"敹?嚗獄颲???偌?桃???,price:"??5,000-25,000"},{cn:"????,kr:"鮈??,cat:"蝢?",note:"?楝銝?蝡?,hours:"14:00-23:30",zone:"??/?曇楝",lat:37.573,lon:126.99,must:"??嚗?????鈭",price:"??0,000-50,000/鈭?},{cn:"摮怠振??",kr:"???月??謔?,cat:"蝢?",note:"?梯???摨?,hours:"11:00-22:00",zone:"??/?曇楝",lat:37.574,lon:127.021,must:"敹?嚗??駁???",price:"??5,000-30,000"},{cn:"蝯梁??貊??,kr:"?蛙?窱渥?",cat:"蝢?",note:"摮????",hours:"11:00-22:00",zone:"瘙撜?,lat:37.527,lon:126.924,must:"??嚗?∟憟?",price:"??5,000-40,000"},{cn:"?∪撅??偌摨?,kr:"諡湊筋???桿???,cat:"蝢?",note:"?偌蝡?摨?,hours:"11:30-21:00",zone:"?偌瘣?,lat:37.545,lon:127.059,must:"敹?嚗?擳畦???畦",price:"??5,000-25,000"},{cn:"瞍Ｗ?瘣收?渲?爸皝?,kr:"?????",cat:"蝢?",note:"敹???",hours:"24撠?",zone:"瞍Ｗ?/璇冽陸??,lat:37.531,lon:126.997,must:"??嚗收?渲?爸皝?,price:"??2,000-20,000"},{cn:"Parole & Langue",kr:"?﹞?月?篞?,cat:"???",note:"憛????梢?摨?,hours:"13:00-21:00",zone:"撘之/撱嗅?",lat:37.565,lon:126.923,must:"敹?嚗偌???概??憛?,price:"??,000-15,000"},{cn:"Butty銝?瘝?,kr:"貒????",cat:"???",note:"撌批毀???祥",hours:"11:00-19:00",zone:"撘之/撱嗅?",lat:37.556,lon:126.901,must:"??嚗概撌湧?銝?瘝?,price:"??,000-12,000"},{cn:"擐砍控?扒憟園?敼???,kr:"諤?坐?筋麆?,cat:"蝢?",note:"?典???摨?,hours:"11:00-22:00",zone:"瞍Ｗ?/璇冽陸??,lat:37.55,lon:126.98,must:"敹?嚗麾?賊?敼?",price:"??5,000-50,000"},{cn:"hetras ?偌",kr:"?欠?潰 ?桿?",cat:"鞈潛",note:"?刻No.29,No.7,No.5",hours:"11:00-20:00",zone:"?偌瘣?,lat:37.541,lon:127.06,must:"敹眺嚗?瘞就o.29?o.7?o.5",price:"??0,000-150,000"},{cn:"newmix coffee",kr:"?渠笆?木誘??,cat:"???",note:"敹眺?單熄?隡湔?蝳?,hours:"11:00-20:00",zone:"?偌瘣?,lat:37.541,lon:127.06,must:"敹眺嚗皞嗅??∠旨??,price:"??5,000-35,000"},{cn:"ADERERROR ?偌",kr:"?? ?桿? ?欠??渥",cat:"?ˇ",note:"?璁艙摨?,hours:"13:00-21:00",zone:"?偌瘣?,lat:37.536,lon:127.054,must:"?刻嚗??碌ogo銵﹝",price:"??00,000-400,000"},{cn:"BLUE ELEPHANT ?偌",kr:"賳ㄗ?收????桿?",cat:"?ˇ",note:"撟喳憓券??",hours:"11:00-20:00",zone:"?偌瘣?,lat:37.541,lon:127.057,must:"敹眺嚗像?孵云?賜??,price:"??5,000-60,000"},{cn:"fwee Agit",kr:"??????,cat:"敶拙?",note:"敹眺撣??野",hours:"11:00-21:00",zone:"?偌瘣?,lat:37.543,lon:127.054,must:"敹眺嚗?銝?瘜乓?瞉文???,price:"??5,000-30,000"},{cn:"DIOR ?偌",kr:"? ?桿?",cat:"?舫?",note:"?梢??唳??",hours:"11:00-20:00",zone:"?偌瘣?,lat:37.544,lon:127.053,must:"??暺?,price:"?祥?亙"},{cn:"NYUNYU ?偌",kr:"?渠 ?桿?",cat:"?ˇ",note:"憌曉?鞈潛?",hours:"11:00-23:00",zone:"?偌瘣?,lat:37.545,lon:127.056,must:"敹眺嚗?蝟駁ˇ?喟",price:"??0,000-50,000"},{cn:"?虛絕 ?偌",kr:"?虛絕?欠????桿?",cat:"?貊",note:"?暑?貊摨?,hours:"11:00-21:00",zone:"?偌瘣?,lat:37.541,lon:127.057,must:"?刻嚗??琿?鞎具?瘞???,price:"??0,000-80,000"},{cn:"KODAK ?勗之?",kr:"儠?渣????諡?,cat:"?ˇ",note:"雿DunDun 2璅?,hours:"10:30-22:00",zone:"??/?曇楝",lat:37.569,lon:127.011,must:"敹眺嚗儔?日◢憭??蜇T",price:"??0,000-150,000"},{cn:"ept ?偌",kr:"?渣???桿?",cat:"?ˇ",note:"???梢?????,hours:"11:00-20:00",zone:"?偌瘣?,lat:37.541,lon:127.06,must:"敹眺嚗???????,price:"??00,000-200,000"},{cn:"HAUS NOWHERE",kr:"????賄??,cat:"?貊",note:"??璅?,hours:"11:00-21:00",zone:"?偌瘣?,lat:37.541,lon:127.059,must:"?刻嚗身閮葦???ˇ",price:"??0,000-300,000"},{cn:"thisisneverthat",kr:"??渥??月???,cat:"?ˇ",note:"銵瞏格?蝚砌?蝡?,hours:"12:00-21:00",zone:"撘之/撱嗅?",lat:37.552,lon:126.92,must:"敹眺嚗??剜蔭瘚?扎?銵?,price:"??0,000-200,000"},{cn:"KITH 擐",kr:"?木 ?",cat:"?ˇ",note:"瞏格???",hours:"11:00-20:00",zone:"?偌瘣?,lat:37.541,lon:127.06,must:"?刻嚗??摰狡",price:"??00,000-500,000"},{cn:"HUMAN MADE",kr:"?渠釆諰??,cat:"?ˇ",note:"?梢?瞏桃?",hours:"11:00-20:00",zone:"?偌瘣?,lat:37.541,lon:127.054,must:"敹眺嚗??豢?敹ogo",price:"??50,000-400,000"},{cn:"MUSINSA EMPTY",kr:"諡渥???????,cat:"?貊",note:"憭批??詨?摨?,hours:"11:00-20:00",zone:"?偌瘣?,lat:37.536,lon:127.054,must:"?刻嚗??身閮葦??",price:"??0,000-300,000"},{cn:"皜偌??,kr:"麮原???,cat:"???",note:"??瘣姘?",hours:"11:30-22:00",zone:"??/?曇楝",lat:37.574,lon:126.991,must:"敹?嚗姘?漣雿????鞊畦",price:"??,000-15,000"},{cn:"YM Coffee House",kr:"YM儢欠???,cat:"???",note:"??憸冽撠平??",hours:"12:00-22:00",zone:"擐撣?",lat:37.62,lon:126.917,must:"?刻嚗?瘝???,price:"??,000-12,000"},{cn:"Cafe Layered 撱嗅?摨?,kr:"儦渣? ??渠? ?圉??,cat:"???",note:"?詨熒??",hours:"11:00-22:00",zone:"撘之/撱嗅?",lat:37.565,lon:126.924,must:"敹?嚗摨瑯扒瘝孵摨?,price:"??,000-10,000"},{cn:"Thanks Oat 撱嗅?",kr:"?∫?欠 ?圉",cat:"???",note:"撱嗅?瘣?撌亙??,hours:"10:00-19:00",zone:"撘之/撱嗅?",lat:37.565,lon:126.921,must:"敹?嚗?撌亙?潦?暻亦?",price:"??,000-15,000"},{cn:"隞予銋雲憭?,kr:"?月??隆賱",cat:"???",note:"?曹??砌?",hours:"12:00-20:00",zone:"撘之/撱嗅?",lat:37.56,lon:126.925,must:"?刻嚗?蝟?撌亦?暺?,price:"??,000-15,000"},{cn:"蝝郭??,kr:"????,cat:"???",note:"???嗅恕",hours:"11:00-20:00",zone:"??/?曇楝",lat:37.58,lon:126.981,must:"敹?嚗蝯梢??嗚??,price:"??0,000-18,000"},{cn:"Artist Bakery",kr:"??欠 貒儢月收",cat:"???",note:"暽賢????摨?,hours:"08:00-20:00",zone:"??/?曇楝",lat:37.576,lon:126.984,must:"敹?嚗厭?舫?",price:"??,000-8,000"},{cn:"29CM ?偌",kr:"?湊筋?桿?",cat:"?貊",note:"蝺??詨?撖阡?摨?,hours:"11:00-20:00",zone:"?偌瘣?,lat:37.545,lon:127.053,must:"?刻嚗??身閮葦??",price:"??0,000-200,000"},{cn:"Ground Seesaw 镼踵?",kr:"篞賈?渠??? ??",cat:"撅汗",note:"鞈芣?撅汗蝛粹?",hours:"10:00-19:00",zone:"??/?曇楝",lat:37.578,lon:126.973,must:"?刻嚗??閬?,price:"??5,000-20,000"},{cn:"撱??撣 156??,kr:"窵? 156??,cat:"?疏",note:"鞈潸眺??鋆賣?鋡?,hours:"09:00-18:00",zone:"??/?曇楝",lat:37.57,lon:127,must:"敹眺嚗??ˊ?極璉◤",price:"??00,000-500,000"},{cn:"Cociety 擐??,kr:"儠?渥?????,cat:"撌乩??",note:"?菜?撌乩?蝛粹?(?曹?隡?",hours:"12:00-20:00",zone:"?偌瘣?,lat:37.556,lon:127.043,must:"?刻嚗??～?暺?,price:"??,000-12,000"},{cn:"Brautor",kr:"賳?堅",cat:"撌乩??",note:"?渲擗?摨?,hours:"08:00-22:00",zone:"?偌瘣?,lat:37.549,lon:127.045,must:"敹?嚗?園?",price:"??,000-12,000"},{cn:"Debunk",kr:"????,cat:"撌乩??",note:"?唬?撅方??豢???,hours:"10:00-23:00",zone:"撘之/撱嗅?",lat:37.548,lon:126.915,must:"?刻嚗???,price:"??,000-10,000"},{cn:"Hollys Coffee 撘之蝡?,kr:"?收?????原?",cat:"撌乩??",note:"24撠?",hours:"24撠?",zone:"撘之/撱嗅?",lat:37.556,lon:126.923,must:"?刻嚗?撘???,price:"??,000-12,000"},{cn:"Ediya Coffee Lab",kr:"?渠??潰誘?潺",cat:"撌乩??",note:"?摨?,hours:"07:30-02:00",zone:"瘙?",lat:37.511,lon:127.033,must:"?刻嚗??～?暺?,price:"??,000-10,000"},{cn:"Terarosa POSCO",kr:"?諢 ?科儠?域?",cat:"撌乩??",note:"?潮?豢??,hours:"07:30-21:00",zone:"瘙?",lat:37.506,lon:127.056,must:"?刻嚗?瘝???,price:"??,000-15,000"},{cn:"1鈭???,kr:"1鈭???,cat:"???",note:"蝯??唳",hours:"11:00-21:00",zone:"?拙像?",lat:37.641,lon:126.938},{cn:"Dotom",kr:"Dotom",cat:"蝢?",note:"?典鈭箔??剖??????方?摨?,hours:"17:00-23:00",zone:"撱箏之/撱?揖?",lat:37.556,lon:127.078,must:"?刻嚗??,price:"??0,000-30,000/鈭?},{cn:"?匱窱原?貐渥?",kr:"?潺站謔科?儦澎筏?陷??,cat:"蝢?",note:"??????熊",hours:"11:00-22:00",zone:"?偌瘣?,lat:37.549,lon:127.045,must:"敹?嚗??????熊",price:"??2,000-18,000"},{cn:"?芰撜園厭暻萄?",kr:"Jayeondo Sogeumppang",cat:"???",note:"暽賡熊??摨?,hours:"08:00-20:00",zone:"?偌瘣?,lat:37.542,lon:127.055,must:"敹眺嚗厭暻萄?",price:"??,000-5,000"},{cn:"Kyewol Gomtang",kr:"Kyewol Gomtang",cat:"蝢?",note:"皝舫ㄞ",hours:"24撠?",zone:"?偌瘣?,lat:37.54,lon:127.048,must:"??嚗?撉冽僖憌?,price:"??0,000-13,000"},{cn:"Thweet Seongsu",kr:"Thweet Seongsu",cat:"???",note:"憡ㄚ敹瘛?",hours:"13:00-22:00",zone:"?偌瘣?,lat:37.545,lon:127.052,must:"敹?嚗?憯怠??唳?瘛?,price:"??,000-12,000"},{cn:"MilkyShop Seongsu",kr:"MilkyShop Seongsu Store",cat:"鞈潛",note:"?衣?憟嗆硃擗嗾隡湔?蝳?,hours:"11:00-20:00",zone:"?偌瘣?,lat:37.544,lon:127.051,must:"敹眺嚗蝟扒瘝寥?銋?,price:"??2,000-18,000"},{cn:"蟡銝誨擐祇?舀?撉冽僖",kr:"?爰???桿? 穈???,cat:"蝢?",note:"24撠??平",hours:"24撠?",zone:"?偌瘣?,lat:37.543,lon:127.054,must:"??嚗收?渲?爸皝?,price:"??3,000-18,000"},{cn:"29cm.home",kr:"29cm.home",cat:"?貊",note:"鞈芣?摰嗅??貊摨?gelato",hours:"12:00-21:00",zone:"?偌瘣?,lat:37.543,lon:127.056,must:"?刻嚗?敹?gelato?身閮??,price:"??,000-50,000"},{cn:"LOE SEONGSU",kr:"諢? ?桿?",cat:"鞈潛",note:"??撠??擐偌 ?祥?餃?",hours:"11:00-20:00",zone:"?偌瘣?,lat:37.542,lon:127.056,must:"敹眺嚗??暸?瘞氬?鞎餃摮???,price:"??0,000-120,000"},{cn:"Standard Bread",kr:"Standard Bread",cat:"???",note:"?菟??衣?瘜??",hours:"08:00-19:00",zone:"?偌瘣?,lat:37.542,lon:127.061,must:"敹?嚗?蝟?撘???,price:"??,000-15,000"},{cn:"Neungdong Minari",kr:"Neungdong Minari Seongsu",cat:"蝢?",note:"Hebe?望絲靘???,hours:"10:00-22:00",zone:"?偌瘣?,lat:37.543,lon:127.054,must:"??嚗偌?寧?撉冽僖",price:"??2,000-15,000"},{cn:"STAFF PICKS",kr:"STAFF PICKS",cat:"???",note:"蝢??∪輒",hours:"10:00-21:00",zone:"擐撣?",lat:37.577,lon:126.968},{cn:"Milestone Coffee",kr:"Milestone Coffee Hannam",cat:"???",note:"瞍Ｗ?瘣蔭瘚?",hours:"09:00-20:00",zone:"瞍Ｗ?/璇冽陸??,lat:37.538,lon:127.003},{cn:"COFFEE & CIGARETTES",kr:"COFFEE & CIGARETTES",cat:"???",note:"17璅?蝛箏???,hours:"11:00-23:00",zone:"??/?曇楝",lat:37.563,lon:126.974},{cn:"Blue Bottle 銝?",kr:"Blue Bottle Samcheong Cafe",cat:"???",note:"憸冽敺末",hours:"08:00-20:00",zone:"銝?瘣?,lat:37.58,lon:126.981},{cn:"諨?MUUT",kr:"諨??桿? ??篞賄 ?欠???,cat:"?貊",note:"閮剛???",hours:"12:00-21:00",zone:"?偌瘣?,lat:37.541,lon:127.06},{cn:"???曆誨蝢?擗?,kr:"???曆誨蝢?擗?擐 MMCA",cat:"撅汗",note:"???嗡誨???擃挪??,hours:"10:00-18:00",zone:"銝?瘣?,lat:37.579,lon:126.98,must:"?刻嚗??閬?,price:"??,000-10,000"},{cn:"擐撣?蝢?擗?,kr:"擐撣?蝢?擗?,cat:"撅汗",note:"蝢?擗?,hours:"10:00-20:00",zone:"??/?曇楝",lat:37.564,lon:126.974},{cn:"?憌?",kr:"?憌?",cat:"蝢?",note:"蝐喳??霅??祈摰?",hours:"11:00-22:00",zone:"擐撣?",lat:37.551,lon:126.956,must:"??嚗?孵?憌?,price:"??5,000/鈭?},{cn:"Ground Seesaw Central",kr:"Ground Seesaw Central",cat:"撅汗",note:"撅汗蝛粹?",hours:"11:00-19:00",zone:"擐撣?",lat:37.558,lon:126.974},{cn:"Musinsa Standard",kr:"Musinsa Standard Seongsu",cat:"?ˇ",note:"??uniqlo 靘踹??潛銵?,hours:"11:00-21:00",zone:"?偌瘣?,lat:37.542,lon:127.059,must:"敹眺嚗?梯﹝??祆狡",price:"??0,000-50,000"},{cn:"Malbang Gukbap",kr:"Malbang Gukbap - Seongsu",cat:"蝢?",note:"皝舫ㄞ",hours:"08:00-21:00",zone:"?偌瘣?,lat:37.548,lon:127.064,must:"??嚗僖憌?,price:"??,000-12,000"},{cn:"papier prost",kr:"??渣?諢??,cat:"鞈潛",note:"?摨?,hours:"12:00-20:00",zone:"镼踵?",lat:37.58,lon:126.969},{cn:"??撣",kr:"??撣",cat:"?舫?",note:"?臭誑鞎瑕?????,hours:"09:00-19:00",zone:"镼踵?",lat:37.581,lon:126.971},{cn:"arkisto",kr:"?打?木??,cat:"鞈潛",note:"??銝璇?",hours:"11:00-20:00",zone:"镼踵?",lat:37.582,lon:126.972},{cn:"MONOHA Seochon",kr:"諈刺????",cat:"鞈潛",note:"?????,hours:"11:00-20:00",zone:"镼踵?",lat:37.58,lon:126.972},{cn:"憭扳?蝢?擗?,kr:"憭扳?蝢?擗?,cat:"撅汗",note:"?蔣撅?銵尹",hours:"11:00-19:00",zone:"镼踵?",lat:37.578,lon:126.973},{cn:"Dancing grandma",kr:"Dancing grandma",cat:"鞈潛",note:"????,hours:"12:00-18:00",zone:"镼踵?",lat:37.578,lon:126.971},{cn:"SOLSOT",kr:"SOLSOT",cat:"蝢?",note:"?ㄞ",hours:"11:30-21:00",zone:"镼踵?",lat:37.578,lon:126.971,must:"??嚗?憌?,price:"??2,000-18,000"},{cn:"ETC Seoul Seochon",kr:"ETC Seoul Seochon",cat:"?貊",note:"?詨?摨?,hours:"12:00-20:00",zone:"镼踵?",lat:37.577,lon:126.969},{cn:"Folki",kr:"Folki",cat:"???",note:"瞍漁?撱?,hours:"10:00-21:00",zone:"镼踵?",lat:37.576,lon:126.969},{cn:"PIZZA SLICE SEOUL",kr:"PIZZA SLICE SEOUL",cat:"蝢?",note:"?怨",hours:"12:00-22:00",zone:"?偌瘣?,lat:37.543,lon:127.062,must:"?刻嚗?拍?",price:"??,000-8,000"},{cn:"AIRDROP COFFEE",kr:"AIRDROP COFFEE SEONGSU",cat:"???",note:"?偌?",hours:"09:00-20:00",zone:"?偌瘣?,lat:37.544,lon:127.055},{cn:"Downtowner Anguk",kr:"Downtowner Anguk",cat:"蝢?",note:"?芣◢瞍Ｗ",hours:"11:00-21:00",zone:"摰?/銝?",lat:37.577,lon:126.986,must:"??嚗璇冽慰??,price:"??2,000-16,000"},{cn:"Anthracite Coffee 撘之",kr:"?欠?科?渣 ??",cat:"撌乩??",note:"撌交平憸典之蝛粹?",hours:"10:00-23:00",zone:"撘之/撱嗅?",lat:37.556,lon:126.925,must:"?刻嚗?摨批?頞喋iFi蝛拙?",price:"??,000-12,000"},{cn:"Mmmg Cafe 撘之",kr:"??篣?儦渣?",cat:"撌乩??",note:"銝惜璅蝡征??,hours:"11:00-22:00",zone:"撘之/撱嗅?",lat:37.557,lon:126.924,must:"?刻嚗?撅斗?????,price:"??,000-10,000"},{cn:"Starbucks Reserve 瘙?",kr:"?欠?貒 謔科?賳?穈",cat:"撌乩??",note:"擃?摰?",hours:"07:00-22:00",zone:"瘙?",lat:37.508,lon:127.062,must:"?刻嚗?璆剖極雿???,price:"??,000-15,000"},{cn:"Fritz Coffee ??鈭?,kr:"?有鼽誘???筋??,cat:"撌乩??",note:"蝎曉??",hours:"09:00-21:00",zone:"?唳?/??鈭?,lat:37.527,lon:127.036,must:"?刻嚗?嗅??雲",price:"??,000-15,000"},{cn:"Coffee Libre 瘙?",kr:"儢欠謔禺???穈",cat:"撌乩??",note:"撠平?撣?,hours:"10:00-22:00",zone:"瘙?",lat:37.505,lon:127.025,must:"?刻嚗?撠???,price:"??,000-12,000"},{cn:"Daelim Changgo ?澈",kr:"?謔潰偷窸?,cat:"撌乩??",note:"頞之?澈?孵遣",hours:"10:00-19:00",zone:"??/?曇楝",lat:37.582,lon:126.968,must:"?刻嚗?摨扯?憭??極雿?,price:"??,000-15,000"},{cn:"Nudake ??鈭?,kr:"??渣 ?筋??,cat:"撌乩??",note:"蝪∠???憸?,hours:"10:00-22:00",zone:"?唳?/??鈭?,lat:37.523,lon:127.029,must:"?刻嚗?暺??,price:"??,000-15,000"},{cn:"Onion ??瘣?,kr:"?渠????蛙???,cat:"撌乩??",note:"???孵遣敺拙憸?,hours:"10:00-22:00",zone:"??/?曇楝",lat:37.571,lon:126.991,must:"?刻嚗??喟征??,price:"??,000-15,000"},{cn:"Cafe Layered ??",kr:"儦渣? ??渠? 賱?",cat:"撌乩??",note:"憭惜?賊?蝛粹?",hours:"11:00-22:00",zone:"??/?曇楝",lat:37.582,lon:126.986,must:"?刻嚗??極雿?,price:"??,000-12,000"},{cn:"WeWork 瘙?",kr:"????穈",cat:"撌乩??",note:"?曹澈颲血 Day Pass",hours:"24撠?",zone:"瘙?",lat:37.498,lon:127.028,must:"?刻嚗?霅啣恕???雯頝?,price:"??5,000-35,000"},{cn:"FastFive 撘之",kr:"?到?貲??渠? ??",cat:"撌乩??",note:"???砍??曹澈蝛粹?",hours:"24撠?",zone:"撘之/撱嗅?",lat:37.555,lon:126.922,must:"?刻嚗?WeWork靘踹?",price:"??0,000"},{cn:"FastFive 瘙?",kr:"?到?貲??渠? 穈",cat:"撌乩??",note:"???砍??曹澈蝛粹?",hours:"24撠?",zone:"瘙?",lat:37.502,lon:127.036,must:"?刻嚗身????,price:"??0,000"},{cn:"Sparkplus 擐",kr:"?欠??秒??科",cat:"撌乩??",note:"憭?暺??扳獢?,hours:"24撠?",zone:"擐撣?",lat:37.565,lon:126.977,must:"?刻嚗?蝙??,price:"??0,000-30,000"},{cn:"Starbucks ??摨?,kr:"?欠?貒 諈???,cat:"撌乩??",note:"擛批?銝剔?摰?閫",hours:"07:00-22:00",zone:"??/?曇楝",lat:37.563,lon:126.984,must:"?刻嚗?蝵桀???齒??,price:"??,000-12,000"},{cn:"Ediya Coffee ??蝡?,kr:"?渠??潰誘??諈??原?",cat:"撌乩??",note:"撟喳????漣憭?,hours:"07:30-22:00",zone:"??/?曇楝",lat:37.561,lon:126.986,must:"?刻嚗?蝞????撌乩?",price:"??,000-10,000"},{cn:"Tom N Toms ??",kr:"?? 諈???,cat:"撌乩??",note:"撖祆?蝛粹??拚??撱?,hours:"08:00-23:00",zone:"??/?曇楝",lat:37.562,lon:126.985,must:"?刻嚗銝極雿runch",price:"??,000-15,000"},{cn:"Paul Bassett ??",kr:"?渠???諈???,cat:"撌乩??",note:"蝎曉??撠平??",hours:"08:00-22:00",zone:"??/?曇楝",lat:37.563,lon:126.983,must:"?刻嚗釭?極雿?,price:"??,000-15,000"},{cn:"Angel-in-us Coffee ??",kr:"??謔禺???諈???,cat:"撌乩??",note:"???砍????",hours:"07:00-23:00",zone:"??/?曇楝",lat:37.562,lon:126.984,must:"?刻嚗??祈齒?祇?瘙?,price:"??,000-12,000"},{cn:"Anthracite 銋頝?,kr:"?欠?科?渣 ??諢?",cat:"撌乩??",note:"撌交平憸函雯蝢??∪輒",hours:"10:00-22:00",zone:"??/?曇楝",lat:37.566,lon:127.003,must:"?刻嚗?極雿??",price:"??,000-12,000"},{cn:"Cafe 201 銋頝?,kr:"儦渣?201 ??諢?,cat:"撌乩??",note:"敺拙???撱?,hours:"12:00-22:00",zone:"??/?曇楝",lat:37.565,lon:127.002,must:"?刻嚗??極雿?畾?,price:"??,000-12,000"},{cn:"Layered 銋頝?,kr:"??渠? ??諢?,cat:"撌乩??",note:"蝪∠?憸冽摰??",hours:"11:00-22:00",zone:"??/?曇楝",lat:37.566,lon:127.001,must:"?刻嚗?瘜典極雿?,price:"??,000-12,000"},{cn:"Nudake 撣輒",kr:"??渣 ?痍??,cat:"撌乩??",note:"??蝪∠?憸函?暺末??,hours:"10:00-22:00",zone:"??/?曇楝",lat:37.564,lon:126.976,must:"?刻嚗??拙極雿憓?,price:"??,000-15,000"},{cn:"FastFive ??",kr:"?到?貲??渠? 諈?",cat:"撌乩??",note:"?曹澈颲血 Day Pass",hours:"24撠?",zone:"??/?曇楝",lat:37.559,lon:126.994,must:"?刻嚗?霅啣恕??璆剛身??,price:"??0,000"},{cn:"WeWork ??諢?,kr:"??????諢?,cat:"撌乩??",note:"???齒?祉憓?,hours:"24撠?",zone:"??/?曇楝",lat:37.565,lon:127.005,must:"?刻嚗?霅啣恕?暑?征??,price:"??5,000-35,000"},{cn:"Sparkplus 撣輒",kr:"?欠??秒??科 ?痍",cat:"撌乩??",note:"敶扯齒?祉征??,hours:"24撠?",zone:"??/?曇楝",lat:37.566,lon:126.978,must:"?刻嚗?蝙??,price:"??0,000-30,000"}];
 var cat='all',zone='all',q='',map,markers=[],myMarker,mapFilter='all';
-var CATS=[{k:'all',l:'全部',i:''},{k:'美食',l:'美食',i:''},{k:'咖啡甜點',l:'咖啡',i:''},{k:'購物',l:'購物',i:''},{k:'Work',l:'Work',i:''},{k:'住宿',l:'住宿',i:''},{k:'景點',l:'景點',i:''}];
+var CATS=[{k:'all',l:'?券',i:''},{k:'蝢?',l:'蝢?',i:''},{k:'???',l:'?',i:''},{k:'鞈潛',l:'鞈潛',i:''},{k:'Work',l:'Work',i:''},{k:'雿挪',l:'雿挪',i:''},{k:'?舫?',l:'?舫?',i:''}];
 var ZONES=[].concat.apply([],D.map(function(p){return p.zone})).filter(function(v,i,a){return v&&a.indexOf(v)===i}).sort();
-var EMO={'美食':'🍜','早午餐':'🍳','咖啡甜點':'☕','購物':'🛍️','服飾':'👕','選物':'🎁','彩妝':'💄','雜貨':'📦','Work':'💻','工作咖啡':'💻','展覽':'🎨','住宿':'🏠','景點':'📍'};
-function match(c,f){return f==='all'||c===f||(f==='購物'&&['服飾','選物','彩妝','雜貨','購物'].indexOf(c)>=0)||(f==='Work'&&['Work','工作咖啡','展覽'].indexOf(c)>=0)||(f==='咖啡甜點'&&['咖啡甜點','早午餐'].indexOf(c)>=0)}
+var EMO={'蝢?':'??','?拙?擗?:'?','???':'??,'鞈潛':'??儭?,'?ˇ':'??','?貊':'??','敶拙?':'??','?疏':'?','Work':'?','撌乩??':'?','撅汗':'?','雿挪':'??','?舫?':'??'};
+function match(c,f){return f==='all'||c===f||(f==='鞈潛'&&['?ˇ','?貊','敶拙?','?疏','鞈潛'].indexOf(c)>=0)||(f==='Work'&&['Work','撌乩??','撅汗'].indexOf(c)>=0)||(f==='???'&&['???','?拙?擗?].indexOf(c)>=0)}
 function count(c){return D.filter(function(p){return match(p.cat,c)}).length}
 
-// ===== 詳情模態框功能 =====
+// ===== 閰單?璅⊥?獢???=====
 var currentPlaceIndex = -1;
 var favoritePlaces = JSON.parse(localStorage.getItem('favoritePlaces') || '[]');
 
@@ -831,7 +824,7 @@ function openPlaceDetail(index) {
     modal.innerHTML = `
         <div class="modal-content">
             <div class="modal-header">
-                <div style="font-size:0.9rem;font-weight:700;color:var(--text)">地點詳情</div>
+                <div style="font-size:0.9rem;font-weight:700;color:var(--text)">?圈?閰單?</div>
                 <button class="modal-close" onclick="closeModal()">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                 </button>
@@ -846,13 +839,13 @@ function openPlaceDetail(index) {
                 ${place.must ? `
                 <div class="must">
                     <div class="must-text">${place.must}</div>
-                    ${place.price ? '<div class="price">💰 ' + place.price + '</div>' : ''}
+                    ${place.price ? '<div class="price">? ' + place.price + '</div>' : ''}
                 </div>
                 ` : ''}
                 <div class="modal-info-grid">
                     <div class="modal-info-item">
                         <svg class="modal-info-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-                        <div class="modal-info-text">${place.hours || '營業時間未提供'}</div>
+                        <div class="modal-info-text">${place.hours || '?平???芣?靘?}</div>
                     </div>
                     ${place.note ? `
                     <div class="modal-info-item">
@@ -865,11 +858,11 @@ function openPlaceDetail(index) {
             <div class="modal-actions">
                 <button class="modal-btn modal-btn-favorite ${favoritePlaces.includes(index) ? 'active' : ''}" onclick="toggleFavorite(${index})">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="${favoritePlaces.includes(index) ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2"><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"/></svg>
-                    ${favoritePlaces.includes(index) ? '已收藏' : '收藏'}
+                    ${favoritePlaces.includes(index) ? '撌脫?? : '?嗉?'}
                 </button>
                 <button class="modal-btn modal-btn-navigate" onclick="navigateToPlace(${index})">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4m0 12v4m10-10h-4M6 12H2"/><circle cx="12" cy="12" r="3"/></svg>
-                    導航
+                    撠
                 </button>
             </div>
         </div>
@@ -896,17 +889,15 @@ function toggleFavorite(index) {
     }
     localStorage.setItem('favoritePlaces', JSON.stringify(favoritePlaces));
     
-    // 更新按鈕狀態
-    var btn = document.querySelector('.modal-btn-favorite');
+    // ?湔?????    var btn = document.querySelector('.modal-btn-favorite');
     if (btn) {
         btn.classList.toggle('active');
         btn.innerHTML = favoritePlaces.includes(index) ? 
-            '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"/></svg>已收藏' :
-            '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"/></svg>收藏';
+            '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"/></svg>撌脫?? :
+            '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"/></svg>?嗉?';
     }
     
-    // 重新渲染列表以顯示收藏徽章
-    draw();
+    // ?皜脫??”隞仿＊蝷箸?噬蝡?    draw();
 }
 
 function navigateToPlace(index) {
@@ -915,18 +906,16 @@ function navigateToPlace(index) {
     closeModal();
 }
 
-// 模態框點擊外部關閉
-document.addEventListener('click', function(e) {
+// 璅⊥?獢????券???document.addEventListener('click', function(e) {
     if (e.target.classList.contains('modal-overlay')) {
         closeModal();
     }
 });
 
-// ===== 今日推薦功能 =====
+// ===== 隞?刻? =====
 function getTodayPicks() {
-    // 從每個分類隨機選一個
-    var picks = [];
-    var categories = ['美食', '咖啡甜點', '購物'];
+    // 敺???憿璈銝??    var picks = [];
+    var categories = ['蝢?', '???', '鞈潛'];
     categories.forEach(function(cat) {
         var items = D.filter(function(p) { return p.cat === cat && p.must; });
         if (items.length > 0) {
@@ -943,16 +932,16 @@ function draw(){
     var ls=document.getElementById('list');
     var inf=document.getElementById('info');
     ts.innerHTML=CATS.map(function(c){return '<button class="tab'+(cat===c.k?' active':'')+'" onclick="cat=\''+c.k+'\';draw()">'+(c.i?c.i+' ':'')+c.l+'<span class="tab-count">'+count(c.k)+'</span></button>'}).join('');
-    zs.innerHTML='<span class="zone-pill'+(zone==='all'?' active':'')+'" onclick="zone=\'all\';draw()">全部地區</span>'+ZONES.map(function(z){return '<span class="zone-pill'+(zone===z?' active':'')+'" onclick="zone=\''+z+'\';draw()">'+z+'</span>'}).join('');
+    zs.innerHTML='<span class="zone-pill'+(zone==='all'?' active':'')+'" onclick="zone=\'all\';draw()">?券?啣?</span>'+ZONES.map(function(z){return '<span class="zone-pill'+(zone===z?' active':'')+'" onclick="zone=\''+z+'\';draw()">'+z+'</span>'}).join('');
     var fs=D.filter(function(p){return match(p.cat,cat)&&(zone==='all'||p.zone===zone)&&(!q||p.cn.toLowerCase().indexOf(q)>=0||p.kr.toLowerCase().indexOf(q)>=0||p.zone.toLowerCase().indexOf(q)>=0)});
-    inf.textContent='共 '+fs.length+' 個地點';
-    if(fs.length===0){ls.innerHTML='<div class="empty"><div style="font-size:2rem;opacity:0.2;margin-bottom:10px"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div><p>找不到符合的地點</p></div>';return}
+    inf.textContent='??'+fs.length+' ?暺?;
+    if(fs.length===0){ls.innerHTML='<div class="empty"><div style="font-size:2rem;opacity:0.2;margin-bottom:10px"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div><p>?曆??啁泵???圈?</p></div>';return}
     ls.innerHTML=fs.map(function(p){
         var qe=encodeURIComponent(p.kr||p.cn);
         var cc='cat-'+p.cat;
         var mh=p.must?'<div class="must"><div class="must-text">'+p.must+'</div>'+(p.price?'<span class="price"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:text-bottom;margin-right:2px"><circle cx="12" cy="12" r="9"/><path d="M14.8 9a2 2 0 0 0 -1.8 -1h-2a2 2 0 0 0 0 4h2a2 2 0 0 1 0 4h-2a2 2 0 0 1 -1.8 -1"/><path d="M12 6v2m0 8v2"/></svg> '+p.price+'</span>':'')+'</div>':'';
         return '<div class="card" onclick="openPlaceDetail(' + D.indexOf(p) + ')">' + 
-        (favoritePlaces.includes(D.indexOf(p)) ? '<span class="favorite-badge">❤️ 已收藏</span>' : '') + 
+        (favoritePlaces.includes(D.indexOf(p)) ? '<span class="favorite-badge">?歹? 撌脫??/span>' : '') + 
         '<div class="card-badges"><span class="badge-cat '+cc+'">'+p.cat+'</span><span class="badge-zone">'+p.zone+'</span></div><div class="name-cn">'+p.cn+'</div><div class="name-kr">'+p.kr+'</div><div class="info"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:text-bottom;margin-right:2px"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> '+p.hours+'</div>'+mh+'<div class="actions"><a href="https://www.google.com/maps/search/?api=1&query='+qe+'" target="_blank" class="btn btn-g">Google</a><a href="https://map.naver.com/p/search/'+qe+'" target="_blank" class="btn btn-n">Naver</a></div></div>'
     }).join('')
 }
@@ -1026,9 +1015,9 @@ function initMap(){
     L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{maxZoom:19}).addTo(map);
     D.forEach(function(p,idx){
         if(p.lat&&p.lon){
-            var e=EMO[p.cat]||'📍';
+            var e=EMO[p.cat]||'??';
             var ic=L.divIcon({className:'',html:'<div class="custom-marker marker-'+p.cat+'"><span>'+e+'</span></div>',iconSize:[28,28],iconAnchor:[14,28],popupAnchor:[0,-28]});
-            var m=L.marker([p.lat,p.lon],{icon:ic}).bindPopup('<b>'+p.cn+'</b><br><span style="color:#888">'+p.cat+' · '+p.zone+'</span><a href="https://map.naver.com/p/search/'+encodeURIComponent(p.kr)+'" target="_blank" class="popup-nav">Naver 導航</a>');
+            var m=L.marker([p.lat,p.lon],{icon:ic}).bindPopup('<b>'+p.cn+'</b><br><span style="color:#888">'+p.cat+' 繚 '+p.zone+'</span><a href="https://map.naver.com/p/search/'+encodeURIComponent(p.kr)+'" target="_blank" class="popup-nav">Naver 撠</a>');
             m.category=p.cat;
             m.placeData=p;
             m.placeIndex=idx;
@@ -1043,7 +1032,7 @@ function updateMapList(){
     var listDesktop=document.getElementById('map-list-desktop');
     var filtered=D.filter(function(p){return p.lat&&p.lon&&match(p.cat,mapFilter)});
     var sheetCount=document.getElementById('sheet-count');
-    if(sheetCount){sheetCount.textContent=filtered.length+'個'}
+    if(sheetCount){sheetCount.textContent=filtered.length+'??}
     var content=filtered.map(function(p,idx){
         var gq=encodeURIComponent(p.cn);
         var nq=encodeURIComponent(p.kr);
@@ -1079,13 +1068,13 @@ function filterMap(f){
     updateMapList();
 }
 function locate(){
-    if(!navigator.geolocation){alert('不支援定位');return}
+    if(!navigator.geolocation){alert('銝?游?雿?);return}
     navigator.geolocation.getCurrentPosition(function(pos){
         if(myMarker)myMarker.remove();
         var ic=L.divIcon({className:'',html:'<div class="my-marker"></div>',iconSize:[16,16],iconAnchor:[8,8]});
-        myMarker=L.marker([pos.coords.latitude,pos.coords.longitude],{icon:ic}).addTo(map).bindPopup('📍 你在這裡').openPopup();
+        myMarker=L.marker([pos.coords.latitude,pos.coords.longitude],{icon:ic}).addTo(map).bindPopup('?? 雿?ㄐ').openPopup();
         map.setView([pos.coords.latitude,pos.coords.longitude],15)
-    },function(){alert('無法取得位置')},{enableHighAccuracy:true})
+    },function(){alert('?⊥???雿蔭')},{enableHighAccuracy:true})
 }
 function showDay(idx){
     document.querySelectorAll('.schedule-tab').forEach(function(t,i){t.classList.toggle('active',i===idx)});
